@@ -1,0 +1,510 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathtools}
+\usepackage[mathscr]{euscript}
+\usepackage{amstext,amssymb,amsmath}
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{glossaries}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows,decorations.pathmorphing,backgrounds,positioning,fit,calc}
+
+\makeglossaries
+ 
+\newglossaryentry{character}
+{
+    name=$c$,
+    description={Character}
+}
+ 
+\newglossaryentry{alphabet}
+{
+    name=$A$,
+    description={Universe set of all possible Characters (Alphabet)}
+}
+
+\newglossaryentry{string}
+{
+    name=$s$,
+    description={String}
+}
+
+\newglossaryentry{compstring}
+{
+    name=$\tilde s$,
+    description={Composite String}
+}
+
+\newglossaryentry{allstrings}
+{
+    name=$\mathbb{X}(A)$,
+    description={Profinite set of all possible Strings over $A$}
+}
+
+\newglossaryentry{subsetstrings}
+{
+    name=$\mathbb{S}(A)$,
+    description={Subset of $\mathbb{X}(\mathcal{A})$}
+}
+
+\newglossaryentry{envsample}
+{
+    name=$\Gamma$,
+    description={Sample Space of Strings}
+}
+
+\newglossaryentry{predicate}
+{
+    name=$\alpha(s)$,
+    description={Predicate}
+}
+
+\newglossaryentry{model}
+{
+    name=$m$,
+    description={Model}
+}
+
+\newglossaryentry{compmodel}
+{
+    name=$\tilde{m}$,
+    description={Composite Model}
+}
+
+\newglossaryentry{modelset}
+{
+    name=$\Xi$,
+    description={Set of Models}
+}
+
+\newglossaryentry{searchspace}
+{
+    name=$\lambda$,
+    description={Search Space}
+}
+
+\newglossaryentry{compsearchspace}
+{
+    name=$\tilde\lambda$,
+    description={Composite Search Space}
+}
+
+\newglossaryentry{parsing}
+{
+    name=$\Psi(\tilde{ s})$,
+    description={Parsing of $\tilde s$}
+}
+
+\newglossaryentry{concat}
+{
+    name=$\Psi\textsuperscript{-1}(s_i)$,
+    description={Concatenation of all $s_i$}
+}
+
+\newglossaryentry{complexity}
+{
+    name=$\mathcal{C}(\tilde m)$,
+    description={Complexity of $\tilde m$}
+}
+
+\newglossaryentry{ccm}
+{
+    name=$\hat m(\tilde s)$,
+    description={Critical Composite Model of $\tilde s$}
+}
+
+\newglossaryentry{hashstring}
+{
+    name=$H(\tilde s)$,
+    description={Hash Function of $\tilde s$}
+}
+
+\newglossaryentry{hashenv}
+{
+    name=$H(\Gamma)$,
+    description={Multiset of Hash Functions of Strings in Sample Space $\Gamma$}
+}
+
+\newglossaryentry{mse}
+{
+    name=$\mathfrak{S}(\theta_i \mathcal{C}_i)$,
+    description={Model Strength Estimator of $\hat m(\tilde s)$}
+}
+
+\newglossaryentry{ccmss}
+{
+    name=$\hat \Lambda_{\Gamma}$,
+    description={Composite Search Space defined by the union of all Composite Search Spaces defined by every $m_i$ in $\mathcal{M}_{\Gamma}$}
+}
+
+\usetikzlibrary{shapes.geometric, arrows}
+
+\title{(Draft) Corinda: An AI Password Cracker and Strength Estimator}
+\date{\today}
+\author{Bernardo A. Rodrigues \\ \href{mailto:bernardoaraujor@gmail.com}{bernardoaraujor@gmail.com} }
+
+\begin{document}
+ 
+\begin{titlepage}
+\maketitle
+\end{titlepage}
+
+\printglossaries
+\clearpage
+
+\section{Introduction}
+
+The aim of this paper is to describe an attempt to design a Artificially Intelligent Agent that fully captures all the aspects of Password Hash Cracking. Theoretical foundation relies on Set Theory,
+First-order Model Theory, and Statistical Inference.
+
+Previous results by Rodrigues et al. \cite{?} suggest that human-biased models generate passwords with distinct statistical patterns, raising the following questions:
+\begin{itemize}
+    \item  Can a Password's Strength be based on Statistical Samples?
+    \item  Can the process of Password Cracking be fully optmized by Strength Estimators?
+    
+\end{itemize}
+
+Among other definitions, we formalize the notions of String, Sample Space, Search Domain, Model, Hash Function, and Model Strength. Strings can be viewed as the Character sets commonly referred as ``\textbf{Passwords}''. Sample Spaces can be viewed as string sets commonly referred as ``\textbf{leaked plaintext password lists}'' \cite{?}. Search Domains can be viewed string sets commonly referred as ``\textbf{dictionaries}''. Models and Composite Models can be viewed as ``\textbf{cracking attack modes}'' {\cite{?}}. Hash Functions can be viewed as what is commonly referred as ``\textbf{Secure Hash Algorithms}'' \cite{?}. Model Strength Estimators can be viewed as equivalent to the popular notion ``\textbf{Password Strength}''.
+
+The Model Strength Estimator proposed here improves upon the concepts already established by Sahin et al \cite{?}, allowing a simpler and more effective metric of Strength. 
+In comparison with Sahin's definition, we argue that using a Real number as Strength Estimator feels more intuitive by allowing intermediary values of Strength. Furthermore, we disagree that a Strength Estimator should depend on which Hash Function is being used and the Computational Power of the Attacker. A Strength Estimator should be a function only of the underlying Model and of a Sample Space. That happens because the computational problem commonly referred as ``\textbf{Password Cracking}'' can ultimately be reduced to  ``\textbf{Computational Complexity vs. Moore's Law}'', an eternal tug of war. Here, ``\textbf{Computational Complexity}'' refers to the memory and time restrictions of computing $H(\tilde s)$, while ``\textbf{Moore's Law}'' refers to the constant acceleration in the growth rate of available Computing Power. There's no way of knowing which is going to be on the winning side tomorrow, so the question of ``\textbf{how long will the cracking process take}" is purely relative and shouldn't be used in a Strength Estimator.
+
+$\cdots$
+SALT
+
+Even though this paper does not take an Information Theoretic approach, a few remarks must be made on that matter. Using Character-based Entropy to Measure Password Strength, as suggested by NIST's Electronic Authentication Guideline \cite{?}, gives a false sense of security. Even with the Composition Rules defined by NIST, most users still tend to choose Human-biased Models for Password generation, and Passwords end up having really low Entropy. For example, the String ``@ppl3" is not that different from ``apple'', and that means there is Redundancy inside the system. The main point here is that the set of possible Symbols for the Entropy calculation should not be limited to individual Characters. Instead, Strings must be viewed as Symbols, in order to allow a better Entropy Estimation.
+
+As a conclusion, we argue that the task of generating a Password should not be relegated to a Human-biased Model. Psychological biases have strong influence in the process, increasing predictability and reducing the effective Model Strength. More appropriate methods of Password generation should be used instead. If the Human being insists in participating in the process, Dicewire \cite{?} could be cited as an appropriate strategy. Memorizing many Strong Passwords is not an easy task, thus human beings should not be responsible for that. Password managing techniques should be used instead.
+
+\section{Ethical Implications}
+
+\section{Definitions}
+
+\subsection{Character}
+
+Let \gls{character} denote a symbol that belongs to a finite set of symbols $A$. Let us call $c$ a ``Character''. 
+
+\subsection{Alphabet}
+
+Let \gls{alphabet} denote the universe set of all possible Characters. Let us call $A$ an ``Alphabet''.
+
+\begin{center}
+$A = \{c_{i=1}, \cdots, c_{N}\}$
+\end{center}
+
+E.g.:
+
+\begin{center}
+$A$ is the ASCII Character set 
+\end{center}
+
+\subsection{String}
+
+Let \gls{string} be a well-ordered finite set of Characters. Let us call $s$ a ``String''.
+\begin{center}
+
+$s = \{c_{i=1}, \cdots, c_{M} | a_i \in A\}$
+
+\end{center}
+
+Let \gls{allstrings} be the set of all possible Strings over $A$.
+
+\begin{center}
+$\mathbb{X}(A) = \wp(A\textsuperscript{n}), n \to \infty$
+\end{center}
+
+Here, $\wp(S)$ represents the powerset of S, and $A\textsuperscript{n}$ represents the n'th cartesian power of $A$.
+
+\subsection{Composite String}
+
+Let \gls{compstring} be a well-ordered finite set of Strings. Let us call it a ``Composite String''.
+
+\begin{center}
+ $\tilde s = \{s_{i=1}, \cdots, s_N \}$
+\end{center}
+
+For the sake of simplicity, let us use ``String'' and ``Composite String'' interchangeably, unless stated otherwise.
+
+%Let $\Phi$ be a finite set of Strings, formed by single instances of strings $ s_i \rq \in \Gamma$ (that is, excluding repetitions). 
+
+%\begin{center}
+%$\Phi = \{  s_{i=1}\rq, \cdots,  s_{S}\rq |  s_i\rq \neq  s_{j \neq i}\rq\}$
+%\end{center}
+
+\subsection{Predicate}
+
+Let Predicate \gls{predicate} be the characteristic function of the relation between a String and a String Set $\subseteq \mathbb{X}(A)$.
+
+E.g.:
+\begin{center}
+$\lambda$ is a dictionary of English words
+
+$\alpha(s) \implies s \in \lambda$
+\end{center}
+
+Let us use $\alpha(s)$ and $\alpha$ interchangeably.
+
+\subsection{Sentence}
+
+Let $\phi(s)$ be a Sentence* formed by one or more Predicates $\alpha_i$, where the variables can be either a Composite String $\tilde s_j$, or its
+constituent Strings $s_{j,k}$.
+
+\begin{center}
+ $\phi(s) : \forall s (\alpha_1( s), \cdots, \alpha_N(s))$
+\end{center}
+
+Let us use $\phi(s)$ and $\phi$ interchangeably.
+
+\subsection{Model}
+
+Let us define $K$ as the set of Strings $s_i$ and Predicates $\alpha_j$.
+
+\begin{center}
+ $K = \{\lambda=\{s_{i=1}, \cdots, s_N\}, \phi = \{\alpha_{j=1}, \cdots, \alpha_M\}\}$ ???
+\end{center}
+
+Let us define Model \gls{model} as a Structure of signature $K$, such that every interpretation of $\phi(s)$ is true according to the  Tarski's model-theoretic definition of truth \cite{?}.
+In the context of First-order Model Theory, $s_i$ is referred as $m$'s First-order Language, and $\lambda$ is referred as $m$'s Domain*.
+
+\begin{center}
+ $m \vDash \phi(s)$
+\end{center}
+
+E.g.: 
+
+\begin{center}
+$\lambda_a$ is a dictionary of English words
+
+$\alpha_a \implies s \in \lambda_a$
+
+$\lambda_b$ is every possible String starting with an Upper-Case Character
+
+$\alpha_b \implies s \in \lambda_b$
+
+$\phi(s) : \forall  s(\alpha_a(s), \alpha_b(s))$
+
+$m \vDash \phi(s) \Rightarrow ``Example" \in \lambda_a \cap \lambda_b$
+
+\end{center}
+
+
+\subsection{Search Domain}
+
+Let the String set \gls{searchspace} be the Domain of $m$. Let us call $\lambda$ ``the Search Domain of $m$''.
+
+\subsection{Parsing}
+
+Let us define the operation of Parsing \gls{parsing} as splitting $\tilde s$ into an ordered partition set of its members.
+
+\begin{center}
+
+$\Psi(\tilde{ s}) = s_{i=1} | \cdots | s_N$
+
+\end{center}
+
+E.g.:
+
+\begin{center}
+
+$\tilde{ s} = ``psword1"$
+
+$\Psi_1(\tilde{ s}) = \{``p", ``s", ``word", ``1" \}$
+
+$\Psi_2(\tilde{ s}) = \{``ps", ``word", ``1"\}$
+
+$\Psi_3(\tilde{ s}) = \{``psword", ``1"\}$
+
+\end{center}
+
+\subsection{Concatenation}
+
+Let us define the operation of Concatenation \gls{concat} as the inverse of Parsing, such that:
+
+\begin{center}
+$\Psi\textsuperscript{-1}(s_{i=1} | \cdots | s_N) = \tilde{ s}$
+\end{center}
+
+E.g.:
+
+\begin{center}
+$\Psi_1^{-1}(\{``p", ``s", ``word", ``1" \}) = ``psword1"$
+
+$\Psi_2^{-1}(\{``ps", ``word", ``1"\}) = ``psword1"$
+
+$\Psi_3^{-1}(\{``psword", ``1"\}) = ``psword1"$
+
+\end{center}
+
+Let us also define the String set $\Psi\textsuperscript{-1}(\tilde\Lambda)$ as the Concatenation of Search Domains such that:
+
+\begin{center}
+$\tilde{s} \in \Psi\textsuperscript{-1}(\tilde\Lambda = \lambda_{i=1} \times \cdots \times \lambda_N) |  \forall i \in \{1, \cdots, N\}, s_i \in \lambda_i$
+\end{center}
+
+\subsection{Composite Model}
+FIX THIS??
+
+Let \gls{modelset} be a well-ordered set of models:
+
+\begin{center}
+$\Xi = \{m_{i=1}, \cdots, m_N\}$
+
+\end{center}
+
+Let us define a composite model \gls{compmodel} $ = \tilde{m}(\Xi)$
+
+\begin{center}
+
+
+\end{center}
+
+\bigskip
+
+E.g.: 
+
+\begin{center}
+The domain $\lambda_a $ of a Model $m_a$ is the String set of names of American citizens
+
+$``john" \in \lambda_a$
+
+\hfill \break
+
+The domain $\lambda_b $ of a Model $m_b$ is the set of Strings with numbers in date format
+
+$``310790" \in \lambda_b$
+
+\hfill \break
+then:
+\hfill \break
+
+
+$``john310790" \in \tilde\Lambda$
+\end{center}
+
+\subsection{Composite Search Domain}
+
+Let \gls{compsearchspace} be the String set defined by the cartesian product between string sets $\lambda_i$. Let us call $\tilde \Lambda$ ``the Composite Search Domain of $\tilde{m}(\Xi)$'', where each $\lambda_i$ is defined by each $m_i \in \Xi$.
+
+\begin{center}
+
+$\tilde\lambda = \lambda_{i=1} \times \cdots \times \lambda_N$
+
+\end{center}
+
+\subsection{Complexity}
+
+Let $|\tilde\lambda|$ be the cardinality (number of elements) of the Search Domain of $\tilde{m}$ (either simple or composite). Let \gls{complexity}$ = |\tilde\lambda|$ denote the ``Complexity* of $\tilde{m}$''.
+
+Let us use $\mathcal{C}(m_i)$ and $\mathcal{C}_i$ interchangeably.
+
+\subsection{Sample Space}
+
+Let \gls{envsample} be a multiset of random Strings defined by statistical samples. Let us call it a ``Sample Space''. Let $\gamma_i$ be the multiset consisting of $n_i$ repetitions of each $ s_i \rq$ in $\Gamma$. 
+
+\begin{center}
+
+$\Gamma = \{ \{ \gamma_{i=1} \}, \cdots,  \{ \gamma_N\}\}$
+
+$\gamma_i = \{ \tilde{s}_{i, j=1}  \rq, \cdots, \tilde{ s}_{i, n_i}  \rq \} | \tilde{ s}_{i, j=1} \rq = \cdots = \tilde{ s}_{i, n_i} \rq$
+
+\end{center}
+
+\subsection{Critical Composite Model}
+
+Let $M(\tilde{ s})$ be the set of all Composite Models that are able to generate the String $\tilde{ s}$. 
+
+\begin{center}
+$M(\tilde{ s}) = \{\tilde{m}_{i=1}, \cdots, \tilde{m}_{N}\} | \forall \tilde\lambda_i, \tilde{ s} \in \tilde \lambda_i$
+\end{center}
+
+Let \gls{ccm} be the Composite Model that minimizes Complexity $\mathcal{C}(\tilde m_i)$. Let us call it ``$\tilde{ s}$'s Critical Composite Model'' (CCM).
+
+\begin{center}
+$\hat m(\tilde{ s}) = \tilde m \in M(\tilde{ s}) | \forall \tilde m_i \in M(\tilde{s}), \mathcal{C}(\tilde m) = min(\mathcal{C}(\tilde m_i))$
+
+\end{center}
+
+Let $\mathcal{M}_\Gamma$ be the multiset of Critical Composite Models that are able to generate each and every String in an Sample Space $\Gamma$.
+
+\begin{center}
+$\Gamma = \{ \tilde s_{j=1}, \cdots, \tilde s_L\}$
+
+$\mathcal{M}_\Gamma = \{\hat m(\tilde s_{j=1}), \cdots, \hat m(\tilde s_L)\}$
+\end{center}
+
+Let us use $\hat m(\tilde s_j)$ and $\hat m_j$ interchangeably.
+
+Also, let \gls{ccmss} be the Composite Search Domain defined by the union of all Composite Search Domains of every $\hat m_i$ in $\mathcal{M}_{\Gamma}$.
+
+\begin{center}
+ $\hat\Lambda_{\Gamma} = \bigcup\limits_{j=1}^{L} \tilde\lambda_j$
+\end{center}
+
+\subsection{Hash Function}
+
+Let $H(\tilde s)$ denote a one-way function that maps each String $\tilde s$ into another String $h$ (called ``$\tilde s$'s Hash'').
+Note that because $H(\tilde s)$ is a one-way function, if we don't know what $\tilde s$ is, then there is no way of retrieving $\tilde s$ from $H(\tilde s)$.
+
+\begin{center}
+ $H: \mathbb{X}(A) \to \mathbb{H}$
+ 
+ $H(\tilde s) = h$
+\end{center}
+
+Here, $\mathbb{X}(A)$ is the Domain*, and $\mathbb{H}$ is the Codomain of $H(\tilde s)$. A few examples of Hash Functions are
+SHA1, SHA256, MD5, and bcrypt.
+
+Let $H(\Gamma)$ denote the list of Hashes of each $\tilde s$ in a Sample Space $\Gamma$.
+
+\subsection{Lookup Table}
+RAINBOW?
+If we have a Sample Space $\Gamma$ and a list of its respective Hashes $H(\Gamma)$, then we can form a new set
+$(\Gamma, H(\Gamma))$ where each element is an ordered pair $(\tilde s, h)$. Let us call $(\Gamma, H(\Gamma))$ a ``Lookup Table''.
+
+\begin{center}
+ $(\Gamma, H(\Gamma)) = \{(\tilde s_i, h_i)\}, \forall \tilde s_i \in \Gamma$
+\end{center}
+
+
+\subsection{Cracking Process}
+
+\subsection{Model Strength Estimator}
+
+Let $n_i$ denote the number of occurances of each CCM $\hat m_i$
+in $\mathcal{M}_{\Gamma}$. Let $\theta_i$ denote the relative frequency of $\hat m_i$ in $\mathcal{M}_{\Gamma}$.
+
+\begin{center}
+ $\theta_i = \dfrac{n_i}{|\mathcal{M}_{\Gamma}|}$
+\end{center}
+
+Let us define the notion of ``Model Strength Estimator'' \gls{mse}, such that it captures how likely it is for some String
+$\tilde s$ being used as a guess in a Cracking Process, given $\hat m_i$'s relative frequency $\theta_i$ in $\mathcal{M}_{\Gamma}$ and $\hat m_i$'s Complexity $\mathcal{C}_i$:
+
+\begin{center}
+ $\mathfrak{S}(\theta_i, \mathcal{C}_i) = \bigg(1 - \dfrac{1}{\log_{10}(\mathcal{C}_i + 9)}\bigg)^{\theta_i}$
+\end{center}
+
+Note that although $\mathfrak{S}(\theta_i, \mathcal{C}_i)$ is related to a Critical Composite Model, we choose to call it Model Strength Estimator for simplicity.
+Note also that because $\mathcal{C}_i \geqslant 1$, a constant is added to $\mathcal{C}_i$ in order to keep  $\mathfrak{S}(\theta_i, \mathcal{C}_i)$'s Range between 0 and 1. 
+
+This metric rewards CCMs with high Complexities and low relative frequencies, classifying them as Strong Models.
+On the other hand, CCMs with low Complexities and high relative frequencies are classified as Weak Models. Note however that a CCM
+could have a relatively low Complexity and still be classified as having a Medium-High Strength, if its relative frequency is low. Also,
+CCMs with high Complexities and high frequencies are also classified as having Medium-High Strengths.
+
+GRAPH??
+
+\subsection{Cracking Resource}
+
+\subsection{Corinda's Design}
+
+-zxcvbn
+-hashcat
+
+The Diagram below summarizes Corinda's design:
+
+\input{diagrama}
+
+\end{document}

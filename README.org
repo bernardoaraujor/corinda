@@ -1,8 +1,9 @@
+
 #+TITLE: corinda
 
 Corinda is a Bayesian hash cracker and password strength estimator.
 
-Theoretical foundation relies on Set Theory, and BStatistical Inference. Corinda expands upon the notions already established in Sahin et al. [1]. Previous results by Rodrigues et al. [2] suggest that human-biased models generate passwords with distinct statistical patterns, raising the following questions:
+Theoretical foundation relies on Set Theory, First-order Model Theory, and Statistical Inference. Corinda expands upon the notions already established in Sahin et al. [1]. Previous results by Rodrigues et al. [2] suggest that human-biased models generate passwords with distinct statistical patterns, raising the following questions:
 
  - Can a Password's Strength be modeled as a Statistical Inference problem? 
  - Can the process of Password Cracking be fully optmized by Machine Learning?
