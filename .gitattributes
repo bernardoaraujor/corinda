@@ -3,3 +3,4 @@ training/linkedin_final.txt filter=lfs diff=lfs merge=lfs -text
 training/rockyou_final.txt filter=lfs diff=lfs merge=lfs -text
 training/input/antipublic.csv.gz filter=lfs diff=lfs merge=lfs -text
 training/input/linkedin.csv.gz filter=lfs diff=lfs merge=lfs -text
+training/input/rockyou.csv.gz filter=lfs diff=lfs merge=lfs -text

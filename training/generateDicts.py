@@ -14,8 +14,8 @@ __status__      = "development"
 ##############################################################
 
 import sys
-import getopt
-import collections
+import csv
+import gzip
 
 ##############################################################
 # loadFile(path)
@@ -25,20 +25,20 @@ import collections
 
 
 def main(argv):
-        inputFile = argv[1]
+    inputFile = argv[1]
 
-        d = {}
+    with open(inputFile.replace('.txt', '.csv'), 'w') as f:
+        fieldnames = ['frequency', 'password']
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+
         for line in open(inputFile, 'r', encoding="utf-8"):
-                line = line.split('\t')
-                freq = int(line[0])
-                password = line[1][0:-1]
-                
-                d[password] = freq
- 
-                print(d['crazy1'])
+            line = line.split('\t')
 
+            freq = int(line[0])
+            password = line[1][0:-1]    #skip the \n (last char)
 
+            writer.writerow({'frequency': freq, 'password': password})
 
 if __name__ == "__main__":
-        main(sys.argv)
+    main(sys.argv)
 
