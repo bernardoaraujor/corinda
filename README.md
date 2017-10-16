@@ -12,7 +12,7 @@ Theoretical foundation relies on Set Theory, First-order Model Theory, and Stati
  
  [2] https://goo.gl/mUVlw2
 
-## installation
+## Installing
 
 1. Clone recursively:
 ```
@@ -20,7 +20,7 @@ git clone --recursive https://github.com/bernardoaraujor/corinda
 cd corinda
 ```
 
-2. If corinda/training/input is empty, fetch from lfs:
+2. If corinda/training/input is empty, fetch from lfs (might take a while):
 ```
 git lfs fetch
 ```
