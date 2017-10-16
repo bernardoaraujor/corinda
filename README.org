@@ -11,3 +11,12 @@ Theoretical foundation relies on Set Theory, First-order Model Theory, and Stati
  [1] https://goo.gl/uYJsVr
  
  [2] https://goo.gl/mUVlw2
+
+#+ TITLE: installation
+
+git clone https://github.com/bernardoaraujor/corinda
+cd corinda
+git lfs ?
+git submodule update
+cd model_recognition/passfault/commandLine
+../gradlew installDist
