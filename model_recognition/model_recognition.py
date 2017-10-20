@@ -1,9 +1,9 @@
 import subprocess
 
 password = "test"
-args = ("passfault/commandLine/build/install/passfault/bin/passfault")
+args = ("java", "-jar", "/home/bernardo/PycharmProjects/corinda/model_recognition/passfault_corinda/out/artifacts/passfault_jar/passfault.jar")
 
 popen = subprocess.Popen(args, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
 
-out, err = popen.communicate(input='bernardo\n'.encode())
+out, err = popen.communicate(input=''.encode())
 print(out)
