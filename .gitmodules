@@ -1,3 +1,0 @@
-[submodule "model_recognition/passfault"]
-	path = model_recognition/passfault
-	url = https://github.com/bernardoaraujor/passfault
