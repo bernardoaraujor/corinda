@@ -15,8 +15,7 @@ class ModelRecognition:
 
 def main():
     recog = ModelRecognition()
-    print(recog.analyze("atila"))
-
+    print(recog.analyze("bernArdorodrigues"))
 
 if __name__ == "__main__":
     main()
