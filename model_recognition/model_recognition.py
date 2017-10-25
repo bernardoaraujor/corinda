@@ -1,19 +1,22 @@
-import subprocess
-import gzip
-import csv
-import pandas as pd
+import jpype
 
-import os
+class ModelRecognition:
+    def __init__(self):
+        classpath = "/home/bernardo/PycharmProjects/corinda/model_recognition/passfault_corinda/out/artifacts/passfault_corinda_jar/passfault_corinda.jar"
+        jpype.startJVM(jpype.getDefaultJVMPath(), "-Djava.class.path=%s" % classpath)
+        passfaultPkg = jpype.JPackage('org').owasp.passfault
+        TextAnalysis = passfaultPkg.TextAnalysis
 
-password = "test"
-args = ("java", "-jar", "/home/bernardo/IdeaProjects/passfault_corinda2/out/artifacts/passfault_corinda_jar/passfault_corinda2.jar")
+        self._analyzer = TextAnalysis()
 
-popen = subprocess.Popen(args, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
 
-data = pd.read_csv('../training/input/rockyou.csv.gz', compression='gzip',
-                   error_bad_lines=False)
+    def analyze(self, password):
+        return self._analyzer.passwordAnalysis(password)
 
-for p in data.password:
-    out, err = popen.communicate(input='bernardo'.encode())
-    popen.wait();
-    print(out)
+def main():
+    recog = ModelRecognition()
+    print(recog.analyze("atila"))
+
+
+if __name__ == "__main__":
+    main()
