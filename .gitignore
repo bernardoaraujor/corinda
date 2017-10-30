@@ -1,2 +1,4 @@
 /training/__pycache__
 /training/.generateDicts.py.swp
+model_recognition/__pycache__/
+.idea/

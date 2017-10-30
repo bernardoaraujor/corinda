@@ -1,4 +1,5 @@
 import jpype
+from model_recognition.model import Model
 
 class ModelRecognition:
     def __init__(self):
@@ -12,6 +13,10 @@ class ModelRecognition:
 
     def analyze(self, password):
         return self._analyzer.passwordAnalysis(password)
+
+    def analyzeThread(self, password, vals):
+        jpype.attachThreadToJVM()
+        vals.append( self._analyzer.passwordAnalysis(password))
 
 def main():
     recog = ModelRecognition()
