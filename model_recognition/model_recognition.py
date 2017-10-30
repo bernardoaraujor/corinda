@@ -1,5 +1,7 @@
 import jpype
 from model_recognition.model import Model
+import json
+from collections import OrderedDict
 
 class ModelRecognition:
     def __init__(self):
@@ -14,9 +16,26 @@ class ModelRecognition:
     def analyze(self, password):
         return self._analyzer.passwordAnalysis(password)
 
-    def analyzeThread(self, password, vals):
+    def analyzer_thread(self, password_list, model_dict):
         jpype.attachThreadToJVM()
-        vals.append( self._analyzer.passwordAnalysis(password))
+        for index, row in password_list.iterrows():
+            password = row["password"]
+            freq = row["freq"]
+
+            json_data = self._analyzer.passwordAnalysis(password)
+            id = json.loads(json_data, object_pairs_hook=OrderedDict)["compositeModelName"]
+
+            if (id in model_dict):
+                model_dict[id].acquire_lock()
+                model_dict[id].add_frequency(freq)
+                model_dict[id].release_lock()
+
+            else:
+                model_dict[id] = Model(json_data)
+                model_dict[id].acquire_lock()
+                model_dict[id].add_frequency(freq)
+                model_dict[id].release_lock()
+
 
 def main():
     recog = ModelRecognition()
