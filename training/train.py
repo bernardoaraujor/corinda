@@ -1,7 +1,11 @@
-from model_recognition.model_recognition import ModelRecognition
 import threading
-import pandas as pd
 import time
+import os, sys
+import pandas as pd
+from model_recognition.model_recognition import ModelRecognition
+
+file_dir = os.path.dirname(__file__)
+sys.path.append(file_dir)
 
 recognizer = ModelRecognition()
 
@@ -13,11 +17,11 @@ recognizer = ModelRecognition()
 #     threads.append(t)
 #     t.start()
 #
-
+print("loading input file")
 data = pd.read_csv('input/rockyou.csv.gz', compression='gzip',
                    error_bad_lines=False)
 
-n_threads = 10
+n_threads = 1000
 threads = []
 n_rows, _ = data.shape
 
@@ -34,10 +38,13 @@ for i in range(0, n_threads):
     t = threading.Thread(target=recognizer.analyzer_thread, args=(slice, model_dict, ))
     threads.append(t)
     t.start()
+    print("starting thread number " + str(i))
 
 while(1):
+    count = recognizer.get_count()
     time.sleep(1)
-    print(count)
+    count_ = recognizer.get_count()
+    print('total evaluated: ' + str(100*count/n_rows) + '\tspeed: ' + str(100*(count_ - count)/n_rows) + '% / s')
 # for index, row in data.iterrows():
 #     # if (row['password'] == 'NULL'):
 #     #    a = 1

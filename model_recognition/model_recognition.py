@@ -1,7 +1,11 @@
-import jpype
-from model_recognition.model import Model
 import json
+import threading
 from collections import OrderedDict
+
+import jpype
+
+from model_recognition.model import Model
+
 
 class ModelRecognition:
     def __init__(self):
@@ -11,10 +15,24 @@ class ModelRecognition:
         TextAnalysis = passfaultPkg.TextAnalysis
 
         self._analyzer = TextAnalysis()
+        self._count = 0
+        self._count_lock= threading.Lock()
 
 
     def analyze(self, password):
         return self._analyzer.passwordAnalysis(password)
+
+    def increase_count(self):
+        self._count += 1
+
+    def get_count(self):
+        return self._count
+
+    def acquire_count_lock(self):
+        self._count_lock.acquire()
+
+    def release_count_lock(self):
+        self._count_lock.release()
 
     def analyzer_thread(self, password_list, model_dict):
         jpype.attachThreadToJVM()
@@ -35,6 +53,12 @@ class ModelRecognition:
                 model_dict[id].acquire_lock()
                 model_dict[id].add_frequency(freq)
                 model_dict[id].release_lock()
+
+            self.acquire_count_lock()
+            self.increase_count()
+            self.release_count_lock()
+
+
 
 
 def main():
