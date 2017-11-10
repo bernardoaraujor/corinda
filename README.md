@@ -7,7 +7,6 @@ to learn new password model entropy patterns, as well as to make guesses against
 Related publications on the subject:
 
  - Passfault: an Open Source Tool for Measuring Password Complexity and Strength: https://goo.gl/uYJsVr
- - zxcvbn: realistic password strength estimation: https://goo.gl/9AfUhv
  
 ## Installing
 
