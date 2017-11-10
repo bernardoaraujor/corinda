@@ -1,32 +1,24 @@
-
 # Corinda
 
-Corinda is a Bayesian hash cracker and password strength estimator.
+Corinda is a concurrency and entropy based hash cracker.
+It takes advantage of the concurrency possibilities of [Go Language](https://golang.org/) 
+to learn new password model entropy patterns, as well as to make guesses against a target hash.
 
-Theoretical foundation relies on Set Theory, First-order Model Theory, and Statistical Inference. Corinda expands upon the notions already established in Sahin et al. [1]. Previous results by Rodrigues et al. [2] suggest that human-biased models generate passwords with distinct statistical patterns, raising the following questions:
+Related publications on the subject:
 
- - Can a Password's Strength be modeled as a Statistical Inference problem? 
- - Can the process of Password Cracking be fully optmized by Machine Learning?
+ - Passfault: an Open Source Tool for Measuring Password Complexity and Strength: https://goo.gl/uYJsVr
+ - zxcvbn: realistic password strength estimation: https://goo.gl/9AfUhv
  
- [1] https://goo.gl/uYJsVr
- 
- [2] https://goo.gl/mUVlw2
-
 ## Installing
 
-1. Clone recursively:
+1. Clone to ~/go/src/github/bernardoaraujor/:
 ```
+mkdir -p ~/go/src/github/bernardoaraujor/
+cd ~/go/src/github/bernardoaraujor/
 git clone --recursive https://github.com/bernardoaraujor/corinda
-cd corinda
 ```
 
 2. If corinda/training/input is empty, fetch from lfs (might take a while):
 ```
+cd corinda
 git lfs fetch
-```
-
-3. Build Passfault:
-```
-cd model_recognition/passfault/commandLine
-../gradlew installDist
-```
