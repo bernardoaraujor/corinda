@@ -10,14 +10,11 @@ Related publications on the subject:
  
 ## Installing
 
-1. Clone to ~/go/src/github/bernardoaraujor/:
+1. Clone to GOPATH:
 ```
-mkdir -p ~/go/src/github/bernardoaraujor/
-cd ~/go/src/github/bernardoaraujor/
-git clone --recursive https://github.com/bernardoaraujor/corinda
+go get github.com/bernardoaraujor/corinda
 ```
 
-2. If corinda/training/input is empty, fetch from lfs (might take a while):
-```
-cd corinda
-git lfs fetch
+2. notes to self:
+TODO:
+ - doc dependencies (jnigi check /usr/lib/jvm/..., sym link include/linux/jni_md.h to include/jni_md.h)
