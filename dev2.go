@@ -87,14 +87,13 @@ func processPass(jvm *jnigi.JVM, fpChan chan freqNpass, frChan chan freqNresult)
 		//format result from JVM into Go string
 		resultJVM, err := v.(*jnigi.ObjectRef).CallMethod(env, "getBytes", jnigi.Byte|jnigi.Array)
 		resultGo := string(resultJVM.([]byte))
-
 		frChan <- freqNresult{fp.freq, resultGo}
 	}
 	close(frChan)
 }
 
 func main() {
-	inputPath := "lists/rockyou.csv"
+	inputPath := os.Args[1]
 	in, err := os.Open(inputPath)
 	if err != nil {
 		log.Fatal(err)
@@ -113,14 +112,15 @@ func main() {
 
 	done := make(chan bool)
 
+	nThreads := 20
+
 	//TODO: buffer this channel... which size?
-	fpChan := make(chan freqNpass)
-	frChan := make(chan freqNresult)
+	fpChan := make(chan freqNpass, nThreads)
+	frChan := make(chan freqNresult, nThreads)
 
 	go csvRead(in, done, fpChan)
 
-	nThreads := 10
-	for i := 0; i < nThreads; i++ {
+		for i := 0; i < nThreads; i++ {
 		go processPass(jvm, fpChan, frChan)
 	}
 
