@@ -2,12 +2,12 @@ package main
 
 import (
 	"github.com/timob/jnigi"
-	"compress/gzip"
 	"encoding/csv"
-	"fmt"
+	//"fmt"
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
 type freqNpass struct{
@@ -15,37 +15,22 @@ type freqNpass struct{
 	pass string
 }
 
-func main() {
-
-	//TODO: how to get slices from .csv.gz??
-	f, err := os.Open("lists/rockyou.csv.gz")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-	gr, err := gzip.NewReader(f)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer gr.Close()
-
-	done := make(chan bool)
-
-	//TODO: buffer this channel... which size?
-	fpChan := make(chan freqNpass)
-
-	go csvRead(gr, done, fpChan)
-
-	//TODO: many processes... how to parametrize in function of n?
-	go processPass(fpChan)
-
-	for !<-done{
-
-	}
+type freqNresult struct{
+	freq int
+	result string
 }
 
-func csvRead(gr *gzip.Reader, done chan bool, fpChan chan freqNpass) {
-	r := csv.NewReader(gr)
+func startJVM() (*jnigi.JVM){
+	jvm, _, err := jnigi.CreateJVM(jnigi.NewJVMInitArgs(false, true, jnigi.DEFAULT_VERSION, []string{"-Xcheck:jni", "-Djava.class.path=/home/bernardo/go/src/github.com/bernardoaraujor/corinda/passfault_corinda/out/artifacts/passfault_corinda_jar/passfault_corinda.jar"}))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return jvm
+}
+
+func csvRead(f *os.File, done chan bool, fpChan chan freqNpass) {
+	r := csv.NewReader(f)
 
 	for records, err := r.Read(); records != nil; records, err = r.Read(){
 		if err != nil {
@@ -61,16 +46,26 @@ func csvRead(gr *gzip.Reader, done chan bool, fpChan chan freqNpass) {
 		fp := freqNpass{freq, pass}
 		fpChan <- fp
 	}
+	close(fpChan)
 
 	done <- true
 }
 
-func processPass(fpChan chan freqNpass){
-	//start JVM
-	_, env, err := jnigi.CreateJVM(jnigi.NewJVMInitArgs(false, true, jnigi.DEFAULT_VERSION, []string{"-Xcheck:jni", "-Djava.class.path=/home/bernardo/go/src/github.com/bernardoaraujor/corinda/passfault_corinda/out/artifacts/passfault_corinda_jar/passfault_corinda.jar"}))
-	if err != nil {
-		log.Fatal(err)
+func csvWrite(f *os.File, frChan chan freqNresult){
+	writer := csv.NewWriter(f)
+	defer writer.Flush()
+
+	for fr := range frChan {
+		s := []string{strconv.Itoa(fr.freq), fr.result}
+		err := writer.Write(s)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
+}
+
+func processPass(jvm *jnigi.JVM, fpChan chan freqNpass, frChan chan freqNresult){
+	env := jvm.AttachCurrentThread()
 
 	//create TextAnalysis JVM object
 	obj, err := env.NewObject("org/owasp/passfault/TextAnalysis")
@@ -78,15 +73,8 @@ func processPass(fpChan chan freqNpass){
 		log.Fatal(err)
 	}
 
-	//iterate over channel
-	//TODO: close channel?
-	for {
-		//read channel
-		fp, ok := <-fpChan
-		if !ok {
-			break
-		}
 
+	for fp := range fpChan {
 		//create JVM string with password
 		str, err := env.NewObject("java/lang/String", []byte(fp.pass))
 
@@ -100,7 +88,47 @@ func processPass(fpChan chan freqNpass){
 		resultJVM, err := v.(*jnigi.ObjectRef).CallMethod(env, "getBytes", jnigi.Byte|jnigi.Array)
 		resultGo := string(resultJVM.([]byte))
 
-		fmt.Println(fp.pass + " " + resultGo)
+		frChan <- freqNresult{fp.freq, resultGo}
+	}
+	close(frChan)
+}
+
+func main() {
+	inputPath := "lists/rockyou.csv"
+	in, err := os.Open(inputPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer in.Close()
+
+	outputPath := strings.Replace(inputPath, ".csv", "_out.csv", -1)
+	out, err := os.Create(outputPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer out.Close()
+
+	//start JVM
+	jvm := startJVM()
+
+	done := make(chan bool)
+
+	//TODO: buffer this channel... which size?
+	fpChan := make(chan freqNpass)
+	frChan := make(chan freqNresult)
+
+	go csvRead(in, done, fpChan)
+
+	nThreads := 10
+	for i := 0; i < nThreads; i++ {
+		go processPass(jvm, fpChan, frChan)
+	}
+
+	go csvWrite(out, frChan)
+
+	for !<-done{
 	}
 }
+
+
 
