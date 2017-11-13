@@ -8,6 +8,9 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
+	//"fmt"
+	"fmt"
 )
 
 type freqNpass struct{
@@ -64,7 +67,7 @@ func csvWrite(f *os.File, frChan chan freqNresult){
 	}
 }
 
-func processPass(jvm *jnigi.JVM, fpChan chan freqNpass, frChan chan freqNresult){
+func processPass(jvm *jnigi.JVM, fpChan chan freqNpass, frChan chan freqNresult, countChan chan bool){
 	env := jvm.AttachCurrentThread()
 
 	//create TextAnalysis JVM object
@@ -88,8 +91,15 @@ func processPass(jvm *jnigi.JVM, fpChan chan freqNpass, frChan chan freqNresult)
 		resultJVM, err := v.(*jnigi.ObjectRef).CallMethod(env, "getBytes", jnigi.Byte|jnigi.Array)
 		resultGo := string(resultJVM.([]byte))
 		frChan <- freqNresult{fp.freq, resultGo}
+		countChan <- true
 	}
 	close(frChan)
+}
+
+func counter(c *int, countChan chan bool){
+	for _ = range countChan{
+		*c++
+	}
 }
 
 func main() {
@@ -112,21 +122,25 @@ func main() {
 
 	done := make(chan bool)
 
-	nThreads := 20
+	nRoutines, _ := strconv.Atoi(os.Args[2])
 
-	//TODO: buffer this channel... which size?
-	fpChan := make(chan freqNpass, nThreads)
-	frChan := make(chan freqNresult, nThreads)
+	count := 0
+	countChan := make(chan bool, nRoutines)
+
+	go counter(&count, countChan)
+	fpChan := make(chan freqNpass, nRoutines)
+	frChan := make(chan freqNresult, nRoutines)
 
 	go csvRead(in, done, fpChan)
-
-		for i := 0; i < nThreads; i++ {
-		go processPass(jvm, fpChan, frChan)
+		for i := 0; i < nRoutines; i++ {
+		go processPass(jvm, fpChan, frChan, countChan)
 	}
 
 	go csvWrite(out, frChan)
 
-	for !<-done{
+	for {
+		time.Sleep(1000 * time.Millisecond)
+		fmt.Println("Processed passwords: " + strconv.Itoa(count))
 	}
 }
 
