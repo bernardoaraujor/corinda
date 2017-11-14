@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"encoding/json"
 	//"fmt"
-	"fmt"
 )
 
 type FreqNpass struct{
@@ -64,8 +63,9 @@ type CompModelJSON struct {
 	CompositeModelName string `json:"compositeModelName"`
 }
 
+//starts JVM that will be used to call Passfault's passwordAnalysis
 func StartJVM() (*jnigi.JVM){
-	jvm, _, err := jnigi.CreateJVM(jnigi.NewJVMInitArgs(false, true, jnigi.DEFAULT_VERSION, []string{"-Xcheck:jni", "-Djava.class.path=/home/bernardo/go/src/github.com/bernardoaraujor/corinda/passfault_corinda/out/artifacts/passfault_corinda_jar/passfault_corinda.jar"}))
+	jvm, _, err := jnigi.CreateJVM(jnigi.NewJVMInitArgs(false, true, jnigi.DEFAULT_VERSION, []string{"-Djava.class.path=/home/bernardo/go/src/github.com/bernardoaraujor/corinda/passfault_corinda/out/artifacts/passfault_corinda_jar/passfault_corinda.jar"}))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -73,8 +73,16 @@ func StartJVM() (*jnigi.JVM){
 	return jvm
 }
 
-func CsvRead(f *os.File, done chan bool, fpChan chan FreqNpass) {
-	r := csv.NewReader(f)
+//reads lines from csv file and sends them to a buffered channel
+//many go routines of ProcessPass will read from this channel
+func CsvRead(inputPath string, fpChan chan FreqNpass) {
+	in, err := os.Open(inputPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer in.Close()
+
+	r := csv.NewReader(in)
 
 	for records, err := r.Read(); records != nil; records, err = r.Read(){
 		if err != nil {
@@ -90,11 +98,13 @@ func CsvRead(f *os.File, done chan bool, fpChan chan FreqNpass) {
 		fp := FreqNpass{freq, pass}
 		fpChan <- fp
 	}
-	close(fpChan)
 
-	done <- true
+	//no more lines, close channel
+	close(fpChan)
 }
 
+//parses the JSON strings returned from Passfault
+//data is stored in maps of Composite and Elementary Models
 func DecodeJSON(frChan chan FreqNresult){
 	compositeModelMap := make(map[string]CompositeModel)
 	elementaryModelMap := make(map[string]ElementaryModel)
@@ -138,16 +148,12 @@ func DecodeJSON(frChan chan FreqNresult){
 			//add to map
 			compositeModelMap[compModelName] = cm
 		}
-
-		/*
-		for _, b := range compModel.ElementaryModels{
-			fmt.Println(b)
-		}
-		*/
 	}
 }
 
-func ProcessPass(jvm *jnigi.JVM, fpChan chan FreqNpass, frChan chan FreqNresult, countChan chan bool){
+//uses Passfault's passwordAnalysis method to process passwords
+func PasswordAnalysis(jvm *jnigi.JVM, fpChan chan FreqNpass, frChan chan FreqNresult, countChan chan bool){
+	//attach this routine to JVM
 	env := jvm.AttachCurrentThread()
 
 	//create TextAnalysis JVM object
@@ -156,7 +162,7 @@ func ProcessPass(jvm *jnigi.JVM, fpChan chan FreqNpass, frChan chan FreqNresult,
 		log.Fatal(err)
 	}
 
-
+	//loop over inputs from csv file
 	for fp := range fpChan {
 		//create JVM string with password
 		str, err := env.NewObject("java/lang/String", []byte(fp.pass))
@@ -172,12 +178,18 @@ func ProcessPass(jvm *jnigi.JVM, fpChan chan FreqNpass, frChan chan FreqNresult,
 		resultString := string(resultJVM.([]byte))
 		resultBytes := []byte(resultString)
 
+		//send result to JSON decoder
 		frChan <- FreqNresult{fp.freq, resultBytes}
+
+		//signal to counter
 		countChan <- true
 	}
+
+	//no more inputs, buffer is empty, close channel
 	close(frChan)
 }
 
+//counts how many passwords have already been analyzed
 func Counter(c *int, countChan chan bool){
 	for _ = range countChan{
 		*c++
