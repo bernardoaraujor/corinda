@@ -17,6 +17,11 @@ import (
 
 const passfaultClassPath = "-Djava.class.path=passfault_corinda/out/artifacts/passfault_corinda_jar/passfault_corinda.jar"
 
+type TrainedMaps struct{
+	ElementaryModelsMap map[string]ElementaryModel
+	CompositeModelsMap map[string]CompositeModel
+}
+
 // this struct is used right after the csv line is read
 // it contains frequency and password
 type FreqNpass struct{
@@ -149,17 +154,13 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 				compositeModelMap[compModelName] = cm
 			}
 		}else{ //frChan is closed
-			emFile, err := os.Create("maps/" + trainName + "ElementaryModelMap.gob")
+			trainedMaps := TrainedMaps{elementaryModelMap, compositeModelMap}
+
+			emFile, err := os.Create("maps/" + trainName + "TrainedMaps.gob")
 			encoder := gob.NewEncoder(emFile)
-			err = encoder.Encode(elementaryModelMap)
+			err = encoder.Encode(trainedMaps)
 			Check(err)
 			emFile.Close()
-
-			cmFile, err := os.Create("maps/" + trainName + "CompositeModelMap.gob")
-			encoder = gob.NewEncoder(cmFile)
-			err = encoder.Encode(compositeModelMap)
-			Check(err)
-			cmFile.Close()
 
 			break
 		}
