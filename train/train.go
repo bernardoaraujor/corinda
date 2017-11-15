@@ -103,7 +103,7 @@ func CsvRead(cr *csv.Reader, nRoutines int) <-chan FreqNpass{
 
 // parses the JSON strings returned from Passfault
 // data is stored in maps of Composite and Elementary Models
-func DecodeJSON(frChan <-chan FreqNresult, done *bool){
+func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 	compositeModelMap := make(map[string]CompositeModel)
 	elementaryModelMap := make(map[string]ElementaryModel)
 	for { // loop over frChan
@@ -149,14 +149,13 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool){
 				compositeModelMap[compModelName] = cm
 			}
 		}else{ //frChan is closed
-
-			emFile, err := os.Create("maps/elementaryModelMap.gob")
+			emFile, err := os.Create("maps/" + trainName + "ElementaryModelMap.gob")
 			encoder := gob.NewEncoder(emFile)
 			err = encoder.Encode(elementaryModelMap)
 			Check(err)
 			emFile.Close()
 
-			cmFile, err := os.Create("maps/compositeModelMap.gob")
+			cmFile, err := os.Create("maps/" + trainName + "CompositeModelMap.gob")
 			encoder = gob.NewEncoder(cmFile)
 			err = encoder.Encode(compositeModelMap)
 			Check(err)
@@ -289,7 +288,7 @@ func Train(input string, nRoutines int) {
 	frChans, countChan := PasswordAnalysis(passfaultClassPath, fpChan, nRoutines)
 	go Counter(&count, countChan)
 	fannedFrChans := FanIn(frChans)
-	go DecodeJSON(fannedFrChans, &done)
+	go DecodeJSON(fannedFrChans, &done, input)
 
 	// report progress every second
 	for !done{
