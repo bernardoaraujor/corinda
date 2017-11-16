@@ -224,9 +224,9 @@ func PasswordAnalysis(passfaultClassPath string, fpChan <-chan FreqNpass, nRouti
 }
 
 // fans output of channels from PasswordAnalysis routines into one single channel
-func FanIn(frChans []<-chan FreqNresult) <-chan FreqNresult{
+func FanIn(frChans []<-chan FreqNresult, nRoutines int) <-chan FreqNresult{
 	var wg sync.WaitGroup
-	out := make(chan FreqNresult)
+	out := make(chan FreqNresult, nRoutines)
 
 	// Start an output goroutine for each input channel in cs.  output
 	// copies values from c to out until c is closed, then calls wg.Done.
@@ -288,7 +288,7 @@ func Train(input string, nRoutines int) {
 	fpChan := CsvRead(cr, nRoutines)
 	frChans, countChan := PasswordAnalysis(passfaultClassPath, fpChan, nRoutines)
 	go Counter(&count, countChan)
-	fannedFrChans := FanIn(frChans)
+	fannedFrChans := FanIn(frChans, nRoutines)
 	go DecodeJSON(fannedFrChans, &done, input)
 
 	// report progress every second
