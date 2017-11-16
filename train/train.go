@@ -291,10 +291,13 @@ func Train(input string, nRoutines int) {
 	fannedFrChans := FanIn(frChans, nRoutines)
 	go DecodeJSON(fannedFrChans, &done, input)
 
+	start := time.Now()
+
 	// report progress every second
 	for !done{
+		since := time.Since(start)
 		time.Sleep(1000 * time.Millisecond)
-		fmt.Println("Processed passwords: " + strconv.Itoa(count))
+		fmt.Println("Processed passwords: " + strconv.Itoa(count) + "; Total time: " + since.String())
 	}
 }
 
