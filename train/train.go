@@ -11,7 +11,6 @@ import (
 	"encoding/gob"
 	"github.com/timob/jnigi"
 	"runtime"
-	"compress/gzip"
 	"time"
 )
 
@@ -267,16 +266,18 @@ func Check(e error) {
 }
 
 func Train(input string, nRoutines int) {
-	inputCsvGzPath := "csv/" + input + ".csv.gz"
-	f, err := os.Open(inputCsvGzPath)
+	//inputCsvGzPath := "csv/" + input + ".csv.gz"
+	inputCsvPath := "csv/" + input + ".csv"
+	//f, err := os.Open(inputCsvGzPath)
+	f, err := os.Open(inputCsvPath)
 	Check(err)
 	defer f.Close()
 
-	gr, err := gzip.NewReader(f)
-	Check(err)
-	defer gr.Close()
+	//gr, err := gzip.NewReader(f)
+	//Check(err)
+	//defer gr.Close()
 
-	cr := csv.NewReader(gr)
+	cr := csv.NewReader(f)
 
 	// initialize counter
 	count := 0
