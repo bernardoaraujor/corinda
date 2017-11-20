@@ -16,9 +16,46 @@ import (
 
 const passfaultClassPath = "-Djava.class.path=passfault_corinda/out/artifacts/passfault_corinda_jar/passfault_corinda.jar"
 
+// this struct is generated after a csv file is processed
 type TrainedMaps struct{
 	ElementaryModelsMap map[string]ElementaryModel
 	CompositeModelsMap map[string]CompositeModel
+}
+
+func (tmTo *TrainedMaps) Merge(tmFrom *TrainedMaps){
+	// process ElementaryModelsMaps
+	for k, emFrom := range tmFrom.ElementaryModelsMap{
+		if emTo, ok := tmTo.ElementaryModelsMap[k]; ok{		//em already in tmTo
+			for tokenFrom, freqFrom := range emFrom.TokenFreqMap{
+				if freqTo, ok := tmTo.ElementaryModelsMap[k].TokenFreqMap[tokenFrom]; ok{		 //token already in map
+					emTo.TokenFreqMap[tokenFrom] = freqTo + freqFrom
+				}else{		//token not in map, create new entry
+					emTo.TokenFreqMap[tokenFrom] = freqFrom
+				}
+			}
+		}else{			//em not in tmTo, create new entry
+			tmTo.ElementaryModelsMap[k] = emFrom
+		}
+	}
+
+	// process CompositeModels
+	for k, cmFrom := range tmFrom.CompositeModelsMap{
+		if cmTo, ok := tmTo.CompositeModelsMap[k]; ok{		//cm already in tmTo
+			cmTo.updateFreq(cmFrom.Freq)
+		}else{		//cm not in tmTo, create new entry
+			cmTo := cmFrom
+
+			//set em pointers
+			for i, em := range cmFrom.ElementaryModels{
+				emName := em.ModelName
+				emTo := tmTo.ElementaryModelsMap[emName]
+				cmTo.ElementaryModels[i] = &emTo
+			}
+
+			//insert cm
+			tmTo.CompositeModelsMap[k] = cmTo
+		}
+	}
 }
 
 // this struct is used right after the csv line is read
@@ -62,7 +99,7 @@ type CompositeModel struct{
 }
 
 // updates the frequency of some CompositeModel
-func (cm CompositeModel) updateFreq(freq int){
+func (cm *CompositeModel) updateFreq(freq int){
 	cm.Freq = cm.Freq + freq
 }
 
