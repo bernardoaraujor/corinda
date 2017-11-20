@@ -22,6 +22,18 @@ type TrainedMaps struct{
 	CompositeModelsMap map[string]*CompositeModel
 }
 
+// returns the relative frequency of a specific CompositeModel, in relation to all CompositeModels in the trained map
+func (tm TrainedMaps) RelativeFreq(cm *CompositeModel) float64{
+	freq :=  cm.Freq
+
+	sum := 0
+	for _, cm := range tm.CompositeModelsMap{
+		sum += cm.Freq
+	}
+
+	return float64(freq)/float64(sum)
+}
+
 func (tmTo *TrainedMaps) Merge(tmFrom *TrainedMaps){
 	// process ElementaryModelsMaps
 	for k, emFrom := range tmFrom.ElementaryModelsMap{
