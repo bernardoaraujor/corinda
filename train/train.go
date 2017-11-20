@@ -191,7 +191,6 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 			}
 		}else{ //frChan is closed
 			trainedMaps := TrainedMaps{elementaryModelMap, compositeModelMap}
-
 			emFile, err := os.Create("maps/" + trainName + "TrainedMaps.gob")
 			encoder := gob.NewEncoder(emFile)
 			err = encoder.Encode(trainedMaps)
