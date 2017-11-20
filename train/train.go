@@ -18,8 +18,8 @@ const passfaultClassPath = "-Djava.class.path=passfault_corinda/out/artifacts/pa
 
 // this struct is generated after a csv file is processed
 type TrainedMaps struct{
-	ElementaryModelsMap map[string]ElementaryModel
-	CompositeModelsMap map[string]CompositeModel
+	ElementaryModelsMap map[string]*ElementaryModel
+	CompositeModelsMap map[string]*CompositeModel
 }
 
 func (tmTo *TrainedMaps) Merge(tmFrom *TrainedMaps){
@@ -49,7 +49,7 @@ func (tmTo *TrainedMaps) Merge(tmFrom *TrainedMaps){
 			for i, em := range cmFrom.ElementaryModels{
 				emName := em.ModelName
 				emTo := tmTo.ElementaryModelsMap[emName]
-				cmTo.ElementaryModels[i] = &emTo
+				cmTo.ElementaryModels[i] = emTo
 			}
 
 			//insert cm
@@ -145,8 +145,8 @@ func CsvRead(cr *csv.Reader, nRoutines int) <-chan FreqNpass{
 // parses the JSON strings returned from Passfault
 // data is stored in maps of Composite and Elementary Models
 func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
-	compositeModelMap := make(map[string]CompositeModel)
-	elementaryModelMap := make(map[string]ElementaryModel)
+	compositeModelMap := make(map[string]*CompositeModel)
+	elementaryModelMap := make(map[string]*ElementaryModel)
 	for { // loop over frChan
 		fr, ok := <-frChan
 		if ok{ //there are still values to be read
@@ -165,7 +165,7 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 					tokenFreqMap := make(map[string]int)
 					tokenFreqMap[emFromJSON.Token] = freq
 					newEM := ElementaryModel{emFromJSON.ModelName, emFromJSON.Complexity, tokenFreqMap}
-					elementaryModelMap[emFromJSON.ModelName] = newEM
+					elementaryModelMap[emFromJSON.ModelName] = &newEM
 				}
 			}
 
@@ -180,14 +180,14 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 				for _, emFromJSON := range cmFromJSON.ElementaryModels{
 					emName := emFromJSON.ModelName
 					em := elementaryModelMap[emName]
-					elementaryModels = append(elementaryModels, &em)
+					elementaryModels = append(elementaryModels, em)
 				}
 
 				// instantiate new Composite Model
 				cm := CompositeModel{compModelName, complexity, freq, elementaryModels}
 
 				// add to map
-				compositeModelMap[compModelName] = cm
+				compositeModelMap[compModelName] = &cm
 			}
 		}else{ //frChan is closed
 			trainedMaps := TrainedMaps{elementaryModelMap, compositeModelMap}
