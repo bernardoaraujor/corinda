@@ -12,27 +12,6 @@ import (
 	"github.com/bernardoaraujor/corinda/crack"
 )
 
-
-// checks for error
-func check(e error) {
-	if e != nil {
-		_, file, line, _ := runtime.Caller(1)
-		fmt.Println(line, "\t", file, "\n", e)
-		os.Exit(1)
-	}
-}
-
-// Decode Gob file
-func load(path string, object interface{}) error {
-	file, err := os.Open(path)
-	if err == nil {
-		decoder := gob.NewDecoder(file)
-		err = decoder.Decode(object)
-	}
-	file.Close()
-	return err
-}
-
 func mergeMaps() train.TrainedMaps{
 	// empty tm
 	tm := train.TrainedMaps{make(map[string]*train.ElementaryModel), make(map[string]*train.CompositeModel)}

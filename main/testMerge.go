@@ -6,11 +6,13 @@ import (
 	"os"
 	"encoding/gob"
 	"runtime"
+	"github.com/bernardoaraujor/corinda/elementary"
+	"github.com/bernardoaraujor/corinda/composite"
 )
 
 func main() {
 	// empty tm
-	tm := train.TrainedMaps{make(map[string]*train.ElementaryModel), make(map[string]*train.CompositeModel)}
+	tm := train.TrainedMaps{make(map[string]*elementary.Model), make(map[string]*composite.Model)}
 
 	//train.Train("test2", 1)
 	var tm2 = new(train.TrainedMaps)

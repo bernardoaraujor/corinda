@@ -17,4 +17,7 @@ go get github.com/bernardoaraujor/corinda
 
 2. notes to self:
 TODO:
- - doc dependencies (jnigi check /usr/lib/jvm/..., sym link include/linux/jni_md.h to include/jni_md.h)
+ - doc dependencies
+    - (jnigi check /usr/lib/jvm/..., sym link include/linux/jni_md.h to include/jni_md.h)
+    - http://www.gnuplot.info/
+    - https://github.com/sbinet/gsl

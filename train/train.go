@@ -12,18 +12,20 @@ import (
 	"github.com/timob/jnigi"
 	"runtime"
 	"time"
+	"github.com/bernardoaraujor/corinda/elementary"
+	"github.com/bernardoaraujor/corinda/composite"
 )
 
 const passfaultClassPath = "-Djava.class.path=passfault_corinda/out/artifacts/passfault_corinda_jar/passfault_corinda.jar"
 
 // this struct is generated after a csv file is processed
 type TrainedMaps struct{
-	ElementaryModelsMap map[string]*ElementaryModel
-	CompositeModelsMap map[string]*CompositeModel
+	ElementaryModelsMap map[string]*elementary.Model
+	CompositeModelsMap map[string]*composite.Model
 }
 
 // returns the relative frequency of a specific CompositeModel, in relation to all CompositeModels in the trained map
-func (tm TrainedMaps) RelativeFreq(cm *CompositeModel) float64{
+func (tm TrainedMaps) RelativeFreq(cm *composite.Model) float64{
 	freq :=  cm.Freq
 
 	sum := 0
@@ -37,15 +39,35 @@ func (tm TrainedMaps) RelativeFreq(cm *CompositeModel) float64{
 func (tmTo *TrainedMaps) Merge(tmFrom *TrainedMaps){
 	// process ElementaryModelsMaps
 	for k, emFrom := range tmFrom.ElementaryModelsMap{
-		if emTo, ok := tmTo.ElementaryModelsMap[k]; ok{		//em already in tmTo
-			for tokenFrom, freqFrom := range emFrom.TokenFreqMap{
-				if freqTo, ok := tmTo.ElementaryModelsMap[k].TokenFreqMap[tokenFrom]; ok{		 //token already in map
-					emTo.TokenFreqMap[tokenFrom] = freqTo + freqFrom
-				}else{		//token not in map, create new entry
-					emTo.TokenFreqMap[tokenFrom] = freqFrom
+		if emTo, ok := tmTo.ElementaryModelsMap[k]; ok{		//emFrom already in tmTo.ElementaryModelsMap
+
+			//verify every TokenNfreq in emFrom
+			for _, tf := range emFrom.TokensNfreqs{
+				t := tf.Token
+				f := tf.Freq
+
+				// is t already in emTo.TokensNfreqs??
+				index := 0
+				b := false
+				for i, tfTo := range emTo.TokensNfreqs{
+					if tfTo.Token == t{
+						index = i
+						b = true
+						break
+					}
 				}
-			}
-		}else{			//em not in tmTo, create new entry
+
+				if b{		// yes, t is in emTo.TokensNfreqs
+					emTo.TokensNfreqs[index].Freq += f
+				}else{		//no, t is not in emTo.TokensNfreqs
+					emTo.TokensNfreqs = append(emTo.TokensNfreqs, elementary.TokenNfreq{t, f})
+				}
+
+				emTo.Sort()
+
+			}			
+		}else{			//emFrom not in tmTo, create new entry
+			emFrom.Sort()
 			tmTo.ElementaryModelsMap[k] = emFrom
 		}
 	}
@@ -53,13 +75,13 @@ func (tmTo *TrainedMaps) Merge(tmFrom *TrainedMaps){
 	// process CompositeModels
 	for k, cmFrom := range tmFrom.CompositeModelsMap{
 		if cmTo, ok := tmTo.CompositeModelsMap[k]; ok{		//cm already in tmTo
-			cmTo.updateFreq(cmFrom.Freq)
+			cmTo.UpdateFreq(cmFrom.Freq)
 		}else{		//cm not in tmTo, create new entry
 			cmTo := cmFrom
 
 			//set em pointers
 			for i, em := range cmFrom.ElementaryModels{
-				emName := em.ModelName
+				emName := em.Name
 				emTo := tmTo.ElementaryModelsMap[emName]
 				cmTo.ElementaryModels[i] = emTo
 			}
@@ -82,37 +104,6 @@ type FreqNpass struct{
 type FreqNresult struct{
 	freq int
 	result []byte
-}
-
-// this struct represents an Elementary Model
-// a map[string]ElementaryModel is later saved into a gob file
-type ElementaryModel struct{
-	ModelName    string
-	Complexity   int
-	TokenFreqMap map[string]int
-}
-
-// updates the frequency of a token in some ElementaryModel
-func (em ElementaryModel) updateTokenFreq(freq int, token string){
-	if freqFromMap, ok := em.TokenFreqMap[token]; ok { //token already in map, only update frequency
-		em.TokenFreqMap[token] = freqFromMap + freq
-	}else{	//token not in map, insert new freq into map
-		em.TokenFreqMap[token] = freq
-	}
-}
-
-// this struct represents a Composite Model
-// a map[string]CompositeModel is later saved into a gob file
-type CompositeModel struct{
-	CompModelName    string
-	Complexity       int
-	Freq             int
-	ElementaryModels []*ElementaryModel
-}
-
-// updates the frequency of some CompositeModel
-func (cm *CompositeModel) updateFreq(freq int){
-	cm.Freq = cm.Freq + freq
 }
 
 // the types ElModelJSON and CompModelJSON are used only for parsing JSON into ElementaryModel and CompositeModel
@@ -157,8 +148,8 @@ func CsvRead(cr *csv.Reader, nRoutines int) <-chan FreqNpass{
 // parses the JSON strings returned from Passfault
 // data is stored in maps of Composite and Elementary Models
 func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
-	compositeModelMap := make(map[string]*CompositeModel)
-	elementaryModelMap := make(map[string]*ElementaryModel)
+	compositeModelMap := make(map[string]*composite.Model)
+	elementaryModelMap := make(map[string]*elementary.Model)
 	for { // loop over frChan
 		fr, ok := <-frChan
 		if ok{ //there are still values to be read
@@ -172,23 +163,26 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 			// update elementaryModel map
 			for _, emFromJSON := range cmFromJSON.ElementaryModels{
 				if emFromMap, ok := elementaryModelMap[emFromJSON.ModelName]; ok {	//ElementaryModel already in map, only update frequency
-					emFromMap.updateTokenFreq(freq, emFromJSON.Token)
+					emFromMap.UpdateTokenFreq(freq, emFromJSON.Token)
 				}else{	// ElementaryModel not in map, create new instance and insert into the map
-					tokenFreqMap := make(map[string]int)
-					tokenFreqMap[emFromJSON.Token] = freq
-					newEM := ElementaryModel{emFromJSON.ModelName, emFromJSON.Complexity, tokenFreqMap}
+					t := emFromJSON.Token
+					f := freq
+				
+					tokensNfreqs := make([]elementary.TokenNfreq, 0)
+					tokensNfreqs = append(tokensNfreqs, elementary.TokenNfreq{t, f})
+					newEM := elementary.Model{emFromJSON.ModelName, emFromJSON.Complexity, tokensNfreqs}
 					elementaryModelMap[emFromJSON.ModelName] = &newEM
 				}
 			}
 
 			if cmFromMap, ok := compositeModelMap[cmFromJSON.CompositeModelName]; ok{	//CompositeModel already in map, only update frequency
-				cmFromMap.updateFreq(freq)
+				cmFromMap.UpdateFreq(freq)
 			}else{		// CompositeModel not in map, create new instance and insert into the map
 				compModelName := cmFromJSON.CompositeModelName
 				complexity := cmFromJSON.Complexity
 
 				// populate array of pointers
-				var elementaryModels []*ElementaryModel
+				var elementaryModels []*elementary.Model
 				for _, emFromJSON := range cmFromJSON.ElementaryModels{
 					emName := emFromJSON.ModelName
 					em := elementaryModelMap[emName]
@@ -196,7 +190,7 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 				}
 
 				// instantiate new Composite Model
-				cm := CompositeModel{compModelName, complexity, freq, elementaryModels}
+				cm := composite.Model{compModelName, complexity, freq, elementaryModels}
 
 				// add to map
 				compositeModelMap[compModelName] = &cm
