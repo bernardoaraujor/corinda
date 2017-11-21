@@ -26,7 +26,7 @@ func EMLogLog(em elementary.Model){
 	style := "lines"
 	points := [][]int{is, freqs}
 	plot.AddPointGroup(pointGroupName, style, points)
-
+	// A plot type used to make points/ curves and customize and save them as an image.
 	plot.SetTitle(em.Name)
 
 	plot.SetXLabel("Token Rank")

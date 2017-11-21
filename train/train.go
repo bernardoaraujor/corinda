@@ -170,7 +170,7 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 				
 					tokensNfreqs := make([]elementary.TokenNfreq, 0)
 					tokensNfreqs = append(tokensNfreqs, elementary.TokenNfreq{t, f})
-					newEM := elementary.Model{emFromJSON.ModelName, emFromJSON.Complexity, tokensNfreqs}
+					newEM := elementary.Model{emFromJSON.ModelName, emFromJSON.Complexity, 0, 0, 0, tokensNfreqs}
 					elementaryModelMap[emFromJSON.ModelName] = &newEM
 				}
 			}

@@ -2,20 +2,15 @@ package main
 
 import (
 	"github.com/bernardoaraujor/corinda/train"
-	"github.com/bernardoaraujor/corinda/plot"
+	"github.com/bernardoaraujor/corinda/elementary"
+	"github.com/bernardoaraujor/corinda/composite"
 	"runtime"
 	"fmt"
 	"os"
 	"encoding/gob"
-	"github.com/bernardoaraujor/corinda/elementary"
-	"github.com/bernardoaraujor/corinda/composite"
 )
 
-func main(){
-	//train.Train("test", 10)
-
-	// -----------------------------------------------------------------------------------------------------------------
-	// empty tm
+func main() {
 	tm := train.TrainedMaps{make(map[string]*elementary.Model), make(map[string]*composite.Model)}
 
 	var tm2 = new(train.TrainedMaps)
@@ -23,20 +18,13 @@ func main(){
 	check(err)
 	tm.Merge(tm2)
 
-	/*
-	for _, em := range tm.ElementaryModelsMap{
-		plot.EMLogLog(*em)
-	}
-	*/
+	em := tm.ElementaryModelsMap["Exact Match:500-worst-passwords"]
+	em.UpdateEntropy()
 
-	plot.EMLogLog(*tm.ElementaryModelsMap["Exact Match:500-worst-passwords"])
-
-	// -----------------------------------------------------------------------------------------------------------------
-
-
+	fmt.Println(em.Entropy)
 }
 
-/*
+
 // checks for error
 func check(e error) {
 	if e != nil {
@@ -56,5 +44,3 @@ func load(path string, object interface{}) error {
 	file.Close()
 	return err
 }
-
-*/
