@@ -22,3 +22,4 @@ TODO:
     - http://www.gnuplot.info/
     - https://github.com/sbinet/gsl
     - scipy, powerlaw
+    - libboost-all-dev

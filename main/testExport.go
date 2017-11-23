@@ -31,6 +31,7 @@ func main(){
 	}
 }
 
+/*
 func check(e error) {
 	if e != nil {
 		_, file, line, _ := runtime.Caller(1)

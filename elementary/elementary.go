@@ -4,6 +4,8 @@ import (
 	"sort"
 	"github.com/sajari/regression"
 	"math"
+	//"fmt"
+	//"strconv"
 )
 
 // this struct represents an Elementary Model
@@ -12,8 +14,6 @@ type Model struct {
 	Name         string
 	Complexity   int
 	Entropy      float64
-	S            float64
-	ZetaInv      float64
 	TokensNfreqs []TokenNfreq
 }
 
@@ -26,37 +26,54 @@ func (em *Model) UpdateEntropy(){
 	// make sure frequencies are sorted
 	em.Sort()
 
-	// sum to normalize freqs later
-	sum := float64(0)
-	for _, tf := range em.TokensNfreqs{
-		sum += float64(tf.Freq)
-	}
-
-	// linear regression in log-log (Freqs follow a zeta distribution)
+	// linear regression in log-log (long tail is a power law)
+	// using graphical method... TODO: maximum likelihood would be better?
 	r := new(regression.Regression)
-	for k, tf := range em.TokensNfreqs{
+	kmin := int(float64(len(em.TokensNfreqs))*0.8)		// long tail is the last 20%
+	kmax := len(em.TokensNfreqs)
+	for k := kmin; k < kmax; k++{
 		logK := math.Log10(float64(k+1))
-		logF := math.Log10(float64(tf.Freq)/sum)
+		logF := math.Log10(float64(em.TokensNfreqs[k].Freq))
 
 		dp := regression.DataPoint(logF, []float64{logK})
 		r.Train(dp)
-
 	}
 	r.Run()
 
 	// these are the coefficients of the linear regression from log-log
-	b := r.Coeff(0)
 	a := r.Coeff(1)
+	b := r.Coeff(0)
 
-	// zeta parames
-	em.S = -a
-	em.ZetaInv = math.Pow(10, b)
+	alpha := -a
+	c := math.Pow(10, b)
 
-	// entropy = sum of -P*log10P
+	// generate virtual freqs
+	maxSize := 10000000
+	size := em.Complexity
+	if size > maxSize{		// we don't want to run out of memory! besides, there's no significant value for entropy after this limit
+		size = maxSize
+	}
+
+	vFreqs := make([]float64, size)
+	sum := float64(0)
+	for k, _ := range vFreqs{
+		if k < kmax{		// use actual freqs
+			f := float64(em.TokensNfreqs[k].Freq)
+			vFreqs[k] = f
+			sum += f
+		}else{
+			f := c*math.Pow(float64(k), -alpha)
+			vFreqs[k] = f
+			sum += f
+		}
+	}
+
+	// calc entropy
 	entropy := float64(0)
-	for k := 1; k <= em.Complexity; k++{
-		p := em.ZetaInv*math.Pow(float64(k), -em.S)
-		entropy -= p*math.Log10(p)
+	for _, vf := range vFreqs{
+		p := vf/sum
+		e := -p*math.Log10(p)
+		entropy += e
 	}
 
 	em.Entropy = entropy
@@ -74,7 +91,6 @@ func (em *Model) UpdateTokenFreq(freq int, token string){
 			break
 		}
 	}
-
 
 	if b{		// yes, token is in em
 		em.TokensNfreqs[index].Freq += freq

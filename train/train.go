@@ -170,7 +170,7 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 				
 					tokensNfreqs := make([]elementary.TokenNfreq, 0)
 					tokensNfreqs = append(tokensNfreqs, elementary.TokenNfreq{t, f})
-					newEM := elementary.Model{emFromJSON.ModelName, emFromJSON.Complexity, 0, 0, 0, tokensNfreqs}
+					newEM := elementary.Model{emFromJSON.ModelName, emFromJSON.Complexity, 0, tokensNfreqs}
 					elementaryModelMap[emFromJSON.ModelName] = &newEM
 				}
 			}
@@ -196,6 +196,13 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 				compositeModelMap[compModelName] = &cm
 			}
 		}else{ //frChan is closed
+
+			// calculate entropies
+			for _, em := range elementaryModelMap{
+				em.UpdateEntropy()
+			}
+
+			// save file
 			trainedMaps := TrainedMaps{elementaryModelMap, compositeModelMap}
 			emFile, err := os.Create("maps/" + trainName + "TrainedMaps.gob")
 			encoder := gob.NewEncoder(emFile)

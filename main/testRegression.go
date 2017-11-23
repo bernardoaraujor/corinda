@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"encoding/gob"
+	"strconv"
 )
 
 func main() {
@@ -18,13 +19,15 @@ func main() {
 	check(err)
 	tm.Merge(tm2)
 
-	em := tm.ElementaryModelsMap["Exact Match:500-worst-passwords"]
-	em.UpdateEntropy()
-
-	fmt.Println(em.Entropy)
+	for _, em := range tm.ElementaryModelsMap{
+		em.UpdateEntropy()
+		fmt.Println(strconv.FormatFloat(em.Entropy, 'f', -1, 64) + "," + strconv.Itoa(em.Complexity) + "," + strconv.Itoa(len(em.TokensNfreqs)))
+	}
+	a := 1
+	fmt.Println(a)
 }
 
-/*
+
 // checks for error
 func check(e error) {
 	if e != nil {
