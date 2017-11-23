@@ -35,8 +35,8 @@ func EMLogLog(em elementary.Model){
 	plot.SetXrange(0, len(is))
 	plot.SetYrange(0, freqs[0])
 
-	plot.SetLogscale("x", 10)
-	plot.SetLogscale("y", 10)
+	//plot.SetLogscale("x", 10)
+	//plot.SetLogscale("y", 10)
 	//fmt.Println(err)
 
 	plot.SavePlot("plot/plots/" + em.Name + ".png")

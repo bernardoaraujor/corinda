@@ -26,11 +26,17 @@ func (em *Model) UpdateEntropy(){
 	// make sure frequencies are sorted
 	em.Sort()
 
+	// sum to normalize freqs later
+	sum := float64(0)
+	for _, tf := range em.TokensNfreqs{
+		sum += float64(tf.Freq)
+	}
+
 	// linear regression in log-log (Freqs follow a zeta distribution)
 	r := new(regression.Regression)
 	for k, tf := range em.TokensNfreqs{
 		logK := math.Log10(float64(k+1))
-		logF := math.Log10(float64(tf.Freq))
+		logF := math.Log10(float64(tf.Freq)/sum)
 
 		dp := regression.DataPoint(logF, []float64{logK})
 		r.Train(dp)
@@ -49,7 +55,7 @@ func (em *Model) UpdateEntropy(){
 	// entropy = sum of -P*log10P
 	entropy := float64(0)
 	for k := 1; k <= em.Complexity; k++{
-		p := math.Pow(float64(k), -em.S)
+		p := em.ZetaInv*math.Pow(float64(k), -em.S)
 		entropy -= p*math.Log10(p)
 	}
 

@@ -21,3 +21,4 @@ TODO:
     - (jnigi check /usr/lib/jvm/..., sym link include/linux/jni_md.h to include/jni_md.h)
     - http://www.gnuplot.info/
     - https://github.com/sbinet/gsl
+    - scipy, powerlaw

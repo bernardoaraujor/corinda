@@ -4,13 +4,13 @@ import (
 	"github.com/bernardoaraujor/corinda/train"
 	"github.com/bernardoaraujor/corinda/elementary"
 	"github.com/bernardoaraujor/corinda/composite"
-	"runtime"
 	"fmt"
+	"runtime"
 	"os"
 	"encoding/gob"
 )
 
-func main() {
+func main(){
 	tm := train.TrainedMaps{make(map[string]*elementary.Model), make(map[string]*composite.Model)}
 
 	var tm2 = new(train.TrainedMaps)
@@ -18,14 +18,19 @@ func main() {
 	check(err)
 	tm.Merge(tm2)
 
-	em := tm.ElementaryModelsMap["Exact Match:500-worst-passwords"]
-	em.UpdateEntropy()
+	em := tm.ElementaryModelsMap["Exact Match:10k-worst-passwords"]
+	tf := em.TokensNfreqs
 
-	fmt.Println(em.Entropy)
+	f, err := os.Create("export.txt")
+	check(err)
+	defer f.Close()
+
+	for _, v := range tf{
+		fmt.Println(v.Freq)
+		fmt.Fprintln(f, v.Freq)
+	}
 }
 
-/*
-// checks for error
 func check(e error) {
 	if e != nil {
 		_, file, line, _ := runtime.Caller(1)
