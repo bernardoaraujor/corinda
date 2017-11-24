@@ -50,7 +50,7 @@ func (em *Model) UpdateEntropy(){
 	// generate virtual freqs
 	maxSize := 10000000
 	size := em.Complexity
-	if size > maxSize{		// we don't want to run out of memory! besides, there's no significant value for entropy after this limit
+	if size > maxSize{		// we don't want to run out of memory! besides, after this limit only brute force models are affected
 		size = maxSize
 	}
 

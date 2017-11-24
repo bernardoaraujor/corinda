@@ -19,12 +19,10 @@ func main() {
 	check(err)
 	tm.Merge(tm2)
 
-	for _, em := range tm.ElementaryModelsMap{
-		em.UpdateEntropy()
-		fmt.Println(strconv.FormatFloat(em.Entropy, 'f', -1, 64) + "," + strconv.Itoa(em.Complexity) + "," + strconv.Itoa(len(em.TokensNfreqs)))
+	for _, cm := range tm.CompositeModelsMap{
+		//cm.UpdateEntropy()
+		fmt.Println(strconv.FormatFloat(cm.Entropy, 'f', -1, 64) + "," + strconv.Itoa(cm.Complexity) + "," + cm.Name)
 	}
-	a := 1
-	fmt.Println(a)
 }
 
 

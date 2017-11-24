@@ -190,7 +190,7 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 				}
 
 				// instantiate new Composite Model
-				cm := composite.Model{compModelName, complexity, freq, elementaryModels}
+				cm := composite.Model{compModelName, complexity, freq, 0, elementaryModels}
 
 				// add to map
 				compositeModelMap[compModelName] = &cm
@@ -200,6 +200,10 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 			// calculate entropies
 			for _, em := range elementaryModelMap{
 				em.UpdateEntropy()
+			}
+
+			for _, cm := range compositeModelMap{
+				cm.UpdateEntropy()
 			}
 
 			// save file
