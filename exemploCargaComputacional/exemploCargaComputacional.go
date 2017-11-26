@@ -2,14 +2,10 @@ package main
 
 import (
 	"sync"
-	//"fmt"
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 )
-
-//const k = 10000
-const k = 1
 
 func main() {
 	// inicializa canais geradores
