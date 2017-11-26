@@ -37,6 +37,8 @@ func main() {
 
 		// drena o canal funil
 		for s := range funil{
+
+			// incrementa contador correspondente ao valor lido
 			switch s{
 			case "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb":
 				a++
