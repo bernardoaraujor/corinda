@@ -78,6 +78,7 @@ func hash(in chan string, n int) chan string{
 	go func(n int, out chan string){
 		defer close(out)
 		for i := 0; i < n; i++ {
+			// lê o canal de entrada
 			s := <- in
 
 			// calcula o hash
