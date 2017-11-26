@@ -80,11 +80,15 @@ func hash(in chan string, n int) chan string{
 		for i := 0; i < n; i++ {
 			s := <- in
 
+			// calcula o hash
 			hasher := sha256.New()
 			hasher.Write([]byte(s))
 			hb := hasher.Sum(nil)
+
+			// converte o hash de hex para string
 			h := hex.EncodeToString(hb)
 
+			// envia o hash no canal de saída
 			out <- h
 		}
 	}(n, out)
