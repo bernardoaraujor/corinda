@@ -1,3 +1,7 @@
+/*
+Este pacote implementa um exemplo de como o padrão de concorrência funil, associado à utilização de iterações mestras
+com gorrotinas de vida limitada, podem ser utilizados para distribuir a carga computacional ao processamento de diferentes canais geradores
+*/
 package main
 
 import (
