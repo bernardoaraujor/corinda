@@ -11,12 +11,12 @@ func main() {
 	// inicializa canais geradores
 	chA := gerador("a")
 	chB := gerador("b")
-	inC := gerador("c")
+	chC := gerador("c")
 
 	// delega o fechamento dos canais à função main
 	defer close(chA)
 	defer close(chB)
-	defer close(inC)
+	defer close(chC)
 
 	// inicializa contadores
 	a := 0
@@ -30,7 +30,7 @@ func main() {
 		//gera canais de processamento
 		hashA := hash(chA, 1)
 		hashB := hash(chB, 10)
-		hashC := hash(inC, 100)
+		hashC := hash(chC, 100)
 
 		// gera canal funil para drenar canais de processamento
 		funil := funil(hashA, hashB, hashC)
