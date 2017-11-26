@@ -56,9 +56,11 @@ func main() {
 
 // gera canal com fluxo continuo de strings identicas a s
 func gerador(s string) chan string{
+
+	// inicializa canal de saída
 	out := make(chan string)
 
-	// gorrotina que envia cópias de s ao canal de saída indefinidamente, até que este canal seja fechado
+	// lança gorrotina que envia cópias de s ao canal de saída indefinidamente, até que este canal seja fechado
 	go func(){
 		for {
 			out <- s
@@ -71,10 +73,12 @@ func gerador(s string) chan string{
 
 // drena o canal in por n iterações
 func hash(in chan string, n int) chan string{
+
+	// inicializa canal de saída
 	out := make(chan string)
 
-	// gorrotina que repete por n iterações
-	// o fechamento do canal de saída é delegado ao encerramento da gorrotina (defer)
+	// lança gorrotina que repete por n iterações
+	// o fechamento do canal de saída é delegado ao encerramento da gorrotina (defer), o que acontece após a execução das n iterações
 	go func(n int, out chan string){
 		defer close(out)
 		for i := 0; i < n; i++ {
@@ -100,27 +104,37 @@ func hash(in chan string, n int) chan string{
 
 // funde o fluxo dos canais cs no canal out
 func funil(cs ...chan string) chan string {
+
+	// declara o grupo de espera wg
 	var wg sync.WaitGroup
+
+	// inicializa canal de saída
 	out := make(chan string)
 
-	// inicializa uma gorrotina de saída para cada canal de entrada em cd.
-	// envia para a saída cópias dos valores drenados de c até que c seja fechado,
-	// e por fim chama wg.Done
+	// inicializa gorrotina de saída para cada canal de entrada em cs.
+	// a gorrotina é responsável por enviar para a saída cópias dos valores drenados de c até que c seja fechado,
+	// até por fim chamar wg.Done
 	output := func(c <-chan string) {
 		for n := range c {
 			out <- n
 		}
 		wg.Done()
 	}
+
+	// prepara o grupo de espera para o número de gorrotinas a serem lançadas
 	wg.Add(len(cs))
+
+	// lança gorrotinas
 	for _, c := range cs {
 		go output(c)
 	}
 
-	// inicializa uma gorrotina para fechar o canal de saída uma vez que todas gorrotinas de saídas estão finalizadas
+	// lança gorrotina para fechar o canal de saída uma vez que todas gorrotinas de saídas estão finalizadas
 	go func() {
 		wg.Wait()
 		close(out)
 	}()
+
+	// retorna canal de saída
 	return out
 }
