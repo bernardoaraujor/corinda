@@ -84,7 +84,6 @@ func hash(in chan string, n int) chan string{
 		}
 	}(n, out)
 
-
 	return out
 }
 
