@@ -57,12 +57,15 @@ func main() {
 // gera canal com fluxo continuo de strings identicas a s
 func gerador(s string) chan string{
 	out := make(chan string)
+
+	// gorrotina que envia cópias de s ao canal de saída indefinidamente, até que este canal seja fechado
 	go func(){
 		for {
 			out <- s
 		}
 	}()
 
+	// retorna o canal de saída
 	return out
 }
 
@@ -70,6 +73,8 @@ func gerador(s string) chan string{
 func hash(in chan string, n int) chan string{
 	out := make(chan string)
 
+	// gorrotina que repete por n iterações
+	// o fechamento do canal de saída é delegado ao encerramento da gorrotina (defer)
 	go func(n int, out chan string){
 		defer close(out)
 		for i := 0; i < n; i++ {
@@ -84,6 +89,7 @@ func hash(in chan string, n int) chan string{
 		}
 	}(n, out)
 
+	// retorna o canal de saída
 	return out
 }
 
@@ -92,8 +98,9 @@ func funil(cs ...chan string) chan string {
 	var wg sync.WaitGroup
 	out := make(chan string)
 
-	// Start an output goroutine for each input channel in cs.  output
-	// copies values from c to out until c is closed, then calls wg.Done.
+	// inicializa uma gorrotina de saída para cada canal de entrada em cd.
+	// envia para a saída cópias dos valores drenados de c até que c seja fechado,
+	// e por fim chama wg.Done
 	output := func(c <-chan string) {
 		for n := range c {
 			out <- n
@@ -105,8 +112,7 @@ func funil(cs ...chan string) chan string {
 		go output(c)
 	}
 
-	// Start a goroutine to close out once all the output goroutines are
-	// done.  This must start after the wg.Add call.
+	// inicializa uma gorrotina para fechar o canal de saída uma vez que todas gorrotinas de saídas estão finalizadas
 	go func() {
 		wg.Wait()
 		close(out)
