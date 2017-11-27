@@ -7,9 +7,9 @@ package main
 
 import (
 	"sync"
-	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"crypto/sha1"
 )
 
 func main() {
@@ -41,15 +41,17 @@ func main() {
 		funil := funil(hashA, hashB, hashC)
 
 		// drena o canal funil
-		for s := range funil{
+		for bytes := range funil{
+			// converte o hash de hex para string
+			s := hex.EncodeToString(bytes)
 
 			// incrementa contador correspondente ao valor lido
 			switch s{
-			case "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb":
+			case "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8":
 				a++
-			case "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d":
+			case "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98":
 				b++
-			case "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6":
+			case "84a516841ba77a5b4648de2cd0dfcb30ea46dbb4":
 				c++
 			}
 		}
@@ -79,29 +81,26 @@ func gerador(s string) chan string{
 }
 
 // drena o canal in por n iterações
-func hash(in chan string, n int) chan string{
+func hash(in chan string, n int) chan []uint8{
 
 	// inicializa canal de saída
-	out := make(chan string)
+	out := make(chan []uint8)
 
 	// lança gorrotina que repete por n iterações
 	// o fechamento do canal de saída é delegado ao encerramento da gorrotina (defer), o que acontece após a execução das n iterações
-	go func(n int, out chan string){
+	go func(n int, out chan []uint8){
 		defer close(out)
 		for i := 0; i < n; i++ {
 			// lê o canal de entrada
 			s := <- in
 
 			// calcula o hash
-			hasher := sha256.New()
+			hasher := sha1.New()
 			hasher.Write([]byte(s))
 			hb := hasher.Sum(nil)
 
-			// converte o hash de hex para string
-			h := hex.EncodeToString(hb)
-
 			// envia o hash no canal de saída
-			out <- h
+			out <- hb
 		}
 	}(n, out)
 
@@ -110,18 +109,18 @@ func hash(in chan string, n int) chan string{
 }
 
 // funde o fluxo dos canais cs no canal out
-func funil(cs ...chan string) chan string {
+func funil(cs ...chan []uint8) chan []uint8 {
 
 	// declara o grupo de espera wg
 	var wg sync.WaitGroup
 
 	// inicializa canal de saída
-	out := make(chan string)
+	out := make(chan []uint8)
 
 	// inicializa gorrotina de saída para cada canal de entrada em cs.
 	// a gorrotina é responsável por enviar para a saída cópias dos valores drenados de c até que c seja fechado,
 	// até por fim chamar wg.Done
-	output := func(c <-chan string) {
+	output := func(c <-chan []uint8) {
 		for n := range c {
 			out <- n
 		}

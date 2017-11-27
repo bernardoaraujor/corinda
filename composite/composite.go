@@ -1,6 +1,14 @@
 package composite
 
-import "github.com/bernardoaraujor/corinda/elementary"
+import (
+	"github.com/bernardoaraujor/corinda/elementary"
+	//"crypto/sha256"
+	"encoding/hex"
+	"crypto/sha1"
+	"hash"
+	"crypto/sha256"
+	"github.com/bernardoaraujor/corinda/crack"
+)
 
 // this struct represents a Composite Model
 // a map[string]CompositeModel is later saved into a gob file
@@ -26,4 +34,13 @@ func (cm *Model) UpdateEntropy(){
 	}
 
 	cm.Entropy = entropy
+}
+
+// returns channel with password guesses
+func (cm *Model) Guess() chan string{
+	out := make(chan string)
+
+	//iterate over elementary models
+
+	return out
 }
