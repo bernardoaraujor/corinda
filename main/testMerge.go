@@ -12,14 +12,17 @@ import (
 
 func main() {
 	// empty tm
-	tm := train.TrainedMaps{make(map[string]*elementary.Model), make(map[string]*composite.Model)}
+	tm := train.TrainedMaps{make(map[string]*elementary.Model), make(map[string]*composite.Model), 0}
 
 	//train.Train("test2", 1)
 	var tm2 = new(train.TrainedMaps)
-	err := Load("/home/bernardo/rockyouMaps/xabTrainedMaps.gob", &tm2)
+	err := Load("maps/testTrainedMaps.gob", &tm2)
 	Check(err)
 
 	tm.Merge(tm2)
+
+	a := 1
+	fmt.Println(a)
 }
 
 // Decode Gob file

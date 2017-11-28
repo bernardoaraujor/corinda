@@ -12,6 +12,6 @@ func main() {
 	//nRoutines, _ := strconv.Atoi(os.Args[2])
 
 	input := "test"
-	nRoutines := 1
+	nRoutines := 10
 	train.Train(input, nRoutines)
 }

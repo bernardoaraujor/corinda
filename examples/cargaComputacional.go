@@ -34,12 +34,15 @@ func main() {
 	//gera array de indices
 	ns := []int{1, 10, 100}
 
+	// inicializa canal de lotes de hashes
+	lotes := loteHashes(geradores, ns)
+
 	// k lotes de hashes
 	k := 100
 	for i := 0; i < k; i++{
 
-		// calcula lote de hashes
-		lote := loteHashes(geradores, ns)
+		// recebe lote do canal lotes
+		lote := <-lotes
 
 		// processa lote
 		for _, byte := range lote{
@@ -82,14 +85,14 @@ func gerador(s string) chan string{
 }
 
 // drena o canal in por n iterações
-func hash(entrada chan string, n int) chan []uint8{
+func hash(entrada chan string, n int) chan []byte{
 
 	// inicializa canal de saída
-	out := make(chan []uint8)
+	out := make(chan []byte)
 
 	// lança gorrotina que repete por n iterações
 	// o fechamento do canal de saída é delegado ao encerramento da gorrotina (defer), o que acontece após a execução das n iterações
-	go func(n int, saida chan []uint8){
+	go func(n int, saida chan []byte){
 		defer close(saida)
 		for i := 0; i < n; i++ {
 			// lê o canal de entrada
@@ -110,18 +113,18 @@ func hash(entrada chan string, n int) chan []uint8{
 }
 
 // funde o fluxo dos canais cs no canal out
-func funil(cs []chan []uint8) chan []uint8 {
+func funil(cs []chan []byte) chan []byte {
 
 	// declara o grupo de espera wg
 	var wg sync.WaitGroup
 
 	// inicializa canal de saída
-	saida := make(chan []uint8)
+	saida := make(chan []byte)
 
 	// inicializa gorrotina de saída para cada canal de entrada em cs.
 	// a gorrotina é responsável por enviar para a saída cópias dos valores drenados de c até que c seja fechado,
 	// até por fim chamar wg.Done
-	output := func(c <-chan []uint8) {
+	output := func(c <-chan []byte) {
 		for n := range c {
 			saida <- n
 		}
@@ -147,26 +150,37 @@ func funil(cs []chan []uint8) chan []uint8 {
 }
 
 // calcula lote de hashes a partir de um array de canais de entrada
-func loteHashes(entradas []chan string, ns []int) [][]uint8{
+func loteHashes(entradas []chan string, ns []int) chan [][]byte{
+	
+	// inicializa canal de saida
+	saida := make(chan [][]byte)
+	
+	go func(entradas []chan string, ns []int){
 
-	// gera array de canais de calculo de hashes, a serem utilizados como entrada para o funil
-	hashes := make([]chan []uint8, 0)
-	for i, entrada := range entradas{
-		n := ns[i]
-		hashes = append(hashes, hash(entrada, n))
-	}
+		// processa lotes indefinidamente
+		for {
+			// gera array de canais de calculo de hashes, a serem utilizados como entrada para o funil
+			hashes := make([]chan []byte, 0)
+			for i, entrada := range entradas{
+				n := ns[i]
+				hashes = append(hashes, hash(entrada, n))
+			}
 
-	// gera canal funil para drenar canais de processamento
-	funil := funil(hashes)
+			// gera canal funil para drenar canais de processamento
+			funil := funil(hashes)
 
-	// inicializa lote de bytes
-	lote := make([][]uint8, 0)
+			// inicializa lote de bytes
+			lote := make([][]byte, 0)
 
-	// drena canal funil
-	for byte := range funil{
-		lote = append(lote, byte)
-	}
+			// drena canal funil
+			for byte := range funil{
+				lote = append(lote, byte)
+			}
 
-	// retorna lote
-	return lote
+			// envia lote no canal de saída
+			saida <- lote
+		}
+	}(entradas, ns)
+	
+	return saida
 }

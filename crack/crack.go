@@ -43,10 +43,14 @@ func (crack Crack) Crack(){
 		digestPerBatch = append(digestPerBatch, int(cm.Entropy))
 	}
 
-	batch := crack.HashBatch(guessChans, digestPerBatch)
+	batchChan := crack.HashBatch(guessChans, digestPerBatch)
 
+	batch := <- batchChan
+	batch = <- batchChan
+	batch = <- batchChan
 	for _, ph := range batch{
 		p := ph.pass
+
 		h := ph.hash
 		fmt.Println(p + ": " + hex.EncodeToString(h))
 	}
@@ -147,25 +151,33 @@ func fanIn(cs []chan passNhash) chan passNhash {
 }
 
 // generate a batch of hashes from the input guess channels
-func (crack Crack) HashBatch(guessChans []chan string, ns []int) []passNhash{
+func (crack Crack) HashBatch(guessChans []chan string, ns []int) chan []passNhash{
+	out := make(chan []passNhash)
 
-	// generates array of channels for digesting, to be used as inputs to fanIn
-	passNhashChan := make([]chan passNhash, 0)
-	for i, guessChan := range guessChans{
-		n := ns[i]
-		passNhashChan = append(passNhashChan, crack.Digest(guessChan, n))
-	}
+	go func(guessChans []chan string, ns []int){
+		for {
+			// generates array of channels for digesting, to be used as inputs to fanIn
+			passNhashChan := make([]chan passNhash, 0)
+			for i, guessChan := range guessChans{
+				n := ns[i]
+				passNhashChan = append(passNhashChan, crack.Digest(guessChan, n))
+			}
 
-	// generate fan in channel
-	fanIn := fanIn(passNhashChan)
+			// generate fan in channel
+			fanIn := fanIn(passNhashChan)
 
-	// initialize batch of hashes
-	batch := make([]passNhash, 0)
+			// initialize batch of hashes
+			batch := make([]passNhash, 0)
 
-	// drain fanIn channel
-	for ph := range fanIn {
-		batch = append(batch, ph)
-	}
+			// drain fanIn channel
+			for ph := range fanIn {
+				batch = append(batch, ph)
+			}
 
-	return batch
+			out <- batch
+		}
+	}(guessChans, ns)
+
+
+	return out
 }

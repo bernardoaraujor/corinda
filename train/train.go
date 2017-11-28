@@ -19,9 +19,10 @@ import (
 const passfaultClassPath = "-Djava.class.path=passfault_corinda/out/artifacts/passfault_corinda_jar/passfault_corinda.jar"
 
 // this struct is generated after a csv file is processed
-type TrainedMaps struct{
+type TrainedMaps struct {
 	ElementaryModelsMap map[string]*elementary.Model
-	CompositeModelsMap map[string]*composite.Model
+	CompositeModelsMap  map[string]*composite.Model
+	NCsvLines            int
 }
 
 // returns the relative frequency of a specific CompositeModel, in relation to all CompositeModels in the trained map
@@ -37,6 +38,8 @@ func (tm TrainedMaps) RelativeFreq(cm *composite.Model) float64{
 }
 
 func (tmTo *TrainedMaps) Merge(tmFrom *TrainedMaps){
+	tmTo.NCsvLines += tmFrom.NCsvLines
+
 	// process ElementaryModelsMaps
 	for k, emFrom := range tmFrom.ElementaryModelsMap{
 		if emTo, ok := tmTo.ElementaryModelsMap[k]; ok{		//emFrom already in tmTo.ElementaryModelsMap
@@ -150,9 +153,12 @@ func CsvRead(cr *csv.Reader, nRoutines int) <-chan FreqNpass{
 func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 	compositeModelMap := make(map[string]*composite.Model)
 	elementaryModelMap := make(map[string]*elementary.Model)
+	nCsvLines := 0
+
 	for { // loop over frChan
 		fr, ok := <-frChan
 		if ok{ //there are still values to be read
+			nCsvLines++
 			freq := fr.freq
 			result := fr.result
 
@@ -207,7 +213,7 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 			}
 
 			// save file
-			trainedMaps := TrainedMaps{elementaryModelMap, compositeModelMap}
+			trainedMaps := TrainedMaps{elementaryModelMap, compositeModelMap, nCsvLines}
 			emFile, err := os.Create("maps/" + trainName + "TrainedMaps.gob")
 			encoder := gob.NewEncoder(emFile)
 			err = encoder.Encode(trainedMaps)
