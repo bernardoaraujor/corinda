@@ -28,22 +28,23 @@ func main() {
 	b := 0
 	c := 0
 
-	// k iterações mestras para cálculos de hashes
+	// gera array de canais geradores
+	geradores := []chan string{chA, chB, chC}
+
+	//gera array de indices
+	ns := []int{1, 10, 100}
+
+	// k lotes de hashes
 	k := 100
 	for i := 0; i < k; i++{
 
-		//gera canais de processamento
-		hashA := hash(chA, 1)
-		hashB := hash(chB, 10)
-		hashC := hash(chC, 100)
+		// calcula lote de hashes
+		lote := loteHashes(geradores, ns)
 
-		// gera canal funil para drenar canais de processamento
-		funil := funil(hashA, hashB, hashC)
-
-		// drena o canal funil
-		for bytes := range funil{
+		// processa lote
+		for _, byte := range lote{
 			// converte o hash de hex para string
-			s := hex.EncodeToString(bytes)
+			s := hex.EncodeToString(byte)
 
 			// incrementa contador correspondente ao valor lido
 			switch s{
@@ -81,26 +82,26 @@ func gerador(s string) chan string{
 }
 
 // drena o canal in por n iterações
-func hash(in chan string, n int) chan []uint8{
+func hash(entrada chan string, n int) chan []uint8{
 
 	// inicializa canal de saída
 	out := make(chan []uint8)
 
 	// lança gorrotina que repete por n iterações
 	// o fechamento do canal de saída é delegado ao encerramento da gorrotina (defer), o que acontece após a execução das n iterações
-	go func(n int, out chan []uint8){
-		defer close(out)
+	go func(n int, saida chan []uint8){
+		defer close(saida)
 		for i := 0; i < n; i++ {
 			// lê o canal de entrada
-			s := <- in
+			s := <-entrada
 
 			// calcula o hash
 			hasher := sha1.New()
 			hasher.Write([]byte(s))
-			hb := hasher.Sum(nil)
+			hashBytes := hasher.Sum(nil)
 
 			// envia o hash no canal de saída
-			out <- hb
+			saida <- hashBytes
 		}
 	}(n, out)
 
@@ -109,20 +110,20 @@ func hash(in chan string, n int) chan []uint8{
 }
 
 // funde o fluxo dos canais cs no canal out
-func funil(cs ...chan []uint8) chan []uint8 {
+func funil(cs []chan []uint8) chan []uint8 {
 
 	// declara o grupo de espera wg
 	var wg sync.WaitGroup
 
 	// inicializa canal de saída
-	out := make(chan []uint8)
+	saida := make(chan []uint8)
 
 	// inicializa gorrotina de saída para cada canal de entrada em cs.
 	// a gorrotina é responsável por enviar para a saída cópias dos valores drenados de c até que c seja fechado,
 	// até por fim chamar wg.Done
 	output := func(c <-chan []uint8) {
 		for n := range c {
-			out <- n
+			saida <- n
 		}
 		wg.Done()
 	}
@@ -138,9 +139,34 @@ func funil(cs ...chan []uint8) chan []uint8 {
 	// lança gorrotina para fechar o canal de saída uma vez que todas gorrotinas de saídas estão finalizadas
 	go func() {
 		wg.Wait()
-		close(out)
+		close(saida)
 	}()
 
 	// retorna canal de saída
-	return out
+	return saida
+}
+
+// calcula lote de hashes a partir de um array de canais de entrada
+func loteHashes(entradas []chan string, ns []int) [][]uint8{
+
+	// gera array de canais de calculo de hashes, a serem utilizados como entrada para o funil
+	hashes := make([]chan []uint8, 0)
+	for i, entrada := range entradas{
+		n := ns[i]
+		hashes = append(hashes, hash(entrada, n))
+	}
+
+	// gera canal funil para drenar canais de processamento
+	funil := funil(hashes)
+
+	// inicializa lote de bytes
+	lote := make([][]uint8, 0)
+
+	// drena canal funil
+	for byte := range funil{
+		lote = append(lote, byte)
+	}
+
+	// retorna lote
+	return lote
 }

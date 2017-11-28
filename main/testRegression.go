@@ -25,7 +25,7 @@ func main() {
 	}
 }
 
-
+/*
 // checks for error
 func check(e error) {
 	if e != nil {
