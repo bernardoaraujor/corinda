@@ -33,7 +33,7 @@ func (cm *Model) UpdateEntropy(){
 }
 
 // returns channel with password guesses belonging to the cartesian product between the Composite Model's Elementary Models
-func (cm *Model) entropyGuess() chan string{
+func (cm *Model) Guess() chan string{
 	out := make(chan string)
 
 	go cm.recursive(0, nil, nil, out)
@@ -109,25 +109,6 @@ func (cm *Model) randomGuess() chan string{
 				guess += em.TokensNfreqs[i].Token
 			}
 
-			out <- guess
-		}
-	}()
-
-	return out
-}
-
-// sweeps the cartesian product of cm's ems
-func (cm *Model) Guess() chan string{
-	out := make(chan string)
-
-	go func(){
-		entropy := cm.entropyGuess()
-		for guess := range entropy{
-			out <- guess
-		}
-
-		random := cm.randomGuess()
-		for guess := range random{
 			out <- guess
 		}
 	}()
