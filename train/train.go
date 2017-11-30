@@ -1,19 +1,18 @@
 package train
 
 import (
-	"os"
-	"strconv"
-	//"time"
-	"fmt"
-	"sync"
-	"encoding/csv"
-	"encoding/json"
-	"encoding/gob"
-	"github.com/timob/jnigi"
-	"runtime"
-	"time"
 	"github.com/bernardoaraujor/corinda/elementary"
 	"github.com/bernardoaraujor/corinda/composite"
+	"github.com/timob/jnigi"
+	"encoding/json"
+	"encoding/csv"
+	"encoding/gob"
+	"strconv"
+	"runtime"
+	"time"
+	"sync"
+	"fmt"
+	"os"
 )
 
 const passfaultClassPath = "-Djava.class.path=passfault_corinda/out/artifacts/passfault_corinda_jar/passfault_corinda.jar"

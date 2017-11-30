@@ -2,10 +2,14 @@ package main
 
 import (
 	"github.com/bernardoaraujor/corinda/crack"
+	"fmt"
 )
 
 func main(){
 	crack := crack.NewCrack("test", crack.SHA1)
 
-	crack.Crack()
+	batches := crack.Crack()
+
+	batch := <- batches
+	fmt.Println(batch)
 }

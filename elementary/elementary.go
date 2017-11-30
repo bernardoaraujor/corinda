@@ -2,10 +2,7 @@ package elementary
 
 import (
 	"sort"
-	"github.com/sajari/regression"
 	"math"
-	//"fmt"
-	//"strconv"
 )
 
 // this struct represents an Elementary Model
@@ -23,55 +20,18 @@ type TokenNfreq struct {
 }
 
 func (em *Model) UpdateEntropy(){
-	// make sure frequencies are sorted
-	em.Sort()
 
-	// linear regression in log-log (long tail is a power law)
-	// using graphical method... TODO: maximum likelihood would be better?
-	r := new(regression.Regression)
-	kmin := int(float64(len(em.TokensNfreqs))*0.8)		// long tail is the last 20%
-	kmax := len(em.TokensNfreqs)
-	for k := kmin; k < kmax; k++{
-		logK := math.Log10(float64(k+1))
-		logF := math.Log10(float64(em.TokensNfreqs[k].Freq))
-
-		dp := regression.DataPoint(logF, []float64{logK})
-		r.Train(dp)
-	}
-	r.Run()
-
-	// these are the coefficients of the linear regression from log-log
-	a := r.Coeff(1)
-	b := r.Coeff(0)
-
-	alpha := -a
-	c := math.Pow(10, b)
-
-	// generate virtual freqs
-	maxSize := 10000000
-	size := em.Complexity
-	if size > maxSize{		// we don't want to run out of memory! besides, after this limit only brute force models are affected
-		size = maxSize
+	// sum for normalization (frequencies to probabilities)
+	sum := 0
+	for _, tf := range em.TokensNfreqs{
+		sum += tf.Freq
 	}
 
-	vFreqs := make([]float64, size)
-	sum := float64(0)
-	for k, _ := range vFreqs{
-		if k < kmax{		// use actual freqs
-			f := float64(em.TokensNfreqs[k].Freq)
-			vFreqs[k] = f
-			sum += f
-		}else{
-			f := c*math.Pow(float64(k), -alpha)
-			vFreqs[k] = f
-			sum += f
-		}
-	}
-
-	// calc entropy
+	// entropy calculation
 	entropy := float64(0)
-	for _, vf := range vFreqs{
-		p := vf/sum
+	for _, tf := range em.TokensNfreqs{
+		f := tf.Freq
+		p := float64(f)/float64(sum)
 		e := -p*math.Log10(p)
 		entropy += e
 	}

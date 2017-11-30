@@ -1,16 +1,16 @@
 package crack
 
 import (
-	"runtime"
-	"fmt"
-	"os"
 	"github.com/bernardoaraujor/corinda/train"
+	"crypto/sha256"
+	"encoding/csv"
 	"encoding/gob"
 	"crypto/sha1"
+	"runtime"
 	"hash"
-	"crypto/sha256"
 	"sync"
-	"encoding/hex"
+	"fmt"
+	"os"
 )
 
 const Rockyou = "rockyou"
@@ -32,12 +32,13 @@ type Crack struct {
 }
 
 // crack session
-func (crack Crack) Crack(){
+func (crack Crack) Crack() chan []passNhash{
+
 	compositeModelsMap := crack.trainedMaps.CompositeModelsMap
 
+	// initialize channels
 	guessChans := make([]chan string, 0)
 	digestPerBatch := make([]int, 0)
-
 	for _, cm := range compositeModelsMap{
 		guessChans = append(guessChans, cm.Guess())
 		digestPerBatch = append(digestPerBatch, int(cm.Entropy))
@@ -45,15 +46,8 @@ func (crack Crack) Crack(){
 
 	batchChan := crack.HashBatch(guessChans, digestPerBatch)
 
-	batch := <- batchChan
-	batch = <- batchChan
-	batch = <- batchChan
-	for _, ph := range batch{
-		p := ph.pass
-
-		h := ph.hash
-		fmt.Println(p + ": " + hex.EncodeToString(h))
-	}
+	checkResults(batchChan)
+	return batchChan
 }
 
 // Constructor
@@ -98,19 +92,22 @@ func (crack Crack) Digest(in chan string, n int) chan passNhash {
 			// reads in channel
 			guess := <-in
 
-			// digest
-			var hasher hash.Hash
-			switch crack.alg {
-			case SHA1:
-				hasher = sha1.New()
-			case SHA256:
-				hasher = sha256.New()
-			}
-			hasher.Write([]byte(guess))
-			digest := hasher.Sum(nil)
+			// temporary conditional... avoiding weird bug that receives empty guess
+			if guess != ""{
+				// digest
+				var hasher hash.Hash
+				switch crack.alg {
+				case SHA1:
+					hasher = sha1.New()
+				case SHA256:
+					hasher = sha256.New()
+				}
+				hasher.Write([]byte(guess))
+				digest := hasher.Sum(nil)
 
-			// spits out digest
-			out <- passNhash{guess, digest}
+				// spits out digest
+				out <- passNhash{guess, digest}
+			}
 		}
 	}(n, out)
 
@@ -180,4 +177,40 @@ func (crack Crack) HashBatch(guessChans []chan string, ns []int) chan []passNhas
 
 
 	return out
+}
+
+func checkResults(in chan []passNhash){
+	f, err := os.Open("targets/rockyouSHA1.csv")
+	check(err)
+
+	r := csv.NewReader(f)
+	targets, err := r.ReadAll()
+	check(err)
+	f.Close()
+
+	fmt.Println(targets)
+	//results, err := os.Create("crack/results/test.csv")
+	//check(err)
+
+	for batch := range in{
+		for _, ph := range batch{
+			pass := ph.pass
+			hash := ph.hash
+		}
+	}
+
+	for _, target := range targets{
+		freq := target[0]
+		hash := target[1]
+
+
+	}
+
+}
+
+func search(hashbytes []byte, targets [][]string){
+	for _, target := range targets{
+		freq := target[0]
+		hash := target[1]
+	}
 }

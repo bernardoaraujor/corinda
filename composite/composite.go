@@ -2,8 +2,6 @@ package composite
 
 import (
 	"github.com/bernardoaraujor/corinda/elementary"
-	"math/rand"
-	"time"
 )
 
 // this struct represents a Composite Model
@@ -61,18 +59,18 @@ func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan st
 
 	// last depth level of recursion
 	if depth == n{
-		resultado := ""
+		result := ""
 		for d := 0; d < n; d++{
 			i := counters[d]
-			resultado += cm.ElementaryModels[d].TokensNfreqs[i].Token
+			result += cm.ElementaryModels[d].TokensNfreqs[i].Token
 		}
 
 		// send result to out channel
-		out <- resultado
+		out <- result
 
 		// any other depth that isn't the last
 	}else{
-		// sweep current depth
+		// go through current depth
 		for counters[depth] = 0; counters[depth] < lengths[depth]; counters[depth]++{
 			// recursively process next depth
 			cm.recursive(depth+1, counters, lengths, out)
@@ -93,25 +91,4 @@ func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan st
 	if closer{
 		close(out)
 	}
-}
-
-// randomly sends combinations of tokens to out channel
-func (cm *Model) randomGuess() chan string{
-	out := make(chan string)
-
-	go func(){
-		s1 := rand.NewSource(time.Now().UnixNano())
-		r := rand.New(s1)
-		for {
-			guess := ""
-			for _, em := range cm.ElementaryModels{
-				i := r.Intn(len(em.TokensNfreqs))
-				guess += em.TokensNfreqs[i].Token
-			}
-
-			out <- guess
-		}
-	}()
-
-	return out
 }

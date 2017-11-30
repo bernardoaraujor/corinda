@@ -14,6 +14,9 @@ func main() {
 	// empty tm
 	tm := train.TrainedMaps{make(map[string]*elementary.Model), make(map[string]*composite.Model), 0}
 
+	em := tm.ElementaryModelsMap[""]
+	fmt.Println(em)
+
 	//train.Train("test2", 1)
 	var tm2 = new(train.TrainedMaps)
 	err := Load("maps/testTrainedMaps.gob", &tm2)
@@ -21,8 +24,12 @@ func main() {
 
 	tm.Merge(tm2)
 
-	a := 1
-	fmt.Println(a)
+	for _, v := range tm.ElementaryModelsMap{
+		if v.Name == ""{
+			fmt.Println(0)
+		}
+	}
+
 }
 
 // Decode Gob file
