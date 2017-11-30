@@ -9,7 +9,7 @@ import (
 // a map[string]ElementaryModel is later saved into a gob file
 type Model struct {
 	Name         string
-	Complexity   int
+	//Complexity   int
 	Entropy      float64
 	TokensNfreqs []TokenNfreq
 }

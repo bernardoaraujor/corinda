@@ -112,13 +112,13 @@ type FreqNresult struct{
 // this is done by function DecodeJSON
 type ElModelJSON struct{
 	ModelName  string `json:"modelName"`
-	Complexity int    `json:"complexity"`
+	//Complexity int    `json:"complexity"`
 	ModelIndex int    `json:"modelIndex"`
 	Token      string `json:"token"`
 }
 
 type CompModelJSON struct {
-	Complexity       int `json:"complexity"`
+	//Complexity       int `json:"complexity"`
 	ElementaryModels []ElModelJSON `json:"elementaryModels"`
 	CompositeModelName string `json:"compositeModelName"`
 }
@@ -175,7 +175,8 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 				
 					tokensNfreqs := make([]elementary.TokenNfreq, 0)
 					tokensNfreqs = append(tokensNfreqs, elementary.TokenNfreq{t, f})
-					newEM := elementary.Model{emFromJSON.ModelName, emFromJSON.Complexity, 0, tokensNfreqs}
+					//newEM := elementary.Model{emFromJSON.ModelName, emFromJSON.Complexity, 0, tokensNfreqs}
+					newEM := elementary.Model{emFromJSON.ModelName, 0, tokensNfreqs}
 					elementaryModelMap[emFromJSON.ModelName] = &newEM
 				}
 			}
@@ -184,7 +185,7 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 				cmFromMap.UpdateFreq(freq)
 			}else{		// CompositeModel not in map, create new instance and insert into the map
 				compModelName := cmFromJSON.CompositeModelName
-				complexity := cmFromJSON.Complexity
+				//complexity := cmFromJSON.Complexity
 
 				// populate array of pointers
 				var elementaryModels []*elementary.Model
@@ -195,7 +196,8 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 				}
 
 				// instantiate new Composite Model
-				cm := composite.Model{compModelName, complexity, freq, 0, elementaryModels}
+				//cm := composite.Model{compModelName, complexity, freq, 0, elementaryModels}
+				cm := composite.Model{compModelName, freq, 0, elementaryModels}
 
 				// add to map
 				compositeModelMap[compModelName] = &cm

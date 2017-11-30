@@ -3,7 +3,7 @@ package crack
 import (
 	"github.com/bernardoaraujor/corinda/train"
 	"crypto/sha256"
-	"encoding/csv"
+	//"encoding/csv"
 	"encoding/gob"
 	"crypto/sha1"
 	"runtime"
@@ -11,6 +11,10 @@ import (
 	"sync"
 	"fmt"
 	"os"
+	"io/ioutil"
+	//"encoding/hex"
+	"strings"
+	"encoding/hex"
 )
 
 const Rockyou = "rockyou"
@@ -20,6 +24,11 @@ const Antipublic = "antipublic"
 const SHA1 = "SHA1"
 const SHA256 = "SHA256"
 
+type targetMap struct{
+	sync.RWMutex
+	targets map[string]string
+}
+
 type passNhash struct {
 	pass string
 	hash []byte
@@ -28,12 +37,12 @@ type passNhash struct {
 type Crack struct {
 	trainedMaps train.TrainedMaps
 	alg         string
-	targets		[]uint8
+	targetMap	targetMap
 }
 
 // crack session
-func (crack Crack) Crack() chan []passNhash{
-
+func (crack Crack) Crack(){
+	fmt.Println(len(crack.targetMap.targets))
 	compositeModelsMap := crack.trainedMaps.CompositeModelsMap
 
 	// initialize channels
@@ -45,18 +54,36 @@ func (crack Crack) Crack() chan []passNhash{
 	}
 
 	batchChan := crack.HashBatch(guessChans, digestPerBatch)
+	searchChan := make(chan passNhash)
+	resultChan := crack.searchTarget(searchChan)
+	go saveResults(resultChan)
 
-	checkResults(batchChan)
-	return batchChan
+	fmt.Println("Cracking...")
+	for batch := range batchChan{
+		for _, ph := range batch{
+			searchChan <- ph
+		}
+	}
 }
 
 // Constructor
 func NewCrack(list string, alg string) Crack{
 	var crack Crack
+
+	crack.alg = alg
+
 	err := load("maps/"+ list +"TrainedMaps.gob", &crack.trainedMaps)
 	check(err)
 
-	crack.alg = alg
+	f, err := ioutil.ReadFile("targets/rockyouSHA1.csv")
+	check(err)
+	targets := strings.Split(string(f), "\n")
+
+	fmt.Println("Loading target list...")
+	crack.targetMap.targets = make(map[string]string)
+	for _, hash := range targets{
+		crack.targetMap.targets[hash] = hash
+	}
 
 	return crack
 }
@@ -179,38 +206,38 @@ func (crack Crack) HashBatch(guessChans []chan string, ns []int) chan []passNhas
 	return out
 }
 
-func checkResults(in chan []passNhash){
-	f, err := os.Open("targets/rockyouSHA1.csv")
-	check(err)
+func (crack *Crack) searchTarget(in chan passNhash) chan passNhash{
+	out := make(chan passNhash)
 
-	r := csv.NewReader(f)
-	targets, err := r.ReadAll()
-	check(err)
-	f.Close()
+	go func(){
+		for{
+			ph := <- in
+			//pass := ph.pass
+			hash := hex.EncodeToString(ph.hash)
 
-	fmt.Println(targets)
-	//results, err := os.Create("crack/results/test.csv")
-	//check(err)
+			if _, ok := crack.targetMap.targets[hash]; ok{
+				out <- ph
 
-	for batch := range in{
-		for _, ph := range batch{
-			pass := ph.pass
-			hash := ph.hash
+				//crack.targetMap.Lock()
+				delete(crack.targetMap.targets, hash)
+				//crack.targetMap.Unlock()
+			}
 		}
-	}
+	}()
 
-	for _, target := range targets{
-		freq := target[0]
-		hash := target[1]
-
-
-	}
-
+	return out
 }
 
-func search(hashbytes []byte, targets [][]string){
-	for _, target := range targets{
-		freq := target[0]
-		hash := target[1]
+func saveResults(in chan passNhash){
+	resultFile, err := os.Create("results/testResults.csv")
+	check(err)
+	defer resultFile.Close()
+
+	for ph := range in{
+		pass := ph.pass
+		hash := ph.hash
+
+		line := pass + "," + hex.EncodeToString(hash)
+		fmt.Fprintln(resultFile, line)
 	}
 }

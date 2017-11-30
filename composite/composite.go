@@ -8,7 +8,7 @@ import (
 // a map[string]CompositeModel is later saved into a gob file
 type Model struct{
 	Name             string
-	Complexity       int
+	//Complexity       int
 	Freq             int
 	Entropy float64
 	ElementaryModels []*elementary.Model
