@@ -9,12 +9,11 @@ import (
 // a map[string]ElementaryModel is later saved into a gob file
 type Model struct {
 	Name         string
-	//Complexity   int
 	Entropy      float64
-	TokensNfreqs []TokenNfreq
+	TokensNfreqs []TokenFreq
 }
 
-type TokenNfreq struct {
+type TokenFreq struct {
 	Token string
 	Freq  int
 }
@@ -55,13 +54,13 @@ func (em *Model) UpdateTokenFreq(freq int, token string){
 	if b{		// yes, token is in em
 		em.TokensNfreqs[index].Freq += freq
 	}else{		//no, token is not in em
-		em.TokensNfreqs = append(em.TokensNfreqs, TokenNfreq{token, freq})
+		em.TokensNfreqs = append(em.TokensNfreqs, TokenFreq{token, freq})
 	}
 
 	em.Sort()
 }
 
-// sorts TokensNfreqs in descendent order
+// sorts TokenFreqs in descendent order
 func (em *Model) Sort(){
 	sort.Sort(em)
 }

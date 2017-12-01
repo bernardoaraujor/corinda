@@ -12,14 +12,14 @@ import (
 )
 
 func main() {
-	tm := train.TrainedMaps{make(map[string]*elementary.Model), make(map[string]*composite.Model)}
+	tm := train.Maps{make(map[string]*elementary.Model), make(map[string]*composite.Model)}
 
-	var tm2 = new(train.TrainedMaps)
+	var tm2 = new(train.Maps)
 	err := load("maps/testTrainedMaps.gob", &tm2)
 	check(err)
 	tm.Merge(tm2)
 
-	for _, cm := range tm.CompositeModelsMap{
+	for _, cm := range tm.CompositeMap {
 		//cm.UpdateEntropy()
 		fmt.Println(strconv.FormatFloat(cm.Entropy, 'f', -1, 64) + "," + strconv.Itoa(cm.Complexity) + "," + cm.Name)
 	}

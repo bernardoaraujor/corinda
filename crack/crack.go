@@ -3,7 +3,6 @@ package crack
 import (
 	"github.com/bernardoaraujor/corinda/train"
 	"crypto/sha256"
-	//"encoding/csv"
 	"encoding/gob"
 	"crypto/sha1"
 	"runtime"
@@ -12,7 +11,6 @@ import (
 	"fmt"
 	"os"
 	"io/ioutil"
-	//"encoding/hex"
 	"strings"
 	"encoding/hex"
 )
@@ -24,46 +22,44 @@ const Antipublic = "antipublic"
 const SHA1 = "SHA1"
 const SHA256 = "SHA256"
 
-type targetMap struct{
+type targetsMap struct{
 	sync.RWMutex
 	targets map[string]string
 }
 
-type passNhash struct {
+type password struct {
 	pass string
 	hash []byte
 }
 
 type Crack struct {
-	trainedMaps train.TrainedMaps
-	alg         string
-	targetMap	targetMap
+	alg        string
+	trainMaps  train.Maps
+	targetsMap targetsMap
 }
 
 // crack session
 func (crack Crack) Crack(){
-	fmt.Println(len(crack.targetMap.targets))
-	compositeModelsMap := crack.trainedMaps.CompositeModelsMap
+	composites := crack.trainMaps.CompositeMap
+	var wg sync.WaitGroup
 
 	// initialize channels
-	guessChans := make([]chan string, 0)
-	digestPerBatch := make([]int, 0)
-	for _, cm := range compositeModelsMap{
-		guessChans = append(guessChans, cm.Guess())
-		digestPerBatch = append(digestPerBatch, int(cm.Entropy))
+	guesses := make([]chan string, 0)
+	guessesPerBatch := make([]int, 0)
+	for _, cm := range composites{
+		guesses = append(guesses, cm.Guess())
+		guessesPerBatch = append(guessesPerBatch, int(cm.Entropy))
 	}
 
-	batchChan := crack.HashBatch(guessChans, digestPerBatch)
-	searchChan := make(chan passNhash)
-	resultChan := crack.searchTarget(searchChan)
-	go saveResults(resultChan)
+	batches := crack.batch(guesses, guessesPerBatch)
+
+	// TODO: many parallell searchers?
+	wg.Add(1)
+	results := crack.searcher(batches)
+	go save(results, wg)
 
 	fmt.Println("Cracking...")
-	for batch := range batchChan{
-		for _, ph := range batch{
-			searchChan <- ph
-		}
-	}
+	wg.Wait()
 }
 
 // Constructor
@@ -72,7 +68,7 @@ func NewCrack(list string, alg string) Crack{
 
 	crack.alg = alg
 
-	err := load("maps/"+ list +"TrainedMaps.gob", &crack.trainedMaps)
+	err := load("maps/"+ list +"Maps.gob", &crack.trainMaps)
 	check(err)
 
 	f, err := ioutil.ReadFile("targets/rockyouSHA1.csv")
@@ -80,9 +76,9 @@ func NewCrack(list string, alg string) Crack{
 	targets := strings.Split(string(f), "\n")
 
 	fmt.Println("Loading target list...")
-	crack.targetMap.targets = make(map[string]string)
+	crack.targetsMap.targets = make(map[string]string)
 	for _, hash := range targets{
-		crack.targetMap.targets[hash] = hash
+		crack.targetsMap.targets[hash] = hash
 	}
 
 	return crack
@@ -110,10 +106,10 @@ func check(e error) {
 
 // returns channel with hashes in string format, and iterates n times retrieving password guesses over in
 // digest implements the fan in patterns
-func (crack Crack) Digest(in chan string, n int) chan passNhash {
-	out := make(chan passNhash)
+func (crack Crack) digest(in chan string, n int) chan password {
+	out := make(chan password)
 
-	go func(n int, out chan passNhash) {
+	go func(n int, out chan password) {
 		defer close(out)
 		for i := 0; i < n; i++ {
 			// reads in channel
@@ -133,7 +129,7 @@ func (crack Crack) Digest(in chan string, n int) chan passNhash {
 				digest := hasher.Sum(nil)
 
 				// spits out digest
-				out <- passNhash{guess, digest}
+				out <- password{guess, digest}
 			}
 		}
 	}(n, out)
@@ -142,14 +138,14 @@ func (crack Crack) Digest(in chan string, n int) chan passNhash {
 }
 
 // merge the flux from channels cs into out
-func fanIn(cs []chan passNhash) chan passNhash {
+func fanIn(cs []chan password) chan password {
 	var wg sync.WaitGroup
 
-	out := make(chan passNhash)
+	out := make(chan password)
 
 	// Start an output goroutine for each input channel in cs.  output
 	// copies values from c to out until c is closed, then calls wg.Done.
-	output := func(c <-chan passNhash) {
+	output := func(c <-chan password) {
 		for n := range c {
 			out <- n
 		}
@@ -175,52 +171,54 @@ func fanIn(cs []chan passNhash) chan passNhash {
 }
 
 // generate a batch of hashes from the input guess channels
-func (crack Crack) HashBatch(guessChans []chan string, ns []int) chan []passNhash{
-	out := make(chan []passNhash)
+func (crack Crack) batch(guessChans []chan string, ns []int) chan []password {
+	out := make(chan []password)
 
 	go func(guessChans []chan string, ns []int){
 		for {
 			// generates array of channels for digesting, to be used as inputs to fanIn
-			passNhashChan := make([]chan passNhash, 0)
+			passwords := make([]chan password, 0)
 			for i, guessChan := range guessChans{
 				n := ns[i]
-				passNhashChan = append(passNhashChan, crack.Digest(guessChan, n))
+				passwords = append(passwords, crack.digest(guessChan, n))
 			}
 
 			// generate fan in channel
-			fanIn := fanIn(passNhashChan)
+			fanIn := fanIn(passwords)
 
 			// initialize batch of hashes
-			batch := make([]passNhash, 0)
+			batch := make([]password, 0)
 
 			// drain fanIn channel
-			for ph := range fanIn {
-				batch = append(batch, ph)
+			for password := range fanIn {
+				batch = append(batch, password)
 			}
 
 			out <- batch
 		}
 	}(guessChans, ns)
 
-
 	return out
 }
 
-func (crack *Crack) searchTarget(in chan passNhash) chan passNhash{
-	out := make(chan passNhash)
+func (crack *Crack) searcher(in chan []password) chan password {
+	out := make(chan password)
 
 	go func(){
 		for{
-			ph := <- in
-			//pass := ph.pass
-			hash := hex.EncodeToString(ph.hash)
+			batch := <- in
 
-			if _, ok := crack.targetMap.targets[hash]; ok{
-				out <- ph
+			for _, password := range batch{
+				//pass := ph.pass
+				hash := hex.EncodeToString(password.hash)
 
-				//crack.targetMap.Lock()
-				delete(crack.targetMap.targets, hash)
-				//crack.targetMap.Unlock()
+				if _, ok := crack.targetsMap.targets[hash]; ok{
+					out <- password
+
+					crack.targetsMap.Lock()
+					delete(crack.targetsMap.targets, hash)
+					crack.targetsMap.Unlock()
+				}
 			}
 		}
 	}()
@@ -228,7 +226,9 @@ func (crack *Crack) searchTarget(in chan passNhash) chan passNhash{
 	return out
 }
 
-func saveResults(in chan passNhash){
+func save(in chan password, wg sync.WaitGroup){
+	defer wg.Done()
+
 	resultFile, err := os.Create("results/testResults.csv")
 	check(err)
 	defer resultFile.Close()
@@ -238,6 +238,7 @@ func saveResults(in chan passNhash){
 		hash := ph.hash
 
 		line := pass + "," + hex.EncodeToString(hash)
+		//fmt.Println(pass)
 		fmt.Fprintln(resultFile, line)
 	}
 }

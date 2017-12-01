@@ -8,10 +8,9 @@ import (
 // a map[string]CompositeModel is later saved into a gob file
 type Model struct{
 	Name             string
-	//Complexity       int
-	Freq             int
+	Freq    int
 	Entropy float64
-	ElementaryModels []*elementary.Model
+	Models  []*elementary.Model
 }
 
 // updates the frequency of the Composite Model
@@ -23,7 +22,7 @@ func (cm *Model) UpdateFreq(freq int){
 func (cm *Model) UpdateEntropy(){
 	entropy := float64(0)
 
-	for _, em := range cm.ElementaryModels{
+	for _, em := range cm.Models {
 		entropy += em.Entropy
 	}
 
@@ -42,7 +41,7 @@ func (cm *Model) Guess() chan string{
 // sends elements of the cartesian product of TokensNFreqs of all cm's ems to out channel
 func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan string){
 	// max depth to be processed recursively
-	n := len(cm.ElementaryModels)
+	n := len(cm.Models)
 
 	// first depth level of recursion... init counters and lengths
 	if depth == 0{
@@ -52,8 +51,8 @@ func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan st
 
 		// init lengths
 		lengths = make([]int, n)
-		for i, _ := range cm.ElementaryModels{
-			lengths[i] = len(cm.ElementaryModels[i].TokensNfreqs)
+		for i, _ := range cm.Models {
+			lengths[i] = len(cm.Models[i].TokensNfreqs)
 		}
 	}
 
@@ -62,7 +61,7 @@ func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan st
 		result := ""
 		for d := 0; d < n; d++{
 			i := counters[d]
-			result += cm.ElementaryModels[d].TokensNfreqs[i].Token
+			result += cm.Models[d].TokensNfreqs[i].Token
 		}
 
 		// send result to out channel

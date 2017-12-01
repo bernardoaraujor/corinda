@@ -14,14 +14,14 @@ func main() {
 
 	// -----------------------------------------------------------------------------------------------------------------
 	// empty tm
-	tm := train.TrainedMaps{make(map[string]*elementary.Model), make(map[string]*composite.Model), 0}
+	tm := train.Maps{make(map[string]*elementary.Model), make(map[string]*composite.Model), 0}
 
-	var tm2 = new(train.TrainedMaps)
+	var tm2 = new(train.Maps)
 	err := load("maps/testTrainedMaps.gob", &tm2)
 	check(err)
 	tm.Merge(tm2)
 
-	cm := tm.CompositeModelsMap["|Exact Match:frPopular.txt|Exact Match:500-worst-passwords.txt|"]
+	cm := tm.CompositeMap["|Exact Match:frPopular.txt|Exact Match:500-worst-passwords.txt|"]
 
 	c := cm.Guess()
 

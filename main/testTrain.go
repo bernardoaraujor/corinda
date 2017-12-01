@@ -11,7 +11,7 @@ func main() {
 	//input := os.Args[1]
 	//nRoutines, _ := strconv.Atoi(os.Args[2])
 
-	input := "test"
+	input := "rockyou"
 	nRoutines := 10
 	train.Train(input, nRoutines)
 }

@@ -11,14 +11,14 @@ import (
 )
 
 func main(){
-	tm := train.TrainedMaps{make(map[string]*elementary.Model), make(map[string]*composite.Model)}
+	tm := train.Maps{make(map[string]*elementary.Model), make(map[string]*composite.Model)}
 
-	var tm2 = new(train.TrainedMaps)
+	var tm2 = new(train.Maps)
 	err := load("maps/testTrainedMaps.gob", &tm2)
 	check(err)
 	tm.Merge(tm2)
 
-	em := tm.ElementaryModelsMap["Exact Match:10k-worst-passwords"]
+	em := tm.ElementaryMap["Exact Match:10k-worst-passwords"]
 	tf := em.TokensNfreqs
 
 	f, err := os.Create("export.txt")

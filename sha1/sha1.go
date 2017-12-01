@@ -10,13 +10,14 @@ import (
 )
 
 func main() {
-	f, err := os.Open("csv/rockyou.csv")
+	list := "rockyou"
+	f, err := os.Open("csv/" + list + ".csv")
 	Check(err)
 	defer f.Close()
 
 	cr := csv.NewReader(f)
 
-	result, err := os.Create("targets/rockyouSHA1.csv")
+	result, err := os.Create("targets/sha1/" + list + ".csv")
 	Check(err)
 	defer result.Close()
 

@@ -16,20 +16,20 @@ func main(){
 
 	// -----------------------------------------------------------------------------------------------------------------
 	// empty tm
-	tm := train.TrainedMaps{make(map[string]*elementary.Model), make(map[string]*composite.Model)}
+	tm := train.Maps{make(map[string]*elementary.Model), make(map[string]*composite.Model)}
 
-	var tm2 = new(train.TrainedMaps)
+	var tm2 = new(train.Maps)
 	err := load("maps/testTrainedMaps.gob", &tm2)
 	check(err)
 	tm.Merge(tm2)
 
 	/*
-	for _, em := range tm.ElementaryModelsMap{
+	for _, em := range tm.ElementaryMap{
 		plot.EMLogLog(*em)
 	}
 	*/
 
-	plot.EMLogLog(*tm.ElementaryModelsMap["Exact Match:500-worst-passwords"])
+	plot.EMLogLog(*tm.ElementaryMap["Exact Match:500-worst-passwords"])
 
 	// -----------------------------------------------------------------------------------------------------------------
 

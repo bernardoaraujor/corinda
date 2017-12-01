@@ -13,37 +13,38 @@ import (
 	"sync"
 	"fmt"
 	"os"
+	"compress/gzip"
 )
 
 const passfaultClassPath = "-Djava.class.path=passfault_corinda/out/artifacts/passfault_corinda_jar/passfault_corinda.jar"
 
 // this struct is generated after a csv file is processed
-type TrainedMaps struct {
-	ElementaryModelsMap map[string]*elementary.Model
-	CompositeModelsMap  map[string]*composite.Model
-	NCsvLines            int
+type Maps struct {
+	ElementaryMap map[string]*elementary.Model
+	CompositeMap  map[string]*composite.Model
+	N             int
 }
 
 // returns the relative frequency of a specific CompositeModel, in relation to all CompositeModels in the trained map
-func (tm TrainedMaps) RelativeFreq(cm *composite.Model) float64{
+func (tm Maps) RelativeFreq(cm *composite.Model) float64{
 	freq :=  cm.Freq
 
 	sum := 0
-	for _, cm := range tm.CompositeModelsMap{
+	for _, cm := range tm.CompositeMap {
 		sum += cm.Freq
 	}
 
 	return float64(freq)/float64(sum)
 }
 
-func (tmTo *TrainedMaps) Merge(tmFrom *TrainedMaps){
-	tmTo.NCsvLines += tmFrom.NCsvLines
+func (tmTo *Maps) Merge(tmFrom *Maps){
+	tmTo.N += tmFrom.N
 
 	// process ElementaryModelsMaps
-	for k, emFrom := range tmFrom.ElementaryModelsMap{
-		if emTo, ok := tmTo.ElementaryModelsMap[k]; ok{		//emFrom already in tmTo.ElementaryModelsMap
+	for k, emFrom := range tmFrom.ElementaryMap {
+		if emTo, ok := tmTo.ElementaryMap[k]; ok{ //emFrom already in tmTo.ElementaryMap
 
-			//verify every TokenNfreq in emFrom
+			//verify every TokenFreq in emFrom
 			for _, tf := range emFrom.TokensNfreqs{
 				t := tf.Token
 				f := tf.Freq
@@ -62,7 +63,7 @@ func (tmTo *TrainedMaps) Merge(tmFrom *TrainedMaps){
 				if b{		// yes, t is in emTo.TokensNfreqs
 					emTo.TokensNfreqs[index].Freq += f
 				}else{		//no, t is not in emTo.TokensNfreqs
-					emTo.TokensNfreqs = append(emTo.TokensNfreqs, elementary.TokenNfreq{t, f})
+					emTo.TokensNfreqs = append(emTo.TokensNfreqs, elementary.TokenFreq{t, f})
 				}
 
 				emTo.Sort()
@@ -70,26 +71,26 @@ func (tmTo *TrainedMaps) Merge(tmFrom *TrainedMaps){
 			}			
 		}else{			//emFrom not in tmTo, create new entry
 			emFrom.Sort()
-			tmTo.ElementaryModelsMap[k] = emFrom
+			tmTo.ElementaryMap[k] = emFrom
 		}
 	}
 
 	// process CompositeModels
-	for k, cmFrom := range tmFrom.CompositeModelsMap{
-		if cmTo, ok := tmTo.CompositeModelsMap[k]; ok{		//cm already in tmTo
+	for k, cmFrom := range tmFrom.CompositeMap {
+		if cmTo, ok := tmTo.CompositeMap[k]; ok{ //cm already in tmTo
 			cmTo.UpdateFreq(cmFrom.Freq)
 		}else{		//cm not in tmTo, create new entry
 			cmTo := cmFrom
 
 			//set em pointers
-			for i, em := range cmFrom.ElementaryModels{
+			for i, em := range cmFrom.Models {
 				emName := em.Name
-				emTo := tmTo.ElementaryModelsMap[emName]
-				cmTo.ElementaryModels[i] = emTo
+				emTo := tmTo.ElementaryMap[emName]
+				cmTo.Models[i] = emTo
 			}
 
 			//insert cm
-			tmTo.CompositeModelsMap[k] = cmTo
+			tmTo.CompositeMap[k] = cmTo
 		}
 	}
 }
@@ -119,8 +120,8 @@ type ElModelJSON struct{
 
 type CompModelJSON struct {
 	//Complexity       int `json:"complexity"`
-	ElementaryModels []ElModelJSON `json:"elementaryModels"`
-	CompositeModelName string `json:"compositeModelName"`
+	Models             []ElModelJSON `json:"elementaryModels"`
+	CompositeModelName string        `json:"compositeModelName"`
 }
 
 // reads lines from csv file and sends them to a buffered channel
@@ -166,15 +167,15 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 			json.Unmarshal(result, &cmFromJSON)
 
 			// update elementaryModel map
-			for _, emFromJSON := range cmFromJSON.ElementaryModels{
+			for _, emFromJSON := range cmFromJSON.Models {
 				if emFromMap, ok := elementaryModelMap[emFromJSON.ModelName]; ok {	//ElementaryModel already in map, only update frequency
 					emFromMap.UpdateTokenFreq(freq, emFromJSON.Token)
 				}else{	// ElementaryModel not in map, create new instance and insert into the map
 					t := emFromJSON.Token
 					f := freq
 				
-					tokensNfreqs := make([]elementary.TokenNfreq, 0)
-					tokensNfreqs = append(tokensNfreqs, elementary.TokenNfreq{t, f})
+					tokensNfreqs := make([]elementary.TokenFreq, 0)
+					tokensNfreqs = append(tokensNfreqs, elementary.TokenFreq{t, f})
 					//newEM := elementary.Model{emFromJSON.ModelName, emFromJSON.Complexity, 0, tokensNfreqs}
 					newEM := elementary.Model{emFromJSON.ModelName, 0, tokensNfreqs}
 					elementaryModelMap[emFromJSON.ModelName] = &newEM
@@ -189,7 +190,7 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 
 				// populate array of pointers
 				var elementaryModels []*elementary.Model
-				for _, emFromJSON := range cmFromJSON.ElementaryModels{
+				for _, emFromJSON := range cmFromJSON.Models {
 					emName := emFromJSON.ModelName
 					em := elementaryModelMap[emName]
 					elementaryModels = append(elementaryModels, em)
@@ -214,8 +215,8 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 			}
 
 			// save file
-			trainedMaps := TrainedMaps{elementaryModelMap, compositeModelMap, nCsvLines}
-			emFile, err := os.Create("maps/" + trainName + "TrainedMaps.gob")
+			trainedMaps := Maps{elementaryModelMap, compositeModelMap, nCsvLines}
+			emFile, err := os.Create("maps/" + trainName + "Maps.gob")
 			encoder := gob.NewEncoder(emFile)
 			err = encoder.Encode(trainedMaps)
 			Check(err)
@@ -326,18 +327,19 @@ func Check(e error) {
 }
 
 func Train(input string, nRoutines int) {
-	//inputCsvGzPath := "csv/" + input + ".csv.gz"
-	inputCsvPath := "csv/" + input + ".csv"
-	//f, err := os.Open(inputCsvGzPath)
-	f, err := os.Open(inputCsvPath)
+	inputCsvGzPath := "csv/" + input + ".csv.gz"
+	//inputCsvPath := "csv/" + input + ".csv"
+	f, err := os.Open(inputCsvGzPath)
+	//f, err := os.Open(inputCsvPath)
 	Check(err)
 	defer f.Close()
 
-	//gr, err := gzip.NewReader(f)
-	//Check(err)
-	//defer gr.Close()
+	gr, err := gzip.NewReader(f)
+	Check(err)
+	defer gr.Close()
 
-	cr := csv.NewReader(f)
+	//cr := csv.NewReader(f)
+	cr := csv.NewReader(gr)
 
 	// initialize counter
 	count := 0
