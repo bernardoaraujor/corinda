@@ -25,18 +25,6 @@ type Maps struct {
 	N             int
 }
 
-// returns the relative frequency of a specific CompositeModel, in relation to all CompositeModels in the trained map
-func (tm Maps) RelativeFreq(cm *composite.Model) float64{
-	freq :=  cm.Freq
-
-	sum := 0
-	for _, cm := range tm.CompositeMap {
-		sum += cm.Freq
-	}
-
-	return float64(freq)/float64(sum)
-}
-
 func (tmTo *Maps) Merge(tmFrom *Maps){
 	tmTo.N += tmFrom.N
 
@@ -67,7 +55,6 @@ func (tmTo *Maps) Merge(tmFrom *Maps){
 				}
 
 				emTo.Sort()
-
 			}			
 		}else{			//emFrom not in tmTo, create new entry
 			emFrom.Sort()
@@ -92,6 +79,16 @@ func (tmTo *Maps) Merge(tmFrom *Maps){
 			//insert cm
 			tmTo.CompositeMap[k] = cmTo
 		}
+	}
+
+	// update composite models porbabilities
+	sum := 0
+	for _, cm := range tmTo.CompositeMap{
+		sum += cm.Freq
+	}
+
+	for _, cm := range tmTo.CompositeMap{
+		cm.UpdateProb(sum)
 	}
 }
 
@@ -198,7 +195,7 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 
 				// instantiate new Composite Model
 				//cm := composite.Model{compModelName, complexity, freq, 0, elementaryModels}
-				cm := composite.Model{compModelName, freq, 0, elementaryModels}
+				cm := composite.Model{compModelName, freq, 0, 0, elementaryModels}
 
 				// add to map
 				compositeModelMap[compModelName] = &cm
@@ -212,6 +209,16 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 
 			for _, cm := range compositeModelMap{
 				cm.UpdateEntropy()
+			}
+
+			// calculate composite models probabilities
+			sum := 0
+			for _, cm := range compositeModelMap{
+				sum += cm.Freq
+			}
+
+			for _, cm := range compositeModelMap{
+				cm.UpdateProb(sum)
 			}
 
 			// save file

@@ -9,8 +9,14 @@ import (
 type Model struct{
 	Name             string
 	Freq    int
+	Prob 	float64
 	Entropy float64
 	Models  []*elementary.Model
+}
+
+// gets Probability from normalized Frequency
+func (cm *Model) UpdateProb(freqSum int){
+	cm.Prob = float64(cm.Freq)/float64(freqSum)
 }
 
 // updates the frequency of the Composite Model

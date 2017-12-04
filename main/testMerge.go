@@ -14,22 +14,24 @@ func main() {
 	// empty tm
 	tm := train.Maps{make(map[string]*elementary.Model), make(map[string]*composite.Model), 0}
 
-	em := tm.ElementaryMap[""]
-	fmt.Println(em)
-
 	//train.Train("test2", 1)
 	var tm2 = new(train.Maps)
-	err := Load("maps/testTrainedMaps.gob", &tm2)
+	err := Load("maps/testMaps.gob", &tm2)
 	Check(err)
 
 	tm.Merge(tm2)
 
-	for _, v := range tm.ElementaryMap {
-		if v.Name == ""{
-			fmt.Println(0)
-		}
+	err = Load("maps/test2Maps.gob", &tm2)
+	Check(err)
+
+	tm.Merge(tm2)
+
+	sum := 0
+	for _, cm := range tm.CompositeMap{
+		sum += cm.Freq
 	}
 
+	fmt.Println(0)
 }
 
 // Decode Gob file
