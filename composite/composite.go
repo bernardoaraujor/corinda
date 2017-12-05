@@ -11,7 +11,7 @@ type Model struct{
 	Freq    int
 	Prob 	float64
 	Entropy float64
-	Models  []*elementary.Model
+	Models  []string
 }
 
 // gets Probability from normalized Frequency
@@ -25,27 +25,27 @@ func (cm *Model) UpdateFreq(freq int){
 }
 
 // updates the total entropy of the Composite Model
-func (cm *Model) UpdateEntropy(){
+func (cm *Model) UpdateEntropy(elementaries map[string]*elementary.Model){
 	entropy := float64(0)
 
 	for _, em := range cm.Models {
-		entropy += em.Entropy
+		entropy += elementaries[em].Entropy
 	}
 
 	cm.Entropy = entropy
 }
 
 // returns channel with password guesses belonging to the cartesian product between the Composite Model's Elementary Models
-func (cm *Model) Guess() chan string{
+func (cm *Model) Guess(elementaries map[string]*elementary.Model) chan string{
 	out := make(chan string)
 
-	go cm.recursive(0, nil, nil, out)
+	go cm.recursive(0, nil, nil, out, elementaries)
 
 	return out
 }
 
 // sends elements of the cartesian product of TokensNFreqs of all cm's ems to out channel
-func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan string){
+func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan string, elementaries map[string]*elementary.Model){
 	// max depth to be processed recursively
 	n := len(cm.Models)
 
@@ -58,7 +58,8 @@ func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan st
 		// init lengths
 		lengths = make([]int, n)
 		for i, _ := range cm.Models {
-			lengths[i] = len(cm.Models[i].TokensNfreqs)
+			emName := cm.Models[i]
+			lengths[i] = len(elementaries[emName].TokensNfreqs)
 		}
 	}
 
@@ -67,7 +68,8 @@ func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan st
 		result := ""
 		for d := 0; d < n; d++{
 			i := counters[d]
-			result += cm.Models[d].TokensNfreqs[i].Token
+			emName := cm.Models[d]
+			result += elementaries[emName].TokensNfreqs[i].Token
 		}
 
 		// send result to out channel
@@ -78,7 +80,7 @@ func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan st
 		// go through current depth
 		for counters[depth] = 0; counters[depth] < lengths[depth]; counters[depth]++{
 			// recursively process next depth
-			cm.recursive(depth+1, counters, lengths, out)
+			cm.recursive(depth+1, counters, lengths, out, elementaries)
 		}
 	}
 

@@ -13,11 +13,11 @@ import (
 	"fmt"
 	"os"
 	"compress/gzip"
-	"io/ioutil"
 )
 
 const passfaultClassPath = "-Djava.class.path=passfault_corinda/out/artifacts/passfault_corinda_jar/passfault_corinda.jar"
 
+/*
 // this struct is generated after a csv file is processed
 type Maps struct {
 	ElementaryMap map[string]*elementary.Model
@@ -91,6 +91,7 @@ func (tmTo *Maps) Merge(tmFrom *Maps){
 		cm.UpdateProb(sum)
 	}
 }
+*/
 
 // this struct is used right after the csv line is read
 // it contains frequency and password
@@ -186,11 +187,16 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 				//complexity := cmFromJSON.Complexity
 
 				// populate array of pointers
-				var elementaryModels []*elementary.Model
+				//var elementaryModels []*elementary.Model
+				//for _, emFromJSON := range cmFromJSON.Models {
+				//	emName := emFromJSON.ModelName
+				//	em := elementaryModelMap[emName]
+				//	elementaryModels = append(elementaryModels, em)
+				//}
+
+				elementaryModels := make([]string, 0)
 				for _, emFromJSON := range cmFromJSON.Models {
-					emName := emFromJSON.ModelName
-					em := elementaryModelMap[emName]
-					elementaryModels = append(elementaryModels, em)
+					elementaryModels = append(elementaryModels, emFromJSON.ModelName)
 				}
 
 				// instantiate new Composite Model
@@ -208,7 +214,7 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 			}
 
 			for _, cm := range compositeModelMap{
-				cm.UpdateEntropy()
+				cm.UpdateEntropy(elementaryModelMap)
 			}
 
 			// calculate composite models probabilities
@@ -230,11 +236,36 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 			emFile.Close()
 			*/
 
-			trainedMaps := Maps{elementaryModelMap, compositeModelMap, nCsvLines}
-			jsonString, err := json.Marshal(trainedMaps)
-			check(err)
+			emArray := make([]elementary.Model, len(elementaryModelMap))
+			i := 0
+			for _, em := range elementaryModelMap{
+				emArray[i] = *em
+				i++
+			}
+			jsonData, err := json.Marshal(emArray)
 
-			ioutil.WriteFile("maps/" + trainName + "Maps.json", jsonString, 0644)
+			emFile, err := os.Create("maps/" + trainName + "Elementaries.json")
+			check(err)
+			defer emFile.Close()
+
+			emFile.Write(jsonData)
+			emFile.Sync()
+
+			cmArray := make([]composite.Model, len(compositeModelMap))
+			i = 0
+			for _, cm := range compositeModelMap{
+				cmArray[i] = *cm
+				i++
+			}
+
+			jsonData, err = json.Marshal(cmArray)
+
+			cmFile, err := os.Create("maps/" + trainName + "Composites.json")
+			check(err)
+			defer emFile.Close()
+
+			cmFile.Write(jsonData)
+			cmFile.Sync()
 			break
 		}
 	}

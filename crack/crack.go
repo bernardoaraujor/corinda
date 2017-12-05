@@ -1,9 +1,7 @@
 package crack
 
 import (
-	"github.com/bernardoaraujor/corinda/train"
 	"crypto/sha256"
-	"encoding/gob"
 	"crypto/sha1"
 	"runtime"
 	"hash"
@@ -11,8 +9,12 @@ import (
 	"fmt"
 	"os"
 	"io/ioutil"
-	"strings"
 	"encoding/hex"
+	"github.com/bernardoaraujor/corinda/composite"
+	"github.com/bernardoaraujor/corinda/elementary"
+	"encoding/json"
+	"compress/gzip"
+	"encoding/csv"
 )
 
 const Rockyou = "rockyou"
@@ -33,21 +35,25 @@ type password struct {
 }
 
 type Crack struct {
-	alg        string
-	trainMaps  train.Maps
-	targetsMap targetsMap
+	alg          string
+	composites   map[string]*composite.Model
+	elementaries map[string]*elementary.Model
+	targetsMap   targetsMap
+	targetName	 string
 }
 
 // crack session
 func (crack Crack) Crack(){
-	composites := crack.trainMaps.CompositeMap
+	composites := crack.composites
+	elementaries := crack.elementaries
+
 	var wg sync.WaitGroup
 
 	// initialize channels
 	guesses := make([]chan string, 0)
 	guessesPerBatch := make([]int, 0)
 	for _, cm := range composites{
-		guesses = append(guesses, cm.Guess())
+		guesses = append(guesses, cm.Guess(elementaries))
 		guessesPerBatch = append(guessesPerBatch, int(cm.Entropy))
 	}
 
@@ -56,7 +62,7 @@ func (crack Crack) Crack(){
 	// TODO: many parallell searchers?
 	wg.Add(1)
 	results := crack.searcher(batches)
-	go save(results, wg)
+	go save(crack.targetName, results, wg)
 
 	fmt.Println("Cracking...")
 	wg.Wait()
@@ -66,18 +72,48 @@ func (crack Crack) Crack(){
 func NewCrack(list string, alg string) Crack{
 	var crack Crack
 
+	crack.targetName = list
 	crack.alg = alg
 
-	err := load("maps/"+ list +"Maps.gob", &crack.trainMaps)
+	raw, err := ioutil.ReadFile("maps/"+ list +"Elementaries.json")
+	check(err)
+	var elementaries []*elementary.Model
+	err = json.Unmarshal(raw, &elementaries)
 	check(err)
 
-	f, err := ioutil.ReadFile("targets/rockyouSHA1.csv")
+	crack.elementaries = make(map[string]*elementary.Model)
+
+	for _, em := range elementaries{
+		crack.elementaries[em.Name] = em
+	}
+
+	raw, err = ioutil.ReadFile("maps/"+ list +"Composites.json")
 	check(err)
-	targets := strings.Split(string(f), "\n")
+	var composites []*composite.Model
+	err = json.Unmarshal(raw, &composites)
+
+	crack.composites = make(map[string]*composite.Model)
+
+	for _, cm := range composites{
+		crack.composites[cm.Name] = cm
+	}
+
+	f, err := os.Open("targets/sha1/rockyou.csv.gz")
+	check(err)
+	defer f.Close()
+
+	gr, err := gzip.NewReader(f)
+	check(err)
+	defer gr.Close()
+
+	cr := csv.NewReader(gr)
 
 	fmt.Println("Loading target list...")
 	crack.targetsMap.targets = make(map[string]string)
-	for _, hash := range targets{
+	for records, err := cr.Read(); records != nil; records, err = cr.Read(){
+		check(err)
+
+		hash := records[0]
 		crack.targetsMap.targets[hash] = hash
 	}
 
@@ -88,7 +124,7 @@ func NewCrack(list string, alg string) Crack{
 func load(path string, object interface{}) error {
 	file, err := os.Open(path)
 	if err == nil {
-		decoder := gob.NewDecoder(file)
+		decoder := json.NewDecoder(file)
 		err = decoder.Decode(object)
 	}
 	file.Close()
@@ -226,10 +262,10 @@ func (crack *Crack) searcher(in chan []password) chan password {
 	return out
 }
 
-func save(in chan password, wg sync.WaitGroup){
+func save(list string, in chan password, wg sync.WaitGroup){
 	defer wg.Done()
 
-	resultFile, err := os.Create("results/testResults.csv")
+	resultFile, err := os.Create("results/" + list + "testResults.csv")
 	check(err)
 	defer resultFile.Close()
 

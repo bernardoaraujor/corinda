@@ -5,7 +5,7 @@ import (
 )
 
 func main(){
-	crack := crack.NewCrack("test", crack.SHA1)
+	crack := crack.NewCrack("rockyou10k", crack.SHA1)
 
 	crack.Crack()
 }
