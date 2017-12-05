@@ -3,49 +3,68 @@ package main
 import (
 	"github.com/bernardoaraujor/corinda/train"
 	"fmt"
-	"os"
-	"encoding/gob"
-	"runtime"
 	"github.com/bernardoaraujor/corinda/elementary"
 	"github.com/bernardoaraujor/corinda/composite"
+	"io/ioutil"
+	"encoding/json"
+
+	"runtime"
+	"os"
 )
 
 func main() {
-	// empty tm
-	tm := train.Maps{make(map[string]*elementary.Model), make(map[string]*composite.Model), 0}
+	raw, err := ioutil.ReadFile("maps/rockyou10kElementaries.json")
+	check(err)
+	var elementaries []*elementary.Model
+	err = json.Unmarshal(raw, &elementaries)
+	check(err)
 
-	//train.Train("test2", 1)
-	var tm2 = new(train.Maps)
-	err := Load("maps/testMaps.gob", &tm2)
-	Check(err)
-
-	tm.Merge(tm2)
-
-	err = Load("maps/test2Maps.gob", &tm2)
-	Check(err)
-
-	tm.Merge(tm2)
-
-	sum := 0
-	for _, cm := range tm.CompositeMap{
-		sum += cm.Freq
+	emMap1 := make(map[string]*elementary.Model)
+	for _, em := range elementaries{
+		emMap1[em.Name] = em
 	}
 
-	fmt.Println(0)
-}
+	raw, err = ioutil.ReadFile("maps/rockyou10kComposites.json")
+	check(err)
+	var composites []*composite.Model
+	err = json.Unmarshal(raw, &composites)
+	check(err)
 
-// Decode Gob file
-func Load(path string, object interface{}) error {
-	file, err := os.Open(path)
-	if err == nil {
-		decoder := gob.NewDecoder(file)
-		err = decoder.Decode(object)
+	cmMap1 := make(map[string]*composite.Model)
+	for _, cm := range composites{
+		cmMap1[cm.Name] = cm
 	}
-	file.Close()
-	return err
+
+	//-----------
+	raw, err = ioutil.ReadFile("maps/rockyou10k-bElementaries.json")
+	check(err)
+	var elementaries2 []*elementary.Model
+	err = json.Unmarshal(raw, &elementaries2)
+	check(err)
+
+	emMap2 := make(map[string]*elementary.Model)
+	for _, em := range elementaries2{
+		emMap2[em.Name] = em
+	}
+
+	raw, err = ioutil.ReadFile("maps/rockyou10k-bComposites.json")
+	check(err)
+	var composites2 []*composite.Model
+	err = json.Unmarshal(raw, &composites2)
+	check(err)
+
+	cmMap2 := make(map[string]*composite.Model)
+	for _, cm := range composites2{
+		cmMap2[cm.Name] = cm
+	}
+
+	//-------------------------
+	train.Merge(emMap1, emMap2, cmMap1, cmMap2)
+
 }
 
-func Check(e error) {
+// checks for error
+func check(e error) {
 	if e != nil {
 		_, file, line, _ := runtime.Caller(1)
 		fmt.Println(line, "\t", file, "\n", e)

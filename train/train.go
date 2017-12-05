@@ -24,13 +24,13 @@ type Maps struct {
 	CompositeMap  map[string]*composite.Model
 	N             int
 }
+*/
 
-func (tmTo *Maps) Merge(tmFrom *Maps){
-	tmTo.N += tmFrom.N
+func Merge(emMapFrom map[string]*elementary.Model, emMapTo map[string]*elementary.Model, cmMapFrom map[string]*composite.Model, cmMapTo map[string]*composite.Model){
 
 	// process ElementaryModelsMaps
-	for k, emFrom := range tmFrom.ElementaryMap {
-		if emTo, ok := tmTo.ElementaryMap[k]; ok{ //emFrom already in tmTo.ElementaryMap
+	for k, emFrom := range emMapFrom {
+		if emTo, ok := emMapTo[k]; ok{ //emFrom already in tmTo.ElementaryMap
 
 			//verify every TokenFreq in emFrom
 			for _, tf := range emFrom.TokensNfreqs{
@@ -58,40 +58,31 @@ func (tmTo *Maps) Merge(tmFrom *Maps){
 			}			
 		}else{			//emFrom not in tmTo, create new entry
 			emFrom.Sort()
-			tmTo.ElementaryMap[k] = emFrom
+			emMapTo[k] = emFrom
 		}
 	}
 
 	// process CompositeModels
-	for k, cmFrom := range tmFrom.CompositeMap {
-		if cmTo, ok := tmTo.CompositeMap[k]; ok{ //cm already in tmTo
+	for k, cmFrom := range cmMapFrom {
+		if cmTo, ok := cmMapTo[k]; ok{ //cm already in tmTo
 			cmTo.UpdateFreq(cmFrom.Freq)
 		}else{		//cm not in tmTo, create new entry
-			cmTo := cmFrom
-
-			//set em pointers
-			for i, em := range cmFrom.Models {
-				emName := em.Name
-				emTo := tmTo.ElementaryMap[emName]
-				cmTo.Models[i] = emTo
-			}
 
 			//insert cm
-			tmTo.CompositeMap[k] = cmTo
+			cmMapTo[k] = cmFrom
 		}
 	}
 
 	// update composite models porbabilities
 	sum := 0
-	for _, cm := range tmTo.CompositeMap{
+	for _, cm := range cmMapTo{
 		sum += cm.Freq
 	}
 
-	for _, cm := range tmTo.CompositeMap{
+	for _, cm := range cmMapTo{
 		cm.UpdateProb(sum)
 	}
 }
-*/
 
 // this struct is used right after the csv line is read
 // it contains frequency and password
