@@ -6,7 +6,6 @@ import (
 	"github.com/timob/jnigi"
 	"encoding/json"
 	"encoding/csv"
-	"encoding/gob"
 	"strconv"
 	"runtime"
 	"time"
@@ -14,6 +13,7 @@ import (
 	"fmt"
 	"os"
 	"compress/gzip"
+	"io/ioutil"
 )
 
 const passfaultClassPath = "-Djava.class.path=passfault_corinda/out/artifacts/passfault_corinda_jar/passfault_corinda.jar"
@@ -128,11 +128,11 @@ func CsvRead(cr *csv.Reader, nRoutines int) <-chan FreqNpass{
 	fpChan := make(chan FreqNpass, nRoutines)
 	go func(){
 		for records, err := cr.Read(); records != nil; records, err = cr.Read(){
-			Check(err)
+			check(err)
 
 			freq, err := strconv.Atoi(records[0])
 			pass := records[1]
-			Check(err)
+			check(err)
 
 			fp := FreqNpass{freq, pass}
 			fpChan <- fp
@@ -170,7 +170,7 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 				}else{	// ElementaryModel not in map, create new instance and insert into the map
 					t := emFromJSON.Token
 					f := freq
-				
+
 					tokensNfreqs := make([]elementary.TokenFreq, 0)
 					tokensNfreqs = append(tokensNfreqs, elementary.TokenFreq{t, f})
 					//newEM := elementary.Model{emFromJSON.ModelName, emFromJSON.Complexity, 0, tokensNfreqs}
@@ -222,13 +222,19 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 			}
 
 			// save file
-			trainedMaps := Maps{elementaryModelMap, compositeModelMap, nCsvLines}
+			/*trainedMaps := Maps{elementaryModelMap, compositeModelMap, nCsvLines}
 			emFile, err := os.Create("maps/" + trainName + "Maps.gob")
 			encoder := gob.NewEncoder(emFile)
 			err = encoder.Encode(trainedMaps)
-			Check(err)
+			check(err)
 			emFile.Close()
+			*/
 
+			trainedMaps := Maps{elementaryModelMap, compositeModelMap, nCsvLines}
+			jsonString, err := json.Marshal(trainedMaps)
+			check(err)
+
+			ioutil.WriteFile("maps/" + trainName + "Maps.json", jsonString, 0644)
 			break
 		}
 	}
@@ -240,7 +246,7 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 func PasswordAnalysis(passfaultClassPath string, fpChan <-chan FreqNpass, nRoutines int) ([]<-chan FreqNresult, <-chan bool){
 	// start JVM
 	jvm, _, err := jnigi.CreateJVM(jnigi.NewJVMInitArgs(false, true, jnigi.DEFAULT_VERSION, []string{passfaultClassPath}))
-	Check(err)
+	check(err)
 
 	frChans := make([]<-chan FreqNresult, nRoutines)
 
@@ -259,18 +265,18 @@ func PasswordAnalysis(passfaultClassPath string, fpChan <-chan FreqNpass, nRouti
 
 			// create TextAnalysis JVM object
 			obj, err := env.NewObject("org/owasp/passfault/TextAnalysis")
-			Check(err)
+			check(err)
 
 			// loop over inputs from csv file
 			for fp := range fpChan{
 
 				// create JVM string with password
 				str, err := env.NewObject("java/lang/String", []byte(fp.pass))
-				Check(err)
+				check(err)
 
 				// call passwordAnalysis on password
 				v, err := obj.CallMethod(env, "passwordAnalysis", "java/lang/String", str)
-				Check(err)
+				check(err)
 
 				// format result from JVM into byte array (probably not the most elegant way!)
 				resultJVM, err := v.(*jnigi.ObjectRef).CallMethod(env, "getBytes", jnigi.Byte|jnigi.Array)
@@ -325,7 +331,7 @@ func Counter(c *int, countChan <-chan bool){
 }
 
 // checks for error
-func Check(e error) {
+func check(e error) {
 	if e != nil {
 		_, file, line, _ := runtime.Caller(1)
 		fmt.Println(line, "\t", file, "\n", e)
@@ -338,11 +344,11 @@ func Train(input string, nRoutines int) {
 	//inputCsvPath := "csv/" + input + ".csv"
 	f, err := os.Open(inputCsvGzPath)
 	//f, err := os.Open(inputCsvPath)
-	Check(err)
+	check(err)
 	defer f.Close()
 
 	gr, err := gzip.NewReader(f)
-	Check(err)
+	check(err)
 	defer gr.Close()
 
 	//cr := csv.NewReader(f)
