@@ -291,25 +291,26 @@ func PasswordAnalysis(passfaultClassPath string, fpChan <-chan FreqNpass, nRouti
 
 			// loop over inputs from csv file
 			for fp := range fpChan{
+				if len(fp.pass) < 20{
+					// create JVM string with password
+					str, err := env.NewObject("java/lang/String", []byte(fp.pass))
+					check(err)
 
-				// create JVM string with password
-				str, err := env.NewObject("java/lang/String", []byte(fp.pass))
-				check(err)
+					// call passwordAnalysis on password
+					v, err := obj.CallMethod(env, "passwordAnalysis", "java/lang/String", str)
+					check(err)
 
-				// call passwordAnalysis on password
-				v, err := obj.CallMethod(env, "passwordAnalysis", "java/lang/String", str)
-				check(err)
+					// format result from JVM into byte array (probably not the most elegant way!)
+					resultJVM, err := v.(*jnigi.ObjectRef).CallMethod(env, "getBytes", jnigi.Byte|jnigi.Array)
+					resultString := string(resultJVM.([]byte))
+					resultBytes := []byte(resultString)
 
-				// format result from JVM into byte array (probably not the most elegant way!)
-				resultJVM, err := v.(*jnigi.ObjectRef).CallMethod(env, "getBytes", jnigi.Byte|jnigi.Array)
-				resultString := string(resultJVM.([]byte))
-				resultBytes := []byte(resultString)
+					// send result to JSON decoder
+					frChan <- FreqNresult{fp.freq, resultBytes}
 
-				// send result to JSON decoder
-				frChan <- FreqNresult{fp.freq, resultBytes}
-
-				// signal to counter
-				countChan <- true
+					// signal to counter
+					countChan <- true
+				}
 			}
 			close(frChan)
 		}()
