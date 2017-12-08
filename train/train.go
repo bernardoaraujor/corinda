@@ -253,7 +253,7 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 
 			cmFile, err := os.Create("maps/" + trainName + "Composites.json")
 			check(err)
-			defer emFile.Close()
+			defer cmFile.Close()
 
 			cmFile.Write(jsonData)
 			cmFile.Sync()
