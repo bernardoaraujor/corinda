@@ -291,7 +291,9 @@ func PasswordAnalysis(passfaultClassPath string, fpChan <-chan FreqNpass, nRouti
 
 			// loop over inputs from csv file
 			for fp := range fpChan{
-				if len(fp.pass) < 20{
+
+				// filter out weird long passwords
+				if len(fp.pass) < 30{
 					// create JVM string with password
 					str, err := env.NewObject("java/lang/String", []byte(fp.pass))
 					check(err)

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/bernardoaraujor/corinda/train"
+	//"github.com/bernardoaraujor/corinda/train"
 	"fmt"
 	"github.com/bernardoaraujor/corinda/elementary"
 	"github.com/bernardoaraujor/corinda/composite"
@@ -13,10 +13,10 @@ import (
 )
 
 func main() {
-	raw, err := ioutil.ReadFile("maps/rockyou10kElementaries.json")
+	em1, err := ioutil.ReadFile("maps/rockyou1Elementaries.json")
 	check(err)
 	var elementaries []*elementary.Model
-	err = json.Unmarshal(raw, &elementaries)
+	err = json.Unmarshal(em1, &elementaries)
 	check(err)
 
 	emMap1 := make(map[string]*elementary.Model)
@@ -24,10 +24,10 @@ func main() {
 		emMap1[em.Name] = em
 	}
 
-	raw, err = ioutil.ReadFile("maps/rockyou10kComposites.json")
+	cm1, err := ioutil.ReadFile("maps/rockyou1Composites.json")
 	check(err)
 	var composites []*composite.Model
-	err = json.Unmarshal(raw, &composites)
+	err = json.Unmarshal(cm1, &composites)
 	check(err)
 
 	cmMap1 := make(map[string]*composite.Model)
@@ -35,32 +35,7 @@ func main() {
 		cmMap1[cm.Name] = cm
 	}
 
-	//-----------
-	raw, err = ioutil.ReadFile("maps/rockyou10k-bElementaries.json")
-	check(err)
-	var elementaries2 []*elementary.Model
-	err = json.Unmarshal(raw, &elementaries2)
-	check(err)
-
-	emMap2 := make(map[string]*elementary.Model)
-	for _, em := range elementaries2{
-		emMap2[em.Name] = em
-	}
-
-	raw, err = ioutil.ReadFile("maps/rockyou10k-bComposites.json")
-	check(err)
-	var composites2 []*composite.Model
-	err = json.Unmarshal(raw, &composites2)
-	check(err)
-
-	cmMap2 := make(map[string]*composite.Model)
-	for _, cm := range composites2{
-		cmMap2[cm.Name] = cm
-	}
-
-	//-------------------------
-	train.Merge(emMap1, emMap2, cmMap1, cmMap2)
-
+	fmt.Println(0)
 }
 
 // checks for error
