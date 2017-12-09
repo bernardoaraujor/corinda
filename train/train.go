@@ -245,8 +245,12 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 			cmArray := make([]composite.Model, len(compositeModelMap))
 			i = 0
 			for _, cm := range compositeModelMap{
-				cmArray[i] = *cm
-				i++
+
+				// ignore improbable cms
+				if cm.Prob > 0.00001{
+					cmArray[i] = *cm
+					i++
+				}
 			}
 
 			jsonData, err = json.Marshal(cmArray)
@@ -381,6 +385,7 @@ func Train(input string, nRoutines int) {
 
 	// initialize counter
 	count := 0
+	lastCount := 0
 
 	//check if pipeline has finished
 	var done bool
@@ -398,7 +403,8 @@ func Train(input string, nRoutines int) {
 	for !done{
 		since := time.Since(start)
 		time.Sleep(1000 * time.Millisecond)
-		fmt.Println("Processed passwords: " + strconv.Itoa(count) + "; Total time: " + since.String())
+		fmt.Println("Speed: " + strconv.Itoa(count - lastCount) + " P/s; Processed passwords: " + strconv.Itoa(count) + "; Total time: " + since.String())
+		lastCount = count
 	}
 }
 
