@@ -115,9 +115,9 @@ type CompModelJSON struct {
 
 // reads lines from csv file and sends them to a buffered channel
 // many go routines of ProcessPass will read from this channel
-func CsvRead(cr *csv.Reader, nRoutines int) <-chan FreqNpass{
+func CsvRead(cr *csv.Reader) <-chan FreqNpass{
 
-	fpChan := make(chan FreqNpass, nRoutines)
+	fpChan := make(chan FreqNpass)
 	go func(){
 		for records, err := cr.Read(); records != nil; records, err = cr.Read(){
 			check(err)
@@ -269,60 +269,53 @@ func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
 }
 
 // uses Passfault's passwordAnalysis method to process passwords
-func PasswordAnalysis(passfaultClassPath string, fpChan <-chan FreqNpass, nRoutines int) ([]<-chan FreqNresult, <-chan bool){
+func PasswordAnalysis(passfaultClassPath string, fpChan <-chan FreqNpass) (<-chan FreqNresult, <-chan bool){
 	// start JVM
 	jvm, _, err := jnigi.CreateJVM(jnigi.NewJVMInitArgs(false, true, jnigi.DEFAULT_VERSION, []string{passfaultClassPath}))
 	check(err)
 
-	frChans := make([]<-chan FreqNresult, nRoutines)
+	frChan := make(chan FreqNresult)
 
 	//this channel is used to keep track of progress
-	countChan := make(chan bool, nRoutines)
+	countChan := make(chan bool)
 
-	//start nRoutines
-	for i := 0; i < nRoutines; i++{
-		//this channel is used to send results from analysis
-		frChan := make(chan FreqNresult, nRoutines)
+	go func(){
+		// attach this routine to JVM
+		env := jvm.AttachCurrentThread()
 
-		frChans[i] = frChan
-		go func(){
-			// attach this routine to JVM
-			env := jvm.AttachCurrentThread()
+		// create TextAnalysis JVM object
+		obj, err := env.NewObject("org/owasp/passfault/TextAnalysis")
+		check(err)
 
-			// create TextAnalysis JVM object
-			obj, err := env.NewObject("org/owasp/passfault/TextAnalysis")
-			check(err)
+		// loop over inputs from csv file
+		for fp := range fpChan{
 
-			// loop over inputs from csv file
-			for fp := range fpChan{
+			// filter out weird long passwords
+			if len(fp.pass) < 30{
+				// create JVM string with password
+				str, err := env.NewObject("java/lang/String", []byte(fp.pass))
+				check(err)
 
-				// filter out weird long passwords
-				if len(fp.pass) < 30{
-					// create JVM string with password
-					str, err := env.NewObject("java/lang/String", []byte(fp.pass))
-					check(err)
+				// call passwordAnalysis on password
+				v, err := obj.CallMethod(env, "passwordAnalysis", "java/lang/String", str)
+				check(err)
 
-					// call passwordAnalysis on password
-					v, err := obj.CallMethod(env, "passwordAnalysis", "java/lang/String", str)
-					check(err)
+				// format result from JVM into byte array (probably not the most elegant way!)
+				resultJVM, err := v.(*jnigi.ObjectRef).CallMethod(env, "getBytes", jnigi.Byte|jnigi.Array)
+				resultString := string(resultJVM.([]byte))
+				resultBytes := []byte(resultString)
 
-					// format result from JVM into byte array (probably not the most elegant way!)
-					resultJVM, err := v.(*jnigi.ObjectRef).CallMethod(env, "getBytes", jnigi.Byte|jnigi.Array)
-					resultString := string(resultJVM.([]byte))
-					resultBytes := []byte(resultString)
+				// send result to JSON decoder
+				frChan <- FreqNresult{fp.freq, resultBytes}
 
-					// send result to JSON decoder
-					frChan <- FreqNresult{fp.freq, resultBytes}
-
-					// signal to counter
-					countChan <- true
-				}
+				// signal to counter
+				countChan <- true
 			}
-			close(frChan)
-		}()
-	}
+		}
+		close(frChan)
+	}()
 
-	return frChans, countChan
+	return frChan, countChan
 }
 
 // fans output of channels from PasswordAnalysis routines into one single channel
@@ -368,7 +361,7 @@ func check(e error) {
 	}
 }
 
-func Train(input string, nRoutines int) {
+func Train(input string) {
 	inputCsvGzPath := "csv/" + input + ".csv.gz"
 	//inputCsvPath := "csv/" + input + ".csv"
 	f, err := os.Open(inputCsvGzPath)
@@ -391,11 +384,10 @@ func Train(input string, nRoutines int) {
 	var done bool
 
 	// start pipeline
-	fpChan := CsvRead(cr, nRoutines)
-	frChans, countChan := PasswordAnalysis(passfaultClassPath, fpChan, nRoutines)
+	fpChan := CsvRead(cr)
+	frChan, countChan := PasswordAnalysis(passfaultClassPath, fpChan)
 	go Counter(&count, countChan)
-	fannedFrChans := FanIn(frChans, nRoutines)
-	go DecodeJSON(fannedFrChans, &done, input)
+	go DecodeJSON(frChan, &done, input)
 
 	start := time.Now()
 
