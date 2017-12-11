@@ -16,6 +16,7 @@ import (
 )
 
 const passfaultClassPath = "-Djava.class.path=passfault_corinda/out/artifacts/passfault_corinda_jar/passfault_corinda.jar"
+const bufSize = 1000
 
 /*
 // this struct is generated after a csv file is processed
@@ -117,7 +118,7 @@ type CompModelJSON struct {
 // many go routines of ProcessPass will read from this channel
 func CsvRead(cr *csv.Reader) <-chan FreqNpass{
 
-	fpChan := make(chan FreqNpass)
+	fpChan := make(chan FreqNpass, bufSize)
 	go func(){
 		for records, err := cr.Read(); records != nil; records, err = cr.Read(){
 			check(err)
@@ -140,8 +141,8 @@ func CsvRead(cr *csv.Reader) <-chan FreqNpass{
 // parses the JSON strings returned from Passfault
 // data is stored in maps of Composite and Elementary Models
 func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
-	compositeModelMap := make(map[string]*composite.Model)
-	elementaryModelMap := make(map[string]*elementary.Model)
+	compositeModelMap := make(map[string]*composite.Model, bufSize)
+	elementaryModelMap := make(map[string]*elementary.Model, bufSize)
 	nCsvLines := 0
 
 	for { // loop over frChan
@@ -274,10 +275,10 @@ func PasswordAnalysis(passfaultClassPath string, fpChan <-chan FreqNpass) (<-cha
 	jvm, _, err := jnigi.CreateJVM(jnigi.NewJVMInitArgs(false, true, jnigi.DEFAULT_VERSION, []string{passfaultClassPath}))
 	check(err)
 
-	frChan := make(chan FreqNresult)
+	frChan := make(chan FreqNresult, bufSize)
 
 	//this channel is used to keep track of progress
-	countChan := make(chan bool)
+	countChan := make(chan bool, bufSize)
 
 	go func(){
 		// attach this routine to JVM
