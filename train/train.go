@@ -141,8 +141,8 @@ func CsvRead(cr *csv.Reader) <-chan FreqNpass{
 // parses the JSON strings returned from Passfault
 // data is stored in maps of Composite and Elementary Models
 func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
-	compositeModelMap := make(map[string]*composite.Model, bufSize)
-	elementaryModelMap := make(map[string]*elementary.Model, bufSize)
+	compositeModelMap := make(map[string]*composite.Model)
+	elementaryModelMap := make(map[string]*elementary.Model)
 	nCsvLines := 0
 
 	for { // loop over frChan
