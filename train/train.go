@@ -167,6 +167,9 @@ func batchAnalyzer(ibChan chan inputBatch) (chan resultBatch, chan bool){
 
 				// signal to counter
 				counts <- true
+
+				//env.DeleteGlobalRef(str)
+				env.DeleteLocalRef(str)
 			}
 
 			out <- rb
