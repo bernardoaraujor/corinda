@@ -191,7 +191,7 @@ func reporter(c *int, total int, done bool){
 	lastCount := 0
 	// report progress every second
 	for !done{
-		time.Sleep(20 * time.Millisecond)
+		time.Sleep(1000 * time.Millisecond)
 
 		since := time.Since(start)
 		speed := *c - lastCount
