@@ -1,356 +1,52 @@
 package train
 
 import (
-	"github.com/bernardoaraujor/corinda/elementary"
-	"github.com/bernardoaraujor/corinda/composite"
-	"github.com/timob/jnigi"
-	"encoding/json"
-	"encoding/csv"
-	"strconv"
 	"runtime"
-	"time"
-	"sync"
 	"fmt"
 	"os"
+	"github.com/bernardoaraujor/corinda/elementary"
+	"github.com/bernardoaraujor/corinda/composite"
 	"compress/gzip"
+	"encoding/csv"
+	"strconv"
+	"github.com/timob/jnigi"
+	"time"
+	"encoding/json"
 )
 
 const passfaultClassPath = "-Djava.class.path=passfault_corinda/out/artifacts/passfault_corinda_jar/passfault_corinda.jar"
-const bufSize = 1000
+const bufSize = 10000000
 
-/*
-// this struct is generated after a csv file is processed
-type Maps struct {
-	ElementaryMap map[string]*elementary.Model
-	CompositeMap  map[string]*composite.Model
-	N             int
-}
-*/
-
-func Merge(emMapFrom map[string]*elementary.Model, emMapTo map[string]*elementary.Model, cmMapFrom map[string]*composite.Model, cmMapTo map[string]*composite.Model){
-
-	// process ElementaryModelsMaps
-	for k, emFrom := range emMapFrom {
-		if emTo, ok := emMapTo[k]; ok{ //emFrom already in tmTo.ElementaryMap
-
-			//verify every TokenFreq in emFrom
-			for _, tf := range emFrom.TokensNfreqs{
-				t := tf.Token
-				f := tf.Freq
-
-				// is t already in emTo.TokensNfreqs??
-				index := 0
-				b := false
-				for i, tfTo := range emTo.TokensNfreqs{
-					if tfTo.Token == t{
-						index = i
-						b = true
-						break
-					}
-				}
-
-				if b{		// yes, t is in emTo.TokensNfreqs
-					emTo.TokensNfreqs[index].Freq += f
-				}else{		//no, t is not in emTo.TokensNfreqs
-					emTo.TokensNfreqs = append(emTo.TokensNfreqs, elementary.TokenFreq{t, f})
-				}
-
-				emTo.Sort()
-			}			
-		}else{			//emFrom not in tmTo, create new entry
-			emFrom.Sort()
-			emMapTo[k] = emFrom
-		}
-	}
-
-	// process CompositeModels
-	for k, cmFrom := range cmMapFrom {
-		if cmTo, ok := cmMapTo[k]; ok{ //cm already in tmTo
-			cmTo.UpdateFreq(cmFrom.Freq)
-		}else{		//cm not in tmTo, create new entry
-
-			//insert cm
-			cmMapTo[k] = cmFrom
-		}
-	}
-
-	// update composite models porbabilities
-	sum := 0
-	for _, cm := range cmMapTo{
-		sum += cm.Freq
-	}
-
-	for _, cm := range cmMapTo{
-		cm.UpdateProb(sum)
-	}
-}
-
-// this struct is used right after the csv line is read
-// it contains frequency and password
-type FreqNpass struct{
+type input struct {
 	freq int
 	pass string
 }
 
-// this struct is used after the password has been analyzed
-// it contains frequency and a byte slice with the JSON of the analysis
-type FreqNresult struct{
-	freq int
+type inputBatch []input
+
+type result struct {
+	freq   int
 	result []byte
 }
 
-// the types ElModelJSON and CompModelJSON are used only for parsing JSON into ElementaryModel and CompositeModel
-// this is done by function DecodeJSON
-type ElModelJSON struct{
-	ModelName  string `json:"modelName"`
-	//Complexity int    `json:"complexity"`
-	ModelIndex int    `json:"modelIndex"`
+type resultBatch []result
+
+type trainedMaps struct {
+	elementaries map[string]*elementary.Model
+	composites   map[string]*composite.Model
+}
+
+// used only for parsing JSON into elementary.Model
+type elementaryJSON struct{
+	Name  string `json:"modelName"`
+	Index int    `json:"modelIndex"`
 	Token      string `json:"token"`
 }
 
-type CompModelJSON struct {
-	//Complexity       int `json:"complexity"`
-	Models             []ElModelJSON `json:"elementaryModels"`
+// used only for parsing JSON into composite.Model
+type compositeJSON struct {
+	Models             []elementaryJSON `json:"elementaryModels"`
 	CompositeModelName string        `json:"compositeModelName"`
-}
-
-// reads lines from csv file and sends them to a buffered channel
-// many go routines of ProcessPass will read from this channel
-func CsvRead(cr *csv.Reader) <-chan FreqNpass{
-
-	fpChan := make(chan FreqNpass, bufSize)
-	go func(){
-		for records, err := cr.Read(); records != nil; records, err = cr.Read(){
-			check(err)
-
-			freq, err := strconv.Atoi(records[0])
-			pass := records[1]
-			check(err)
-
-			fp := FreqNpass{freq, pass}
-			fpChan <- fp
-		}
-
-		//no more lines, close channel
-		close(fpChan)
-	}()
-
-	return fpChan
-}
-
-// parses the JSON strings returned from Passfault
-// data is stored in maps of Composite and Elementary Models
-func DecodeJSON(frChan <-chan FreqNresult, done *bool, trainName string){
-	compositeModelMap := make(map[string]*composite.Model)
-	elementaryModelMap := make(map[string]*elementary.Model)
-	nCsvLines := 0
-
-	for { // loop over frChan
-		fr, ok := <-frChan
-		if ok{ //there are still values to be read
-			nCsvLines++
-			freq := fr.freq
-			result := fr.result
-
-			// parse JSON
-			var cmFromJSON CompModelJSON
-			json.Unmarshal(result, &cmFromJSON)
-
-			// update elementaryModel map
-			for _, emFromJSON := range cmFromJSON.Models {
-				if emFromMap, ok := elementaryModelMap[emFromJSON.ModelName]; ok {	//ElementaryModel already in map, only update frequency
-					emFromMap.UpdateTokenFreq(freq, emFromJSON.Token)
-				}else{	// ElementaryModel not in map, create new instance and insert into the map
-					t := emFromJSON.Token
-					f := freq
-
-					tokensNfreqs := make([]elementary.TokenFreq, 0)
-					tokensNfreqs = append(tokensNfreqs, elementary.TokenFreq{t, f})
-					//newEM := elementary.Model{emFromJSON.ModelName, emFromJSON.Complexity, 0, tokensNfreqs}
-					newEM := elementary.Model{emFromJSON.ModelName, 0, tokensNfreqs}
-					elementaryModelMap[emFromJSON.ModelName] = &newEM
-				}
-			}
-
-			if cmFromMap, ok := compositeModelMap[cmFromJSON.CompositeModelName]; ok{	//CompositeModel already in map, only update frequency
-				cmFromMap.UpdateFreq(freq)
-			}else{		// CompositeModel not in map, create new instance and insert into the map
-				compModelName := cmFromJSON.CompositeModelName
-				//complexity := cmFromJSON.Complexity
-
-				// populate array of pointers
-				//var elementaryModels []*elementary.Model
-				//for _, emFromJSON := range cmFromJSON.Models {
-				//	emName := emFromJSON.ModelName
-				//	em := elementaryModelMap[emName]
-				//	elementaryModels = append(elementaryModels, em)
-				//}
-
-				elementaryModels := make([]string, 0)
-				for _, emFromJSON := range cmFromJSON.Models {
-					elementaryModels = append(elementaryModels, emFromJSON.ModelName)
-				}
-
-				// instantiate new Composite Model
-				//cm := composite.Model{compModelName, complexity, freq, 0, elementaryModels}
-				cm := composite.Model{compModelName, freq, 0, 0, elementaryModels}
-
-				// add to map
-				compositeModelMap[compModelName] = &cm
-			}
-		}else{ //frChan is closed
-
-			// calculate entropies
-			for _, em := range elementaryModelMap{
-				em.UpdateEntropy()
-			}
-
-			for _, cm := range compositeModelMap{
-				cm.UpdateEntropy(elementaryModelMap)
-			}
-
-			// calculate composite models probabilities
-			sum := 0
-			for _, cm := range compositeModelMap{
-				sum += cm.Freq
-			}
-
-			for _, cm := range compositeModelMap{
-				cm.UpdateProb(sum)
-			}
-
-			// save file
-			/*trainedMaps := Maps{elementaryModelMap, compositeModelMap, nCsvLines}
-			emFile, err := os.Create("maps/" + trainName + "Maps.gob")
-			encoder := gob.NewEncoder(emFile)
-			err = encoder.Encode(trainedMaps)
-			check(err)
-			emFile.Close()
-			*/
-
-			emArray := make([]elementary.Model, len(elementaryModelMap))
-			i := 0
-			for _, em := range elementaryModelMap{
-				emArray[i] = *em
-				i++
-			}
-			jsonData, err := json.Marshal(emArray)
-
-			emFile, err := os.Create("maps/" + trainName + "Elementaries.json")
-			check(err)
-			defer emFile.Close()
-
-			emFile.Write(jsonData)
-			emFile.Sync()
-
-			cmArray := make([]composite.Model, len(compositeModelMap))
-			i = 0
-			for _, cm := range compositeModelMap{
-
-				// ignore improbable cms
-				if cm.Prob > 0.00001{
-					cmArray[i] = *cm
-					i++
-				}
-			}
-
-			jsonData, err = json.Marshal(cmArray)
-
-			cmFile, err := os.Create("maps/" + trainName + "Composites.json")
-			check(err)
-			defer cmFile.Close()
-
-			cmFile.Write(jsonData)
-			cmFile.Sync()
-			break
-		}
-	}
-
-	*done = true
-}
-
-// uses Passfault's passwordAnalysis method to process passwords
-func PasswordAnalysis(passfaultClassPath string, fpChan <-chan FreqNpass) (<-chan FreqNresult, <-chan bool){
-	// start JVM
-	jvm, _, err := jnigi.CreateJVM(jnigi.NewJVMInitArgs(false, true, jnigi.DEFAULT_VERSION, []string{passfaultClassPath}))
-	check(err)
-
-	frChan := make(chan FreqNresult, bufSize)
-
-	//this channel is used to keep track of progress
-	countChan := make(chan bool, bufSize)
-
-	go func(){
-		// attach this routine to JVM
-		env := jvm.AttachCurrentThread()
-
-		// create TextAnalysis JVM object
-		obj, err := env.NewObject("org/owasp/passfault/TextAnalysis")
-		check(err)
-
-		// loop over inputs from csv file
-		for fp := range fpChan{
-
-			// filter out weird long passwords
-			if len(fp.pass) < 30{
-				// create JVM string with password
-				str, err := env.NewObject("java/lang/String", []byte(fp.pass))
-				check(err)
-
-				// call passwordAnalysis on password
-				v, err := obj.CallMethod(env, "passwordAnalysis", "java/lang/String", str)
-				check(err)
-
-				// format result from JVM into byte array (probably not the most elegant way!)
-				resultJVM, err := v.(*jnigi.ObjectRef).CallMethod(env, "getBytes", jnigi.Byte|jnigi.Array)
-				resultString := string(resultJVM.([]byte))
-				resultBytes := []byte(resultString)
-
-				// send result to JSON decoder
-				frChan <- FreqNresult{fp.freq, resultBytes}
-
-				// signal to counter
-				countChan <- true
-			}
-		}
-		close(frChan)
-	}()
-
-	return frChan, countChan
-}
-
-// fans output of channels from PasswordAnalysis routines into one single channel
-func FanIn(frChans []<-chan FreqNresult, nRoutines int) <-chan FreqNresult{
-	var wg sync.WaitGroup
-	out := make(chan FreqNresult, nRoutines)
-
-	// Start an output goroutine for each input channel in cs.  output
-	// copies values from c to out until c is closed, then calls wg.Done.
-	output := func(c <-chan FreqNresult) {
-		for n := range c {
-			out <- n
-		}
-		wg.Done()
-	}
-	wg.Add(len(frChans))
-	for _, c := range frChans {
-		go output(c)
-	}
-
-	// Start a goroutine to close out once all the output goroutines are
-	// done.  This must start after the wg.Add call.
-	go func() {
-		wg.Wait()
-		close(out)
-	}()
-	return out
-}
-
-// counts how many passwords have already been analyzed
-func Counter(c *int, countChan <-chan bool){
-	for _ = range countChan{
-		*c++
-	}
 }
 
 // checks for error
@@ -362,11 +58,10 @@ func check(e error) {
 	}
 }
 
-func Train(input string) {
-	inputCsvGzPath := "csv/" + input + ".csv.gz"
-	//inputCsvPath := "csv/" + input + ".csv"
-	f, err := os.Open(inputCsvGzPath)
-	//f, err := os.Open(inputCsvPath)
+func countLines(list string) int{
+	path := "csv/" + list + ".csv.gz"
+
+	f, err := os.Open(path)
 	check(err)
 	defer f.Close()
 
@@ -374,32 +69,312 @@ func Train(input string) {
 	check(err)
 	defer gr.Close()
 
-	//cr := csv.NewReader(f)
 	cr := csv.NewReader(gr)
 
-	// initialize counter
-	count := 0
-	lastCount := 0
+	//fmt.Println("Counting lines in list...")
+	listSize := 0
+	for records, err := cr.Read(); records != nil; records, err = cr.Read(){
+		check(err)
+		listSize++
+	}
 
-	//check if pipeline has finished
-	var done bool
+	return listSize
+}
 
-	// start pipeline
-	fpChan := CsvRead(cr)
-	frChan, countChan := PasswordAnalysis(passfaultClassPath, fpChan)
-	go Counter(&count, countChan)
-	go DecodeJSON(frChan, &done, input)
+func generator(list string, batchSize int) (int, chan inputBatch){
+	listSize := countLines(list)
 
-	start := time.Now()
+	out := make(chan inputBatch, bufSize)
 
-	// report progress every second
-	for !done{
-		since := time.Since(start)
-		time.Sleep(1000 * time.Millisecond)
-		fmt.Println("Speed: " + strconv.Itoa(count - lastCount) + " P/s; Processed passwords: " + strconv.Itoa(count) + "; Total time: " + since.String())
-		lastCount = count
+	path := "csv/" + list + ".csv.gz"
+	f, err := os.Open(path)
+	check(err)
+
+	gr, err := gzip.NewReader(f)
+	check(err)
+
+	cr := csv.NewReader(gr)
+
+	go func(){
+		defer f.Close()
+		defer gr.Close()
+		end := false
+
+		for{
+			ib := make([]input, 0)
+
+			for i := 0; i < batchSize; i++{
+				row, _ := cr.Read()
+
+				if row != nil{
+					freq, err := strconv.Atoi(row[0])
+					pass := row[1]
+					check(err)
+
+					input := input{freq, pass}
+					ib = append(ib, input)
+				}else{	//end of list
+					end = true
+					break
+				}
+			}
+
+			out <- ib
+			if end{
+				close(out)
+				return
+			}
+		}
+	}()
+
+	return listSize, out
+}
+
+func batchAnalyzer(ibChan chan inputBatch) (chan resultBatch, chan bool){
+	out := make(chan resultBatch, bufSize)
+	counts := make(chan bool)
+
+	go func(){
+
+		_, env, err := jnigi.CreateJVM(jnigi.NewJVMInitArgs(false, true, jnigi.DEFAULT_VERSION, []string{passfaultClassPath}))
+		check(err)
+
+		obj, err := env.NewObject("org/owasp/passfault/TextAnalysis")
+		check(err)
+
+		for ib := range ibChan{
+
+			rb := resultBatch{}
+
+			// range over inputBatch
+			for _, input := range ib{
+				freq := input.freq
+				pass := input.pass
+
+				str, err := env.NewObject("java/lang/String", []byte(pass))
+				check(err)
+
+				// call passwordAnalysis on password
+				v, err := obj.CallMethod(env, "passwordAnalysis", "java/lang/String", str)
+				check(err)
+
+				// format result from JVM into byte array (probably not the most elegant way!)
+				resultJVM, err := v.(*jnigi.ObjectRef).CallMethod(env, "getBytes", jnigi.Byte|jnigi.Array)
+				resultString := string(resultJVM.([]byte))
+				resultBytes := []byte(resultString)
+
+				rb = append(rb, result{freq, resultBytes})
+
+				// signal to counter
+				counts <- true
+			}
+
+			out <- rb
+		}
+
+		close(out)
+		close(counts)
+	}()
+
+	return out, counts
+}
+
+func counter(c *int, counts chan bool){
+	for _ = range counts{
+		*c++
 	}
 }
 
+func reporter(c *int, total int, done bool){
+	start := time.Now()
 
+	lastCount := 0
+	// report progress every second
+	for !done{
+		time.Sleep(20 * time.Millisecond)
+
+		since := time.Since(start)
+		speed := *c - lastCount
+		progress := float64(*c*100)/float64(total)
+
+		fmt.Println("Speed: " + strconv.Itoa(speed) + " P/s; Progress: " + strconv.FormatFloat(progress, 'f', 2, 64) + " %; Processed passwords: " + strconv.Itoa(*c) + "; Total time: " + since.String())
+		lastCount = *c
+	}
+}
+
+func batchDecoder(rbChan chan resultBatch) chan trainedMaps{
+	tmChan := make(chan trainedMaps, bufSize)
+
+	go func(){
+		for rb := range rbChan{
+			tm := trainedMaps{make(map[string]*elementary.Model), make(map[string]*composite.Model)}
+
+			for _, r := range rb{
+				freq := r.freq
+				result := r.result
+
+				// parse JSON
+				var cmFromJSON compositeJSON
+				json.Unmarshal(result, &cmFromJSON)
+
+				// update elementaryModel map
+				for _, emFromJSON := range cmFromJSON.Models {
+					if emFromMap, ok := tm.elementaries[emFromJSON.Name]; ok {	//elementary.Model already in tm, only update frequency
+						emFromMap.UpdateTokenFreq(freq, emFromJSON.Token)
+					}else{	// elementary.Model not in map, create new instance and insert into the map
+						t := emFromJSON.Token
+						f := freq
+
+						tokenFreqs := make([]elementary.TokenFreq, 0)
+						tokenFreqs = append(tokenFreqs, elementary.TokenFreq{t, f})
+
+						newEM := elementary.Model{emFromJSON.Name, 0, tokenFreqs}
+						tm.elementaries[emFromJSON.Name] = &newEM
+					}
+				}
+
+				if cmFromMap, ok := tm.composites[cmFromJSON.CompositeModelName]; ok{	//composite.Model already in map, only update frequency
+					cmFromMap.UpdateFreq(freq)
+				}else{		// composite.Model not in map, create new instance and insert into the map
+					compModelName := cmFromJSON.CompositeModelName
+
+					elementaryModels := make([]string, 0)
+					for _, emFromJSON := range cmFromJSON.Models {
+						elementaryModels = append(elementaryModels, emFromJSON.Name)
+					}
+
+					// instantiate new Composite Model
+					//cm := composite.Model{compModelName, complexity, freq, 0, elementaryModels}
+					cm := composite.Model{compModelName, freq, 0, 0, elementaryModels}
+
+					// add to map
+					tm.composites[compModelName] = &cm
+				}
+			}
+
+			tmChan <- tm
+		}
+
+		close(tmChan)
+	}()
+
+	return tmChan
+}
+
+func mapsMerger(tmChan chan trainedMaps) trainedMaps{
+	finalMaps := trainedMaps{make(map[string]*elementary.Model), make(map[string]*composite.Model)}
+
+	for tm := range tmChan{
+
+		// process tm.elementaries
+		for k, emFrom := range tm.elementaries {
+			if emTo, ok := finalMaps.elementaries[k]; ok{ //emFrom already in finalMaps.elementaries
+
+				//verify every TokenFreq in emFrom
+				for _, tf := range emFrom.TokenFreqs{
+					token := tf.Token
+					freq := tf.Freq
+
+					// is t already in emTo.TokenFreqs??
+					index := 0
+					b := false
+					for i, tfTo := range emTo.TokenFreqs{
+						if tfTo.Token == token{
+							index = i
+							b = true
+							break
+						}
+					}
+
+					if b{		// yes, t is in emTo.TokensNfreqs
+						emTo.TokenFreqs[index].Freq += freq
+					}else{		//no, t is not in emTo.TokensNfreqs
+						emTo.TokenFreqs = append(emTo.TokenFreqs, elementary.TokenFreq{token, freq})
+					}
+
+					emTo.Sort()
+				}
+			}else{			//emFrom not in finalMaps.elementaries, create new entry
+				emFrom.Sort()
+				finalMaps.elementaries[k] = emFrom
+			}
+		}
+
+		// process composite.Models
+		for k, cmFrom := range tm.composites {
+			if cmTo, ok := finalMaps.composites[k]; ok{ //cm already in finalMaps.composites
+				cmTo.UpdateFreq(cmFrom.Freq)
+			}else{		//cm not in finalMaps.composites, create new entry
+
+				//insert cm
+				finalMaps.composites[k] = cmFrom
+			}
+		}
+	}
+
+	for _, em := range finalMaps.elementaries{
+		em.UpdateEntropy()
+	}
+
+	sum := 0
+	for _, cm := range finalMaps.composites{
+		sum += cm.Freq
+	}
+
+	for _, cm := range finalMaps.composites{
+		cm.UpdateProb(sum)
+	}
+
+	return finalMaps
+}
+
+func saveMaps(finalMaps trainedMaps, list string){
+	fmt.Println("Saving maps...")
+	emArray := make([]elementary.Model, len(finalMaps.elementaries))
+	i := 0
+	for _, em := range finalMaps.elementaries{
+		emArray[i] = *em
+		i++
+	}
+	jsonData, err := json.Marshal(emArray)
+
+	emFile, err := os.Create("maps/" + list + "Elementaries.json")
+	check(err)
+	defer emFile.Close()
+
+	emFile.Write(jsonData)
+	emFile.Sync()
+
+	cmArray := make([]composite.Model, len(finalMaps.composites))
+	i = 0
+	for _, cm := range finalMaps.composites{
+
+		// ignore improbable cms
+		if cm.Prob > 0.00001{
+			cmArray[i] = *cm
+			i++
+		}
+	}
+
+	jsonData, err = json.Marshal(cmArray)
+
+	cmFile, err := os.Create("maps/" + list + "Composites.json")
+	check(err)
+	defer cmFile.Close()
+
+	cmFile.Write(jsonData)
+	cmFile.Sync()
+}
+
+func Train(list string){
+	total, inputBatches := generator(list, 100)
+	resultBatches, counts := batchAnalyzer(inputBatches)
+	c := 0
+	go counter(&c, counts)
+	go reporter(&c, total, false)
+	trainedMaps := batchDecoder(resultBatches)
+	finalMaps := mapsMerger(trainedMaps)
+	saveMaps(finalMaps, list)
+	os.Exit(0)
+}
 

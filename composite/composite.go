@@ -59,7 +59,7 @@ func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan st
 		lengths = make([]int, n)
 		for i, _ := range cm.Models {
 			emName := cm.Models[i]
-			lengths[i] = len(elementaries[emName].TokensNfreqs)
+			lengths[i] = len(elementaries[emName].TokenFreqs)
 		}
 	}
 
@@ -69,7 +69,7 @@ func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan st
 		for d := 0; d < n; d++{
 			i := counters[d]
 			emName := cm.Models[d]
-			result += elementaries[emName].TokensNfreqs[i].Token
+			result += elementaries[emName].TokenFreqs[i].Token
 		}
 
 		// send result to out channel

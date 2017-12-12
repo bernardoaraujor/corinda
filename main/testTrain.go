@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	input := os.Args[1]
+	list := os.Args[1]
 
-	train.Train(input)
+	train.Train(list)
 }
