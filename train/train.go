@@ -136,13 +136,16 @@ func batchAnalyzer(ibChan chan inputBatch) (chan resultBatch, chan bool){
 
 	go func(){
 
-		_, env, err := jnigi.CreateJVM(jnigi.NewJVMInitArgs(false, true, jnigi.DEFAULT_VERSION, []string{passfaultClassPath}))
-		check(err)
-
-		obj, err := env.NewObject("org/owasp/passfault/TextAnalysis")
+		jvm, _, err := jnigi.CreateJVM(jnigi.NewJVMInitArgs(false, true, jnigi.DEFAULT_VERSION, []string{passfaultClassPath}))
 		check(err)
 
 		for ib := range ibChan{
+
+			// attach this routine to JVM
+			env := jvm.AttachCurrentThread()
+
+			obj, err := env.NewObject("org/owasp/passfault/TextAnalysis")
+			check(err)
 
 			rb := resultBatch{}
 
@@ -173,6 +176,8 @@ func batchAnalyzer(ibChan chan inputBatch) (chan resultBatch, chan bool){
 			}
 
 			out <- rb
+
+			jvm.DetachCurrentThread()
 		}
 
 		close(out)
@@ -370,7 +375,7 @@ func saveMaps(finalMaps trainedMaps, list string){
 }
 
 func Train(list string){
-	total, inputBatches := generator(list, 100)
+	total, inputBatches := generator(list, 1000000)
 	resultBatches, counts := batchAnalyzer(inputBatches)
 	c := 0
 	go counter(&c, counts)
