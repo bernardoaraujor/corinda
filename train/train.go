@@ -130,9 +130,8 @@ func generator(list string, batchSize int) (int, chan inputBatch){
 	return listSize, out
 }
 
-func batchAnalyzer(ibChan chan inputBatch) (chan resultBatch, chan bool){
+func batchAnalyzer(c *int, ibChan chan inputBatch) chan resultBatch{
 	out := make(chan resultBatch, bufSize)
-	counts := make(chan bool)
 
 	go func(){
 
@@ -168,8 +167,8 @@ func batchAnalyzer(ibChan chan inputBatch) (chan resultBatch, chan bool){
 
 				rb = append(rb, result{freq, resultBytes})
 
-				// signal to counter
-				counts <- true
+				// increment counter
+				*c++
 
 				//env.DeleteGlobalRef(str)
 				env.DeleteLocalRef(str)
@@ -181,19 +180,12 @@ func batchAnalyzer(ibChan chan inputBatch) (chan resultBatch, chan bool){
 		}
 
 		close(out)
-		close(counts)
 	}()
 
-	return out, counts
+	return out
 }
 
-func counter(c *int, counts chan bool){
-	for _ = range counts{
-		*c++
-	}
-}
-
-func reporter(c *int, total int, done bool){
+func reporter(m *int, c *int, total int, done bool){
 	start := time.Now()
 
 	lastCount := 0
@@ -205,7 +197,7 @@ func reporter(c *int, total int, done bool){
 		speed := *c - lastCount
 		progress := float64(*c*100)/float64(total)
 
-		fmt.Println("Speed: " + strconv.Itoa(speed) + " P/s; Progress: " + strconv.FormatFloat(progress, 'f', 2, 64) + " %; Processed passwords: " + strconv.Itoa(*c) + "; Total time: " + since.String())
+		fmt.Println("Maps merged: " + strconv.Itoa(*m) + "; Speed: " + strconv.Itoa(speed) + " P/s; Progress: " + strconv.FormatFloat(progress, 'f', 2, 64) + " %; Processed passwords: " + strconv.Itoa(*c) + "; Total time: " + since.String())
 		lastCount = *c
 	}
 }
@@ -233,8 +225,8 @@ func batchDecoder(rbChan chan resultBatch) chan trainedMaps{
 						t := emFromJSON.Token
 						f := freq
 
-						tokenFreqs := make([]elementary.TokenFreq, 0)
-						tokenFreqs = append(tokenFreqs, elementary.TokenFreq{t, f})
+						tokenFreqs := make(map[string]int)
+						tokenFreqs[t] = f
 
 						newEM := elementary.Model{emFromJSON.Name, 0, tokenFreqs}
 						tm.elementaries[emFromJSON.Name] = &newEM
@@ -269,7 +261,7 @@ func batchDecoder(rbChan chan resultBatch) chan trainedMaps{
 	return tmChan
 }
 
-func mapsMerger(tmChan chan trainedMaps) trainedMaps{
+func mapsMerger(m *int, tmChan chan trainedMaps) trainedMaps{
 	finalMaps := trainedMaps{make(map[string]*elementary.Model), make(map[string]*composite.Model)}
 
 	for tm := range tmChan{
@@ -279,31 +271,19 @@ func mapsMerger(tmChan chan trainedMaps) trainedMaps{
 			if emTo, ok := finalMaps.elementaries[k]; ok{ //emFrom already in finalMaps.elementaries
 
 				//verify every TokenFreq in emFrom
-				for _, tf := range emFrom.TokenFreqs{
-					token := tf.Token
-					freq := tf.Freq
+				for token, freq := range emFrom.TokenFreqs{
 
 					// is t already in emTo.TokenFreqs??
-					index := 0
-					b := false
-					for i, tfTo := range emTo.TokenFreqs{
-						if tfTo.Token == token{
-							index = i
-							b = true
-							break
-						}
+					if _, ok := emTo.TokenFreqs[token]; ok{
+						f := emTo.TokenFreqs[token]
+						emTo.TokenFreqs[token] = f + freq
+					}else{
+						emTo.TokenFreqs[token] = freq
 					}
-
-					if b{		// yes, t is in emTo.TokensNfreqs
-						emTo.TokenFreqs[index].Freq += freq
-					}else{		//no, t is not in emTo.TokensNfreqs
-						emTo.TokenFreqs = append(emTo.TokenFreqs, elementary.TokenFreq{token, freq})
-					}
-
-					emTo.Sort()
 				}
+
 			}else{			//emFrom not in finalMaps.elementaries, create new entry
-				emFrom.Sort()
+
 				finalMaps.elementaries[k] = emFrom
 			}
 		}
@@ -318,6 +298,8 @@ func mapsMerger(tmChan chan trainedMaps) trainedMaps{
 				finalMaps.composites[k] = cmFrom
 			}
 		}
+
+		*m++
 	}
 
 	for _, em := range finalMaps.elementaries{
@@ -331,6 +313,7 @@ func mapsMerger(tmChan chan trainedMaps) trainedMaps{
 
 	for _, cm := range finalMaps.composites{
 		cm.UpdateProb(sum)
+		cm.UpdateEntropy(finalMaps.elementaries)
 	}
 
 	return finalMaps
@@ -376,12 +359,12 @@ func saveMaps(finalMaps trainedMaps, list string){
 
 func Train(list string){
 	total, inputBatches := generator(list, 1000000)
-	resultBatches, counts := batchAnalyzer(inputBatches)
 	c := 0
-	go counter(&c, counts)
-	go reporter(&c, total, false)
+	m := 0
+	resultBatches := batchAnalyzer(&c, inputBatches)
+	go reporter(&m, &c, total, false)
 	trainedMaps := batchDecoder(resultBatches)
-	finalMaps := mapsMerger(trainedMaps)
+	finalMaps := mapsMerger(&m, trainedMaps)
 	saveMaps(finalMaps, list)
 	os.Exit(0)
 }

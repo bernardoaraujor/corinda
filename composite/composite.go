@@ -67,9 +67,9 @@ func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan st
 	if depth == n{
 		result := ""
 		for d := 0; d < n; d++{
-			i := counters[d]
-			emName := cm.Models[d]
-			result += elementaries[emName].TokenFreqs[i].Token
+			//i := counters[d]
+			//emName := cm.Models[d]
+			//result += elementaries[emName].TokenFreqs[i].Token
 		}
 
 		// send result to out channel
