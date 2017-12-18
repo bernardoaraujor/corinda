@@ -153,25 +153,28 @@ func batchAnalyzer(c *int, ibChan chan inputBatch) chan resultBatch{
 				freq := input.freq
 				pass := input.pass
 
-				str, err := env.NewObject("java/lang/String", []byte(pass))
-				check(err)
+				// filter out long weird passwords
+				if len(pass) < 30{
+					str, err := env.NewObject("java/lang/String", []byte(pass))
+                                	check(err)
 
-				// call passwordAnalysis on password
-				v, err := obj.CallMethod(env, "passwordAnalysis", "java/lang/String", str)
-				check(err)
+	                                // call passwordAnalysis on password
+        	                        v, err := obj.CallMethod(env, "passwordAnalysis", "java/lang/String", str)
+                	                check(err)
+	
+        	                        // format result from JVM into byte array (probably not the most elegant way!)
+                	                resultJVM, err := v.(*jnigi.ObjectRef).CallMethod(env, "getBytes", jnigi.Byte|jnigi.Array)
+                        	        resultString := string(resultJVM.([]byte))
+                                	resultBytes := []byte(resultString)
 
-				// format result from JVM into byte array (probably not the most elegant way!)
-				resultJVM, err := v.(*jnigi.ObjectRef).CallMethod(env, "getBytes", jnigi.Byte|jnigi.Array)
-				resultString := string(resultJVM.([]byte))
-				resultBytes := []byte(resultString)
+	                                rb = append(rb, result{freq, resultBytes})
 
-				rb = append(rb, result{freq, resultBytes})
+        	                        // increment counter
+                	                *c++
 
-				// increment counter
-				*c++
-
-				//env.DeleteGlobalRef(str)
-				env.DeleteLocalRef(str)
+                        	        //env.DeleteGlobalRef(str)
+                                	env.DeleteLocalRef(str)
+				}
 			}
 
 			out <- rb
