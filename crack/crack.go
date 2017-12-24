@@ -53,7 +53,14 @@ func (crack Crack) Crack(){
 	guesses := make([]chan string, 0)
 	guessesPerBatch := make([]int, 0)
 	for _, cm := range composites{
-		guesses = append(guesses, cm.Guess(elementaries))
+		tokenLists := make([][]string, 0)
+		for _, elementaryName := range cm.Models{
+			elementary := elementaries[elementaryName]
+
+			tokenLists = append(tokenLists, elementary.SortedTokens())
+		}
+
+		guesses = append(guesses, cm.Guess(tokenLists))
 		guessesPerBatch = append(guessesPerBatch, int(cm.Entropy))
 	}
 
@@ -75,19 +82,30 @@ func NewCrack(list string, alg string) Crack{
 	crack.targetName = list
 	crack.alg = alg
 
-	raw, err := ioutil.ReadFile("maps/"+ list +"Elementaries.json")
+	f, err := os.Open("maps/"+ list +"Elementaries.json.gz")
+	check(err)
+
+	gr, err := gzip.NewReader(f)
+	check(err)
+
+	raw, err := ioutil.ReadAll(gr)
 	check(err)
 	var elementaries []*elementary.Model
 	err = json.Unmarshal(raw, &elementaries)
 	check(err)
-
 	crack.elementaries = make(map[string]*elementary.Model)
 
 	for _, em := range elementaries{
 		crack.elementaries[em.Name] = em
 	}
 
-	raw, err = ioutil.ReadFile("maps/"+ list +"Composites.json")
+	f, err = os.Open("maps/"+ list +"Composites.json.gz")
+	check(err)
+
+	gr, err = gzip.NewReader(f)
+	check(err)
+
+	raw, err = ioutil.ReadAll(gr)
 	check(err)
 	var composites []*composite.Model
 	err = json.Unmarshal(raw, &composites)
@@ -98,11 +116,11 @@ func NewCrack(list string, alg string) Crack{
 		crack.composites[cm.Name] = cm
 	}
 
-	f, err := os.Open("targets/sha1/rockyou.csv.gz")
+	f, err = os.Open("targets/sha1/rockyou.csv.gz")
 	check(err)
 	defer f.Close()
 
-	gr, err := gzip.NewReader(f)
+	gr, err = gzip.NewReader(f)
 	check(err)
 	defer gr.Close()
 

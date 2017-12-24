@@ -36,16 +36,17 @@ func (cm *Model) UpdateEntropy(elementaries map[string]*elementary.Model){
 }
 
 // returns channel with password guesses belonging to the cartesian product between the Composite Model's Elementary Models
-func (cm *Model) Guess(elementaries map[string]*elementary.Model) chan string{
+func (cm *Model) Guess(tokenLists [][]string) chan string{
 	out := make(chan string)
 
-	go cm.recursive(0, nil, nil, out, elementaries)
+	go cm.recursive(0, nil, nil, out, tokenLists)
 
 	return out
 }
 
 // sends elements of the cartesian product of TokensNFreqs of all cm's ems to out channel
-func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan string, elementaries map[string]*elementary.Model){
+func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan string, tokenLists [][]string){
+
 	// max depth to be processed recursively
 	n := len(cm.Models)
 
@@ -58,8 +59,8 @@ func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan st
 		// init lengths
 		lengths = make([]int, n)
 		for i, _ := range cm.Models {
-			emName := cm.Models[i]
-			lengths[i] = len(elementaries[emName].TokenFreqs)
+			//emName := cm.Models[i]
+			lengths[i] = len(tokenLists[i])
 		}
 	}
 
@@ -67,9 +68,9 @@ func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan st
 	if depth == n{
 		result := ""
 		for d := 0; d < n; d++{
-			//i := counters[d]
-			//emName := cm.Models[d]
-			//result += elementaries[emName].TokenFreqs[i].Token
+			i := counters[d]
+
+			result += tokenLists[d][i]
 		}
 
 		// send result to out channel
@@ -80,7 +81,7 @@ func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan st
 		// go through current depth
 		for counters[depth] = 0; counters[depth] < lengths[depth]; counters[depth]++{
 			// recursively process next depth
-			cm.recursive(depth+1, counters, lengths, out, elementaries)
+			cm.recursive(depth+1, counters, lengths, out, tokenLists)
 		}
 	}
 
@@ -98,4 +99,5 @@ func (cm *Model) recursive(depth int, counters []int, lengths []int, out chan st
 	if closer{
 		close(out)
 	}
+
 }

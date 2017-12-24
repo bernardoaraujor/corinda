@@ -1,34 +1,67 @@
 package main
 
 import (
-	"github.com/bernardoaraujor/corinda/train"
-	"github.com/bernardoaraujor/corinda/elementary"
 	"github.com/bernardoaraujor/corinda/composite"
-	"fmt"
-	"runtime"
 	"os"
-	"encoding/gob"
+	"compress/gzip"
+	"io/ioutil"
+	"encoding/json"
+	"runtime"
+	"fmt"
+	"github.com/bernardoaraujor/corinda/elementary"
 )
 
 func main() {
 
-	// -----------------------------------------------------------------------------------------------------------------
-	// empty tm
-	tm := train.Maps{make(map[string]*elementary.Model), make(map[string]*composite.Model), 0}
+	list := "rockyou"
 
-	var tm2 = new(train.Maps)
-	err := load("maps/testTrainedMaps.gob", &tm2)
+	f, err := os.Open("maps/"+ list +"Elementaries.json.gz")
 	check(err)
-	tm.Merge(tm2)
 
-	cm := tm.CompositeMap["|Exact Match:frPopular.txt|Exact Match:500-worst-passwords.txt|"]
+	gr, err := gzip.NewReader(f)
+	check(err)
 
-	c := cm.Guess()
+	raw, err := ioutil.ReadAll(gr)
+	check(err)
+	var elementaries []*elementary.Model
+	err = json.Unmarshal(raw, &elementaries)
+	check(err)
 
-	for s := range c{
-		fmt.Println(s)
+	emMap := make(map[string]*elementary.Model)
+
+	for _, em := range elementaries{
+		emMap[em.Name] = em
 	}
+
+	f, err = os.Open("maps/"+ list +"Composites.json.gz")
+	check(err)
+
+	gr, err = gzip.NewReader(f)
+	check(err)
+
+	raw, err = ioutil.ReadAll(gr)
+	check(err)
+	var composites []*composite.Model
+	err = json.Unmarshal(raw, &composites)
+
+	cmMap := make(map[string]*composite.Model)
+	for _, cm := range composites{
+		cmMap[cm.Name] = cm
+	}
+
+	cm := cmMap["|5 Random Character(s):Numbers|Exact Match:JohnTheRipper.txt|"]
+	tokenLists := make([][]string, 0)
+	for _, elementaryName := range cm.Models{
+		elementary := emMap[elementaryName]
+
+		tokenLists = append(tokenLists, elementary.SortedTokens())
+	}
+	for guess := range cm.Guess(tokenLists){
+		fmt.Println(guess)
+	}
+
 }
+
 
 func check(e error) {
 	if e != nil {
@@ -37,15 +70,3 @@ func check(e error) {
 		os.Exit(1)
 	}
 }
-
-// Decode Gob file
-func load(path string, object interface{}) error {
-	file, err := os.Open(path)
-	if err == nil {
-		decoder := gob.NewDecoder(file)
-		err = decoder.Decode(object)
-	}
-	file.Close()
-	return err
-}
-

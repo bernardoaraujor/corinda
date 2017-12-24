@@ -23,6 +23,16 @@ TODO:
     - https://github.com/sbinet/gsl
     - scipy, powerlaw
     - libboost-all-dev
+ - future work:
+    - CLI (cobra?)
+    - go tests
+    - salting
+    - l337
+    - misspelling
+    - toggle case
+    - model recognition
+    - maximum likelihood for entropy estimation
+    - entropy guess sorting
 
 3. Dictionaries:
 

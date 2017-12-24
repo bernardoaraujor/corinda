@@ -2,6 +2,7 @@ package elementary
 
 import (
 	"math"
+	"sort"
 )
 
 // this struct represents an Elementary Model
@@ -47,4 +48,48 @@ func (em *Model) UpdateTokenFreq(freq int, token string){
 	}else{
 		em.TokenFreqs[token] = freq
 	}
+}
+
+// temporary structure used to sort tokens
+type tokenSort struct{
+	tokenFreqs map[string]int
+	tokenSlice []string
+}
+
+//returns a sorted slice with tokens in descending frequency order
+func (em *Model) SortedTokens() []string{
+	tokenSlice := make([]string, 0)
+
+	for token, _ := range em.TokenFreqs{
+		tokenSlice = append(tokenSlice, token)
+	}
+
+	tokenSort := tokenSort{em.TokenFreqs, tokenSlice}
+	tokenSort.Sort()
+
+	return tokenSort.tokenSlice
+}
+
+// sorts TokenFreqs in descendent order
+func (ts *tokenSort) Sort(){
+	sort.Sort(ts)
+}
+
+// We implement `sort.Interface` - `Len`, `Less`, and
+// `Swap` - on our type so we can use the `sort` package's
+// generic `Sort` function. `Len` and `Swap`
+// will usually be similar across types and `Less` will
+// hold the actual custom sorting logic.
+func (ts *tokenSort) Len() int {
+	return len(ts.tokenFreqs)
+}
+
+func (ts *tokenSort) Swap(i, j int) {
+	ts.tokenSlice[i], ts.tokenSlice[j] = ts.tokenSlice[j], ts.tokenSlice[i]
+}
+func (ts *tokenSort) Less(i, j int) bool {
+	tokenI := ts.tokenSlice[i]
+	tokenJ := ts.tokenSlice[j]
+
+	return ts.tokenFreqs[tokenI] > ts.tokenFreqs[tokenJ]
 }
