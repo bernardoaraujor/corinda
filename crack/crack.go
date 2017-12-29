@@ -15,14 +15,15 @@ import (
 	"encoding/json"
 	"compress/gzip"
 	"encoding/csv"
+	"math"
 )
 
 const Rockyou = "rockyou"
 const Linkedin = "linkedin"
 const Antipublic = "antipublic"
 
-const SHA1 = "SHA1"
-const SHA256 = "SHA256"
+const SHA1 = "sha1"
+const SHA256 = "sha256"
 
 type targetsMap struct{
 	sync.RWMutex
@@ -40,6 +41,7 @@ type Crack struct {
 	elementaries map[string]*elementary.Model
 	targetsMap   targetsMap
 	targetName	 string
+	trainedName	 string
 }
 
 // crack session
@@ -50,6 +52,8 @@ func (crack Crack) Crack(){
 	var wg sync.WaitGroup
 
 	// initialize channels
+	fmt.Println("Initializing Guess Channels")
+
 	guesses := make([]chan string, 0)
 	guessesPerBatch := make([]int, 0)
 	for _, cm := range composites{
@@ -61,7 +65,11 @@ func (crack Crack) Crack(){
 		}
 
 		guesses = append(guesses, cm.Guess(tokenLists))
-		guessesPerBatch = append(guessesPerBatch, int(cm.Entropy))
+
+		// gpb = k*p*10^E
+		k := 1.0
+		gpb := int(k * cm.Prob*math.Pow(10, cm.Entropy))
+		guessesPerBatch = append(guessesPerBatch, gpb)
 	}
 
 	batches := crack.batch(guesses, guessesPerBatch)
@@ -69,20 +77,21 @@ func (crack Crack) Crack(){
 	// TODO: many parallell searchers?
 	wg.Add(1)
 	results := crack.searcher(batches)
-	go save(crack.targetName, results, wg)
+	go save(crack.trainedName, crack.targetName, crack.alg, results, wg)
 
 	fmt.Println("Cracking...")
 	wg.Wait()
 }
 
 // Constructor
-func NewCrack(list string, alg string) Crack{
+func NewCrack(trained string, target string, alg string) Crack{
 	var crack Crack
 
-	crack.targetName = list
+	crack.targetName = target
+	crack.trainedName = trained
 	crack.alg = alg
 
-	f, err := os.Open("maps/"+ list +"Elementaries.json.gz")
+	f, err := os.Open("maps/"+ trained + "Elementaries.json.gz")
 	check(err)
 
 	gr, err := gzip.NewReader(f)
@@ -99,7 +108,7 @@ func NewCrack(list string, alg string) Crack{
 		crack.elementaries[em.Name] = em
 	}
 
-	f, err = os.Open("maps/"+ list +"Composites.json.gz")
+	f, err = os.Open("maps/"+ trained +"Composites.json.gz")
 	check(err)
 
 	gr, err = gzip.NewReader(f)
@@ -116,7 +125,7 @@ func NewCrack(list string, alg string) Crack{
 		crack.composites[cm.Name] = cm
 	}
 
-	f, err = os.Open("targets/sha1/rockyou.csv.gz")
+	f, err = os.Open("targets/" + alg + "/" + target + ".csv.gz")
 	check(err)
 	defer f.Close()
 
@@ -280,10 +289,10 @@ func (crack *Crack) searcher(in chan []password) chan password {
 	return out
 }
 
-func save(list string, in chan password, wg sync.WaitGroup){
+func save(trained string, target string, alg string, in chan password, wg sync.WaitGroup){
 	defer wg.Done()
 
-	resultFile, err := os.Create("results/" + list + "testResults.csv")
+	resultFile, err := os.Create("results/" + trained + "_" + target + "_" + alg +".csv")
 	check(err)
 	defer resultFile.Close()
 
