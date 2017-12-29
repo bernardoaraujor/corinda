@@ -16,6 +16,8 @@ import (
 	"compress/gzip"
 	"encoding/csv"
 	"math"
+	"time"
+	"strconv"
 )
 
 const Rockyou = "rockyou"
@@ -77,7 +79,9 @@ func (crack Crack) Crack(){
 	// TODO: many parallell searchers?
 	wg.Add(1)
 	results := crack.searcher(batches)
-	go save(crack.trainedName, crack.targetName, crack.alg, results, wg)
+	count := 0
+	go save(crack.trainedName, crack.targetName, crack.alg, results, wg, &count)
+	go reporter(&count)
 
 	fmt.Println("Cracking...")
 	wg.Wait()
@@ -289,7 +293,7 @@ func (crack *Crack) searcher(in chan []password) chan password {
 	return out
 }
 
-func save(trained string, target string, alg string, in chan password, wg sync.WaitGroup){
+func save(trained string, target string, alg string, in chan password, wg sync.WaitGroup, c *int){
 	defer wg.Done()
 
 	resultFile, err := os.Create("results/" + trained + "_" + target + "_" + alg +".csv")
@@ -301,7 +305,25 @@ func save(trained string, target string, alg string, in chan password, wg sync.W
 		hash := ph.hash
 
 		line := pass + "," + hex.EncodeToString(hash)
-		//fmt.Println(pass)
+		*c++
+
 		fmt.Fprintln(resultFile, line)
 	}
+}
+
+func reporter(c *int){
+	lastCount := 0
+	// report progress every second
+	for {
+		time.Sleep(1000 * time.Millisecond)
+
+		speed := *c - lastCount
+
+		fmt.Println("Speed: " + strconv.Itoa(speed) + " P/s; Found Passwords: " + strconv.Itoa(*c))
+		lastCount = *c
+	}
+}
+
+func monitor(wg sync.WaitGroup){
+		
 }
