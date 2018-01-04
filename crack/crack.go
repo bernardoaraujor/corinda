@@ -57,7 +57,7 @@ func (crack Crack) Crack(){
 	fmt.Println("Initializing Guess Channels")
 
 	guesses := make([]chan string, 0)
-	guessesPerBatch := make([]int, 0)
+	nGuesses := make([]int, 0)
 	for _, cm := range composites{
 		tokenLists := make([][]string, 0)
 		for _, elementaryName := range cm.Models{
@@ -68,17 +68,18 @@ func (crack Crack) Crack(){
 
 		guesses = append(guesses, cm.Guess(tokenLists))
 
-		// gpb = k*p*10^E
+		// n = k*p*10^E
 		k := 1.0
-		gpb := int(k * cm.Prob*math.Pow(10, cm.Entropy))
-		guessesPerBatch = append(guessesPerBatch, gpb)
+		n := int(k * cm.Prob * math.Pow(10, cm.Entropy))
+		nGuesses = append(nGuesses, n)
 	}
 
-	batches := crack.batch(guesses, guessesPerBatch)
+	guessLoop := crack.guessLoop(guesses, nGuesses)
 
-	// TODO: many parallell searchers?
+	passwords := crack.digest(guessLoop)
+
 	wg.Add(1)
-	results := crack.searcher(batches)
+	results := crack.searcher(passwords)
 	count := 0
 	go save(crack.trainedName, crack.targetName, crack.alg, results, wg, &count)
 	go reporter(&count)
@@ -171,19 +172,17 @@ func check(e error) {
 	}
 }
 
-// returns channel with hashes in string format, and iterates n times retrieving password guesses over in
-// digest implements the fan in patterns
-func (crack Crack) digest(in chan string, n int) chan password {
+// returns channel with hashes in string format
+func (crack Crack) digest(in chan string) chan password {
 	out := make(chan password)
 
-	go func(n int, out chan password) {
+	go func(out chan password) {
 		defer close(out)
-		for i := 0; i < n; i++ {
-			// reads in channel
-			guess := <-in
 
+		// reads in channel
+		for guess := range in {
 			// temporary conditional... avoiding weird bug that receives empty guess
-			if guess != ""{
+			if guess != "" {
 				// digest
 				var hasher hash.Hash
 				switch crack.alg {
@@ -199,7 +198,8 @@ func (crack Crack) digest(in chan string, n int) chan password {
 				out <- password{guess, digest}
 			}
 		}
-	}(n, out)
+
+	}(out)
 
 	return out
 }
@@ -237,55 +237,41 @@ func fanIn(cs []chan password) chan password {
 	return out
 }
 
-// generate a batch of hashes from the input guess channels
-func (crack Crack) batch(guessChans []chan string, ns []int) chan []password {
-	out := make(chan []password)
+// loops over guess channels generating guesses for digest
+func (crack Crack) guessLoop(guessChans []chan string, ns []int) chan string {
+	out := make(chan string)
 
 	go func(guessChans []chan string, ns []int){
 		for {
-			// generates array of channels for digesting, to be used as inputs to fanIn
-			passwords := make([]chan password, 0)
 			for i, guessChan := range guessChans{
-				n := ns[i]
-				passwords = append(passwords, crack.digest(guessChan, n))
+				nGuesses := ns[i]
+
+				for j := 0; j < nGuesses; j++{
+					guess := <- guessChan
+
+					out <- guess
+				}
 			}
-
-			// generate fan in channel
-			fanIn := fanIn(passwords)
-
-			// initialize batch of hashes
-			batch := make([]password, 0)
-
-			// drain fanIn channel
-			for password := range fanIn {
-				batch = append(batch, password)
-			}
-
-			out <- batch
 		}
 	}(guessChans, ns)
 
 	return out
 }
 
-func (crack *Crack) searcher(in chan []password) chan password {
+func (crack *Crack) searcher(in chan password) chan password {
 	out := make(chan password)
 
 	go func(){
-		for{
-			batch := <- in
+		for password := range in{
+			//pass := ph.pass
+			hash := hex.EncodeToString(password.hash)
 
-			for _, password := range batch{
-				//pass := ph.pass
-				hash := hex.EncodeToString(password.hash)
+			if _, ok := crack.targetsMap.targets[hash]; ok{
+				out <- password
 
-				if _, ok := crack.targetsMap.targets[hash]; ok{
-					out <- password
-
-					crack.targetsMap.Lock()
-					delete(crack.targetsMap.targets, hash)
-					crack.targetsMap.Unlock()
-				}
+				crack.targetsMap.Lock()
+				delete(crack.targetsMap.targets, hash)
+				crack.targetsMap.Unlock()
 			}
 		}
 	}()
@@ -325,5 +311,5 @@ func reporter(c *int){
 }
 
 func monitor(wg sync.WaitGroup){
-		
+
 }
