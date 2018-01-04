@@ -44,6 +44,7 @@ type Crack struct {
 	targetsMap   targetsMap
 	targetName	 string
 	trainedName	 string
+	durationH	 float64
 }
 
 // crack session
@@ -69,7 +70,7 @@ func (crack Crack) Crack(){
 		guesses = append(guesses, cm.Guess(tokenLists))
 
 		// n = k*p*10^E
-		k := 1.0
+		k := 100.0
 		n := int(k * cm.Prob * math.Pow(10, cm.Entropy))
 		nGuesses = append(nGuesses, n)
 	}
@@ -81,20 +82,24 @@ func (crack Crack) Crack(){
 	wg.Add(1)
 	results := crack.searcher(passwords)
 	count := 0
-	go save(crack.trainedName, crack.targetName, crack.alg, results, wg, &count)
+
+	go monitor(wg, crack.durationH)
 	go reporter(&count)
+	go save(crack.trainedName, crack.targetName, crack.alg, results, wg, &count)
 
 	fmt.Println("Cracking...")
+
 	wg.Wait()
 }
 
 // Constructor
-func NewCrack(trained string, target string, alg string) Crack{
+func NewCrack(trained string, target string, alg string, durationH float64) Crack{
 	var crack Crack
 
 	crack.targetName = target
 	crack.trainedName = trained
 	crack.alg = alg
+	crack.durationH = durationH
 
 	f, err := os.Open("maps/"+ trained + "Elementaries.json.gz")
 	check(err)
@@ -310,6 +315,14 @@ func reporter(c *int){
 	}
 }
 
-func monitor(wg sync.WaitGroup){
+func monitor(wg sync.WaitGroup, durationH float64){
+	start := time.Now()
 
+	for{
+		since := time.Since(start)
+		if since.Hours() > durationH{
+			wg.Done()
+			os.Exit(0)
+		}
+	}
 }
