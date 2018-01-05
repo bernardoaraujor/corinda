@@ -37,6 +37,7 @@ func main() {
 	fmt.Println("|frutas x nums x nomes| = " + strconv.Itoa(total))
 }
 
+/*
 // gera canal com fluxo de elementos do produto cartesiano dos arrays
 func produtoCartesiano(arrays ...[]string) chan string{
 	// inicializa canal de saída
@@ -48,6 +49,7 @@ func produtoCartesiano(arrays ...[]string) chan string{
 	// retorna canal de saída
 	return saida
 }
+
 
 // lança os valores do produto cartesiano dos arrays no canal de saída
 func recursao(arrays [][]string, profundidade int, contadores []int, tamanhos []int, saida chan string){

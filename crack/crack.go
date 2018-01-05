@@ -75,6 +75,7 @@ func (crack Crack) Crack(){
 		nGuesses = append(nGuesses, n)
 	}
 
+	fmt.Println(nGuesses)
 	guessLoop := crack.guessLoop(guesses, nGuesses)
 
 	passwords := crack.digest(guessLoop)
