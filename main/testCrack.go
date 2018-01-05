@@ -17,7 +17,7 @@ func main(){
 		algs = crack.SHA256
 	}
 
-	crack := crack.NewCrack(trained, target, algs, 1.0)
+	crack := crack.NewCrack(trained, target, algs, 10.0)
 
 	crack.Crack()
 }
