@@ -10,7 +10,7 @@ import (
 
 func main() {
 
-	// inicializa os arrays
+	// inicializa as listas de tokens
 	var frutas = []string{"banana", "maçã", "uva"}
 	var nums = []string{"1", "2", "3", "4"}
 	var nomes = []string{"wesley", "rodrigo", "igor", "regina", "marcos"}
@@ -37,7 +37,7 @@ func main() {
 	fmt.Println("|frutas x nums x nomes| = " + strconv.Itoa(total))
 }
 
-/*
+
 // gera canal com fluxo de elementos do produto cartesiano dos arrays
 func produtoCartesiano(arrays ...[]string) chan string{
 	// inicializa canal de saída
