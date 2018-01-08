@@ -27,6 +27,8 @@ const Antipublic = "antipublic"
 const SHA1 = "sha1"
 const SHA256 = "sha256"
 
+const minProb = 0.00015
+
 type targetsMap struct{
 	sync.RWMutex
 	targets map[string]string
@@ -60,19 +62,20 @@ func (crack Crack) Crack(){
 	guesses := make([]chan string, 0)
 	nGuesses := make([]int, 0)
 	for _, cm := range composites{
-		tokenLists := make([][]string, 0)
-		for _, elementaryName := range cm.Models{
-			elementary := elementaries[elementaryName]
+		if cm.Prob > minProb{
+			tokenLists := make([][]string, 0)
+			for _, elementaryName := range cm.Models{
+				elementary := elementaries[elementaryName]
 
-			tokenLists = append(tokenLists, elementary.SortedTokens())
+				tokenLists = append(tokenLists, elementary.SortedTokens())
+			}
+
+			guesses = append(guesses, cm.Guess(tokenLists))
+
+			// n = p*10^E
+			n := int(cm.Prob * math.Pow(10, cm.Entropy))
+			nGuesses = append(nGuesses, n)
 		}
-
-		guesses = append(guesses, cm.Guess(tokenLists))
-
-		// n = k*p*10^E
-		k := 100.0
-		n := int(k * cm.Prob * math.Pow(10, cm.Entropy))
-		nGuesses = append(nGuesses, n)
 	}
 
 	fmt.Println(nGuesses)
