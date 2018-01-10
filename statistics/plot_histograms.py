@@ -1,4 +1,26 @@
 import matplotlib.pyplot as plt
+import numpy as np
+
+def hist_complexity(list):
+    f = open(list + '_comp.txt', 'r')
+    lines = f.readlines()
+    f.close()
+
+    complexities = []
+    for line in lines:
+        complexity = float(line.replace('\n', ''))
+        complexities.append(complexity)
+
+
+    plt.hist(complexities, bins=np.logspace(np.log10(0.1), np.log10(15.0), 1000), facecolor='lightgray')
+    plt.xscale('symlog')
+    plt.yscale('log', nonposy='clip')
+    plt.xlabel('Complexidade')
+    plt.ylabel('Frequencia')
+    plt.title('histograma de complexidades: ' + list)
+    plt.legend()
+    plt.grid(True)
+    plt.show()
 
 def hist_entropy(list):
     f = open(list + '_entr.txt', 'r')
@@ -58,13 +80,15 @@ def hist_prob(list):
     plt.grid(True)
     plt.show()
 
-hist_prob('rockyou')
-hist_entropy('rockyou')
+#hist_prob('rockyou')
+#hist_entropy('rockyou')
+hist_complexity('rockyou')
 
-hist_prob('linkedin')
-hist_entropy('linkedin')
+#hist_prob('linkedin')
+#hist_entropy('linkedin')
+#hist_complexity('linkedin')
 
-hist_prob('antipublic')
-hist_entropy('antipublic')
-
+#hist_prob('antipublic')
+#hist_entropy('antipublic')
+#hist_complexity('antipublic')
 
