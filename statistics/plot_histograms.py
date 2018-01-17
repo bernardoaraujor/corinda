@@ -7,14 +7,21 @@ def hist_complexity(list):
     f.close()
 
     complexities = []
+    sum = 0
+    i = 0
     for line in lines:
         complexity = float(line.replace('\n', ''))
         complexities.append(complexity)
+        sum += complexity
+        i += 1
 
+    avgComplexity = sum / i
+    print(list + ' average complexity (log10): ' + str(np.log10(avgComplexity)))
 
-    plt.hist(complexities, bins=np.logspace(np.log10(0.1), np.log10(15.0), 1000), facecolor='lightgray')
-    plt.xscale('symlog')
-    plt.yscale('log', nonposy='clip')
+    MIN, MAX = np.power(10, 0), np.power(10, 15)
+    plt.hist(complexities, bins=10 ** np.linspace(np.log10(MIN), np.log10(MAX), 200), facecolor='gray')
+    plt.axvline(avgComplexity, color='deeppink', linestyle='dashed', linewidth=4, label="complexidade media")
+    plt.gca().set_xscale("log")
     plt.xlabel('Complexidade')
     plt.ylabel('Frequencia')
     plt.title('histograma de complexidades: ' + list)
@@ -38,7 +45,7 @@ def hist_entropy(list):
 
     avgEntropy = sum / i
 
-    plt.hist(entropies, 100, facecolor='lightgray')
+    plt.hist(entropies, 200, facecolor='gray')
     plt.xlabel('Entropia')
     plt.ylabel('Frequencia')
     plt.axvline(avgEntropy, color='deeppink', linestyle='dashed', linewidth=4, label="entropia media")
@@ -69,7 +76,7 @@ def hist_prob(list):
             print(list + ' 80% probability: ' + str(maxProb))
             break
 
-    plt.hist(probabilities, 500, facecolor='lightgray')
+    plt.hist(probabilities, 1000, facecolor='gray')
     plt.xlim(0, 0.01)
     plt.xlabel('Probabilidade')
     plt.ylabel('Frequencia')
@@ -80,15 +87,16 @@ def hist_prob(list):
     plt.grid(True)
     plt.show()
 
-#hist_prob('rockyou')
-#hist_entropy('rockyou')
+hist_prob('rockyou')
+hist_entropy('rockyou')
 hist_complexity('rockyou')
 
-#hist_prob('linkedin')
-#hist_entropy('linkedin')
-#hist_complexity('linkedin')
+hist_complexity('rockyou_1M')
 
-#hist_prob('antipublic')
-#hist_entropy('antipublic')
-#hist_complexity('antipublic')
+hist_prob('linkedin')
+hist_entropy('linkedin')
+hist_complexity('linkedin')
 
+hist_prob('antipublic')
+hist_entropy('antipublic')
+hist_complexity('antipublic')
