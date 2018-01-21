@@ -1,3 +1,5 @@
+// MEDIA PONDERADA DAS COMPLEXIDADES!!!!!
+
 package main
 
 import (
