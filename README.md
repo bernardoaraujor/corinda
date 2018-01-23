@@ -6,7 +6,8 @@ to learn new password model entropy patterns, as well as to make guesses against
 
 Related publications on the subject:
 
- - Passfault: an Open Source Tool for Measuring Password Complexity and Strength: [https://goo.gl/uYJsVr](https://goo.gl/uYJsVr)
+ - General Framework for Evaluating Password Complexity and Strength: [https://goo.gl/uYJsVr](https://goo.gl/uYJsVr)
+ - Passfault: an Open Source Tool for Measuring Password Complexity and Strength: [https://goo.gl/mUVlw2](https://goo.gl/mUVlw2)
  
 ## Installing
 
@@ -46,9 +47,18 @@ This project uses a modified version of [OWASP's Passfault](http://www.passfault
 This work is part of my MSc. in Computer Engineering @ UFG, Brazil. The Dissertation can be found at `/ufg`, however only a Brazilian Portuguese version is available.
 
 
-## Dictionaries
+## Passfault Wordlists
+
+Found at `passfault_corinda/src/org/owasp/passfault/wordlists/`.
+
+- Language words (xxPopular and xxLongTail):
+Generated with help of the Python module [wordfreq](https://pypi.python.org/pypi/wordfreq), maintained by [Luminoso Technologies, Inc.](https://luminoso.com/). The module gathers information about word usage on different topics at different levels of formality, using data collected from the following sources: LeedsIC, SUBTLEX, OpenSub, Twitter, Wikipedia, Reddit, and CCrawl.
+
+xxPopular contain the 80% head of the Zipf Distribution of words, while xxLongTail contain the 20% long tail.
 
 - JohnTheRipper:
+
+Downloaded from [https://wiki.skullsecurity.org/Passwords](https://wiki.skullsecurity.org/Passwords).
 
 > This list has been compiled by Solar Designer of Openwall Project, http://www.openwall.com/wordlists/ .
 > This list is based on passwords most commonly seen on a set of Unix
@@ -58,6 +68,16 @@ revised to also include common website passwords from public lists
 of "top N passwords" from major community website compromises that
 occurred in 2006 through 2010. Last update: 2011/11/20 (3546 entries).
 
+- cain-and-abel:
+
+Downloaded from [https://wiki.skullsecurity.org/Passwords](https://wiki.skullsecurity.org/Passwords).
+
+- 500-worst-passwords:
+Downloaded from [https://github.com/danielmiessler/SecLists/tree/master/Passwords](https://github.com/danielmiessler/SecLists/tree/master/Passwords).
+
+- 10k-worst-passwords:
+Downloaded from [https://github.com/danielmiessler/SecLists/tree/master/Passwords](https://github.com/danielmiessler/SecLists/tree/master/Passwords).
+
 - spanishNames:
 > Copyright Rhett Butler of Mongay.com
 
@@ -66,10 +86,10 @@ occurred in 2006 through 2010. Last update: 2011/11/20 (3546 entries).
 The information was collected from public voting records.
 
 - usFirstNames:
-TODO
+Downloaded from the US Social Security website: [https://www.ssa.gov/oact/babynames/limits.html](https://www.ssa.gov/oact/babynames/limits.html)
 
 - usLastNames:
-TODO
+Downloaded from the US Census of 2000: [https://www.census.gov/topics/population/genealogy/data/2000_surnames.html](https://www.census.gov/topics/population/genealogy/data/2000_surnames.html)
 
 ## TODO
  - doc dependencies
