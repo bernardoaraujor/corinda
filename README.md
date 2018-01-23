@@ -81,7 +81,7 @@ Downloaded from [https://github.com/danielmiessler/SecLists/tree/master/Password
 #### spanishNames:
 > Copyright Rhett Butler of Mongay.com
 
-- indiaNames:
+#### indiaNames:
 > This OWASP Passfault word list is licensed under a Creative Commons Attribution 4.0 International Licence. This list was compiled by Brandon Lyew, Georgina Matias, Kevin Sealy, Michael Glassman, and Scott Sands as part of their Capstone/Winter-code-sprint project.
 The information was collected from public voting records.
 
