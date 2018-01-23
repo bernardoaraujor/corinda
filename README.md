@@ -51,12 +51,12 @@ This work is part of my MSc. in Computer Engineering @ UFG, Brazil. The Disserta
 
 Found at `passfault_corinda/src/org/owasp/passfault/wordlists/`.
 
-- Language words (xxPopular and xxLongTail):
+### Language words (xxPopular and xxLongTail):
 Generated with help of the Python module [wordfreq](https://pypi.python.org/pypi/wordfreq), maintained by [Luminoso Technologies, Inc.](https://luminoso.com/). The module gathers information about word usage on different topics at different levels of formality, using data collected from the following sources: LeedsIC, SUBTLEX, OpenSub, Twitter, Wikipedia, Reddit, and CCrawl.
 
 xxPopular contain the 80% head of the Zipf Distribution of words, while xxLongTail contain the 20% long tail.
 
-- JohnTheRipper:
+### JohnTheRipper:
 
 Downloaded from [https://wiki.skullsecurity.org/Passwords](https://wiki.skullsecurity.org/Passwords).
 
@@ -68,27 +68,27 @@ revised to also include common website passwords from public lists
 of "top N passwords" from major community website compromises that
 occurred in 2006 through 2010. Last update: 2011/11/20 (3546 entries).
 
-- cain-and-abel:
+### cain-and-abel:
 
 Downloaded from [https://wiki.skullsecurity.org/Passwords](https://wiki.skullsecurity.org/Passwords).
 
-- 500-worst-passwords:
+### 500-worst-passwords:
 Downloaded from [https://github.com/danielmiessler/SecLists/tree/master/Passwords](https://github.com/danielmiessler/SecLists/tree/master/Passwords).
 
-- 10k-worst-passwords:
+### 10k-worst-passwords:
 Downloaded from [https://github.com/danielmiessler/SecLists/tree/master/Passwords](https://github.com/danielmiessler/SecLists/tree/master/Passwords).
 
-- spanishNames:
+### spanishNames:
 > Copyright Rhett Butler of Mongay.com
 
 - indiaNames:
 > This OWASP Passfault word list is licensed under a Creative Commons Attribution 4.0 International Licence. This list was compiled by Brandon Lyew, Georgina Matias, Kevin Sealy, Michael Glassman, and Scott Sands as part of their Capstone/Winter-code-sprint project.
 The information was collected from public voting records.
 
-- usFirstNames:
+### usFirstNames:
 Downloaded from the US Social Security website: [https://www.ssa.gov/oact/babynames/limits.html](https://www.ssa.gov/oact/babynames/limits.html)
 
-- usLastNames:
+### usLastNames:
 Downloaded from the US Census of 2000: [https://www.census.gov/topics/population/genealogy/data/2000_surnames.html](https://www.census.gov/topics/population/genealogy/data/2000_surnames.html)
 
 ## TODO
