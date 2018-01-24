@@ -2,36 +2,318 @@
 % CAPÍTULO 3
 \chapter{SISTEMA, MODELO E OTIMIZAÇÃO (xx/xx/2017)}\label{chapter:cap3}
 
-\section{Sistema}
+Este capítulo formaliza as principais definições da métrica de força. O embasamento teórico dos conceitos como: i) \textit{string}, ii) modelo, iii) frequência relativa, iv) função de dispersão criptográfica, v) processo de quebra e vi) força do modelo são apresentados, consistindo da união das teorias dos conjuntos e dos modelos de primeira ordem e da inferência estatística.
 
-Aqui você deve definir o que é sistema. Pode utilizar o livro do Medina e outros.
+\section{String}
 
+Seja $c$ o símbolo pertencente ao conjunto universo de símbolos $A$. Chama-se $c$ de \textbf{caractere}. 
+Seja $A$ o conjunto universo de todos os Caracteres possíveis. Por exemplo, $A$ pode ser o conjunto de caracteres ASCII. Chama-se $A$ de \textbf{alfabeto}. 
+
+\begin{equation}
+A = \{c_{i=1}, \cdots, c_{N}\}
+\end{equation} 
+
+Seja $s$ o multiconjunto bem ordenado de Caracteres. Chama-se $s$ de \textbf{string}.
+
+\begin{equation}
+s = \{c_{j=1}, \cdots, c_{M} | c_j \in A\}
+\end{equation}
+
+Seja $\mathbb{X}(A)$ o conjunto de todas strings possíveis sobre $A$.
+
+\begin{equation}
+\mathbb{X}(A) = \wp(A^n), n \to \infty
+\end{equation}
+
+Aqui, $\wp(x)$ representa o conjunto potência de $x$, e $A^n$ representa o $n$-ésimo produto cartesiano de $A$.
+
+Seja $\tilde s$ o multiconjunto bem ordenado de strings. Chama-se $\tilde s$ de \textbf{string composta}.
+
+\begin{equation}
+\tilde s = \{s_{k=1}, \cdots, s_L \}
+\end{equation}
+
+Como qualquer string com mais de um caractere pode ser considerada string composta, utiliza-se os termos string
+e string composta indistintamente.
+
+Seja $\Gamma$ o multiconjunto de strings resultado do processo de amostragem. Chama-se $\Gamma$ de \textbf{multiconjunto de amostras}.
+
+\subsection{Operações com Strings}
+
+A partir das operações de partição e concatenação, é possível transformar strings compostas em strings elementares e vice-versa. Define-se a operação de \textbf{partição} de string composta $\Psi(\tilde{ s})$, como a partição do multiconjunto $\tilde s$ em subconjuntos $s_i$, dada por:
+
+\begin{equation}
+\Psi(\tilde{ s}) = s_{i=1} | \cdots | s_N
+\end{equation}
+
+Por exemplo, seja $\tilde{ s} = ``psword1"$. Possíveis partições de $\tilde{s}$ são:
+
+\begin{equation} \label{36}
+\Psi_1(\tilde{ s}) = \{\{``p"\}, \{``s"\}, \{``word"\}, \{``1"\}\}
+\end{equation}
+
+\begin{equation} \label{37}
+\Psi_2(\tilde{ s}) = \{\{``ps"\}, \{``word"\}, \{``1"\}\}
+\end{equation}
+
+\begin{equation} \label{38}
+ \Psi_3(\tilde{ s}) = \{\{``psword"\}, \{``1"\}\}
+\end{equation}
+
+Define-se a operação de \textbf{concatenação} de strings $\Psi\textsuperscript{-1}(s_{i=1} | \cdots | s_N)$ como a operação inversa da partição, tal que:
+
+\begin{equation}
+\Psi\textsuperscript{-1}(s_{i=1} | \cdots | s_N) = \tilde{ s}
+\end{equation}
+
+As concatenações dos subconjuntos em (\ref{36}), (\ref{37}), (\ref{38}) são dados por:
+
+\begin{equation}
+ \Psi_1^{-1}(\{\{``p"\}, \{``s"\}, \{``word"\}, \{``1"\} \}) = ``psword1"
+\end{equation}
+
+\begin{equation}
+ \Psi_2^{-1}(\{\{``ps"\}, \{``word"\}, \{``1"\}\}) = ``psword1"
+\end{equation}
+
+\begin{equation}
+ \Psi_3^{-1}(\{\{``psword"\}, \{``1"\}\}) = ``psword1"
+\end{equation}
+
+\iffalse
 \section{Modelo}
 
-Aqui você deve definir o que é modelo. Pode utilizar o livro do Medina e outros.
+Seja $\alpha(s)$ o \textbf{predicado lógico}, isto é, a função booleana que define a relação entre o termo $s$ e o conjunto $\lambda \subseteq \mathbb{X}(A)$. Por exemplo, se $\lambda$ é dicionário de palavras da língua inglesa, tem-se o seguinte predicado:
 
-\subsection{Construção da modelagem do motor de corrente contínua}
+\begin{equation}
+\alpha(s) \implies s \in \lambda
+\end{equation}
 
-Aqui você deve falar somente o necessário para que seu leitor entenda o que é o modelo do motor de corrente contínua, dado as expressões que o define.
+%Por motivos de simplicidade, utiliza-se os termos $\alpha_i$ e $\alpha(s_i)$ indistintamente.
 
-\section{Processo de otimização}
+Seja $\phi(s)$ a \textbf{fórmula lógica} formada por um ou mais predicados $\alpha_i$ unidos por conectores lógicos, por exemplo:
 
-Aqui você deve falar sucintamente sobre o processo de otimização. Pegue o material comigo.
+\begin{equation}
+\phi(s) : (\alpha_{i=1}( s) \land \cdots \land \alpha_N(s))
+\end{equation}
 
-\subsection{Otimização aplicada ao controle do motor de corrente contínua}
+Define-se $K$ como o conjunto formado por constantes (no caso, strings) $s_i \in \lambda$ e predicados $\alpha_j$. Seguindo a definição de verdade na teoria dos modelos segundo Tarski em \citeonline{patterson_2008}, define-se o modelo
+$m$ como a estrutura de assinatura $K$, onde todos elementos $s_i$ de $\lambda$ satisfazem a fórmula $\phi(s)$, formada
+pelos predicados $\alpha_j$. Desta forma, escreve-se:
 
-Aqui você fala do trabalho do Márcio, Douglas e Rafael, descrevendo o que eles fizeram como processo de otimização.
+\begin{equation}
+m \vDash \phi(s)
+\end{equation}
+
+\noindent para expressar que $\phi(s)$ é verdade em $m$, ou seja, que $m$ é \textbf{modelo} de $\phi(s)$ \cite{chang_keisler_2012}. Por exemplo, seja $\lambda_a$ o dicionário de 
+palavras inglesas, e $\lambda_b$ composto por todas possíveis strings iniciadas com caractere em caixa-alta, então:
+
+\begin{equation}
+ \alpha_a(s) \implies s \in \lambda_a
+\end{equation}
+
+\begin{equation}
+ \alpha_b(s) \implies s \in \lambda_b
+\end{equation}
+
+\begin{equation}
+ \phi(s) : (\alpha_a(s) \land \alpha_b(s)) \implies s \in \lambda = \lambda_a \cap \lambda_b
+\end{equation}
+
+\begin{equation}
+ m \vDash \phi(s) \Rightarrow ``Example" \in \lambda
+\end{equation}
+
+No contexto da teoria dos modelos de primeira ordem, o conjunto de constantes (no caso, strings) $\lambda$ da assinatura $K$ de $m$ é chamado de \textbf{domínio} de $m$.
+O número de elementos de $\lambda$ é chamado de \textbf{cardinalidade} de $m$ \cite{chang_keisler_2012}. Denota-se a cardinalidade de $m_i$
+por $\mathcal{C}_i$ e $\mathcal{C}(m_i)$. Observa-se que a cardinalidade é equivalente ao conceito de complexidade estabelecido por \citeonline{sahin}.
+
+Quando seres humanos criam suas senhas, o viés psicológico dominante é a utilização de padrões que possam ser lembrados posteriormente. A teoria dos modelos de primeira ordem
+permite a formalização de tais padrões, restringindo o espaço de busca das senhas mais prováveis. 
+
+\subsection{Modelo Composto}
+
+Seja $\Xi$ o conjunto bem ordenado de modelos elementares, dado por:
+
+\begin{equation}
+ \Xi = \{m_{i=1}, \cdots, m_N\}
+\end{equation}
+
+Define-se o \textbf{modelo composto}\footnote{A definição de modelo composto consiste de adaptação estabelecida para os fins deste trabalho, não constando na literatura clássica da 
+teoria dos modelos de primeira ordem.} $\tilde m$ como o modelo cujo domínio $\tilde \lambda$ é formado pelo produto cartesiano dos domínios $\lambda_i$ dos modelos simples $m_i \in \Xi$, dado por:
+
+\begin{equation}
+\tilde \lambda = \lambda_{i=1} \times \cdots \times \lambda_N
+\end{equation}
+
+Por exemplo, seja $\Xi = \{m_a, m_b\}$, seja $\lambda_a$ o dicionário de nomes de cidadãos americanos, e $\lambda_b$ o conjunto de strings composta por números em formato de data, então:
+
+\begin{equation}
+ \alpha_a(s) \implies s \in \lambda_a
+\end{equation}
+
+\begin{equation}
+ \phi_a(s): \alpha_a(s) \implies ``john" \in \lambda_a
+\end{equation}
+
+\begin{equation}
+ \alpha_b(s) \implies s \in \lambda_b
+\end{equation}
+
+\begin{equation}
+ \phi_b(s): \alpha_b(s) \implies ``310790" \in \lambda_b
+\end{equation}
+
+\hfill \break
+\noindent portanto:
+\hfill \break
+
+\begin{equation}
+ \tilde \lambda = \lambda_a \times \lambda_b
+\end{equation}
+
+\begin{equation}
+ \tilde s = \Psi^{-1}(s_a\in \lambda_a|s_b\in \lambda_b)
+\end{equation}
+
+
+\begin{equation}
+ \tilde \alpha(\tilde s) \implies \tilde s \in \tilde \lambda
+\end{equation}
+
+\begin{equation}
+ \tilde \phi(\tilde s): \tilde \alpha (\tilde s)
+\end{equation}
+
+\begin{equation}\label{eq30}
+ \tilde m \vDash \tilde \phi(s) \implies ``john310790" \in \tilde\lambda
+\end{equation}
+
+Observa-se que a cardinalidade do modelo composto é definida pelo produto das cardinalidades de cada $m_i \in \Xi$, dado por:
+
+\begin{equation}
+\displaystyle\mathcal{C}(\tilde m) = \prod_{i=1}^{N} \mathcal{C}(m_i)
+\end{equation}.
+
+Assim, no exemplo descrito acima, se $\mathcal{C}(m_a) = 30.000$ e $\mathcal{C}(m_b) = 930.000$, então $\mathcal{C}(\tilde m) = 27.900.000.000$.
+
+\subsection{Modelo Crítico}
+
+Seja $M(\tilde s)$ o conjunto de todos modelos (elementares e compostos) cujos domínios possuem $\tilde s$ como membro.
+
+\begin{center}
+$M(\tilde{ s}) = \{\tilde{m}_{i=1}, \cdots, \tilde{m}_{N}\} | \forall \tilde\lambda_i, \tilde{ s} \in \tilde \lambda_i$
+\end{center}
+
+Seja $\hat m$ o modelo com menor cardinalidade em $M(\tilde s)$. Chama-se $\hat m(\tilde s)$ de \textbf{modelo crítico}\footnote{Assim como a definição de modelo composto, a definição de modelo crítico
+consiste de adaptação estabelecida para os fins deste trabalho, não constando na literatura clássica da 
+toeria dos modelos de primeira ordem.} de $\tilde s$, dado por:
+
+\begin{equation}
+\hat m(\tilde{s}) = \underset{\tilde m}{\arg\min} \ \mathcal{C}(\tilde m_i), \forall \tilde m_i \in M(\tilde s)
+\end{equation}
+
+Seja $\mathcal{M}_{\Gamma}$ o \textbf{multiconjunto de modelos críticos} capazes de gerar cada string no multiconjunto de amostras $\Gamma$, dado por:
+
+\begin{equation}
+\Gamma = \{ \tilde s_{j=1}, \cdots, \tilde s_L\} \implies \mathcal{M}_{\Gamma} = \{\hat m(\tilde s_{j=1}), \cdots, \hat m(\tilde s_L)\}
+\end{equation}
+
+Utiliza-se $\hat m(\tilde s_j)$ e $\hat m_j$ com o mesmo significado, denotando o domínio do modelo crítico $\hat m_j$ por $\hat \lambda_j$.
+
+\fi
+
+\section{Frequência Relativa}
+
+Como $\mathcal{M}_{\Gamma}$ é multiconjunto, podem ocorrer membros $\hat m_i$ repetidos. Seja $n_i$ o número de ocorrências de cada $\hat m_i$
+em $\mathcal{M}_{\Gamma}$, e seja $|\mathcal{M}_{\Gamma}|$ o número total de membros de $\mathcal{M}_{\Gamma}$, incluindo repetições. Define-se então $\theta_i$ como
+a \textbf{frequência relativa} de $\hat m_i$ em $\mathcal{M}_{\Gamma}$ \cite{casella_berger_2010}:
+
+\begin{equation}
+ \theta_i = \dfrac{n_i}{|\mathcal{M}_{\Gamma}|}
+\end{equation}
+
+\section{Função de Dispersão Criptográfica}
+
+A função de dispersão criptográfica (FDC) é  uma função cuja inversão é considerada praticamente irrealizável, ou seja, é quase impossível recriar os valores de entrada, utilizando somente o valor resultante da dispersão. Define-se a FDC $H(\tilde s)$ como função unidirecional que toma como entrada string de 
+tamanho arbitrário $\tilde s$ e retorna como saída string de tamanho fixo $h$, chamada \textit{\textbf{hash}} \cite{ferguson_schneier_kohno_2010, menezes_2001}. A FDC possui as seguintes características: i) dado $\tilde s$, é trivial computar $h = H(\tilde s)$;
+ii) dado $h$, é computacionalmente difícil encontrar $\tilde s$ tal que $h = H(\tilde s)$ e iii) dado $\tilde s$, é computacionalmente difícil encontrar $\tilde s'$ tal que $H(\tilde s) = H(\tilde s')$. 
+
+\section{Processo de Quebra}
+
+O \textbf{processo de quebra} do \textit{hash} $h$, consiste da tarefa de encontrar string $\tilde s$ tal que $H(\tilde s) = h$.
+Para isto, o Processo consiste em calcular a FDC $H(\tilde s_i)$ de cada string $\tilde s_i$ pertencente ao domínio $\hat \lambda$ do modelo crítico $\hat m$, 
+até que seja encontrada $H(\tilde s_i) = h$.
+
+Dependendo da FDC escolhida e da capacidade computacional utilizada no processo de quebra, caso o domínio $\hat \lambda$ seja grande o suficiente, o processo 
+pode estender-se por período de tempo extremamente longo, fazendo com que o mesmo torne-se inviável.
+
+\section{Força do Modelo}
+
+A \textbf{força do modelo} $\hat m$ é definida quando alguma string de seu domínio é submetida a processos de quebra. Denota-se a força do modelo $\hat m$
+por $\mathfrak{S}(\mathcal{C}, \theta)$, onde $\mathcal{C}$ é a cardinalidade de $\hat m$ e $\theta$ é a frequência relativa de $\hat m$ em $\mathcal{M}_{\Gamma}$.
+
+\begin{equation} \label{forca}
+ \mathfrak{S}(\mathcal{C}, \theta) = (1 - \theta)^a, a = \frac{1}{\log_{10}(\mathcal{C})}
+\end{equation}
+
+Observa-se que apesar de $\mathfrak{S}(\mathcal{C}, \theta)$ estar relacionada ao modelo crítico $\hat m$, chama-se de força do modelo por simplicidade.
+Observa-se também que modelos fortes geram $\mathfrak{S}(\mathcal{C}, \theta) \approx 1$, enquanto modelos fracos geram $\mathfrak{S}(\mathcal{C}, \theta) \approx 0$.
+
+Esta métrica de força, diferentemente de outras estabelecidas na literatura \cite{sahin, weir_2009, burr}, leva em conta a frequência relativa $\theta$ do modelo em conjunto de amostras.
+Se o conjunto de amostras $\Gamma$ utilizado para obter $\mathcal{M}_{\Gamma}$ e $\theta$, possuir desejada representatividade estatística da distribuição de modelos críticos
+na vida real, pode-se afirmar que a probabilidade de que o domínio $\hat \lambda$ do modelo $\hat m$ seja usado em processos de quebra é igual a $\theta$, e portanto, a probabilidade de que $\hat \lambda$
+\textbf{não} será utilizado é $(1 - \theta)$. Isto é ponto de partida favorável para a métrica de força, uma vez que modelos populares terão alta probabilidade de ser bem 
+sucedidos em processos de quebra.
+
+O termo $a$ em (\ref{forca}), denominado de \textbf{fator de cardinalidade}, é utilizado para parametrizar a cardinalidade do modelo.
+Assim, a métrica recompensa modelos com altas cardinalidades e baixas frequências relativas, classificando-os como fortes.
+Por outro lado, modelos com baixas cardinalidades e altas frequências relativas são penalizados, sendo classificados como fracos.
+
+A Figura \ref{fig21} ilustra o mapa de $\mathfrak{S}(\mathcal{C}, \theta)$, que foi gerado na linguagem \textit{Python 3.6}, com auxílio dos pacotes
+\textit{NumPy} e \textit{Matplotlib}. Observa-se que $\mathcal{C}_{min} = 1$, e portanto, $\log_{10}(\mathcal{C}_{min}) = 0$, teoricamente $a$ pode resultar em divisão por $zero$. Contudo, o interpretador
+\textit{IPython} trata tal caso associando $a = \infty$ e gerando \textit{warning}, conforme ilustrado na Figura \ref{fig22}. 
+
+
+Na exceção de $\mathfrak{S}(1, 0) = (1)^{\infty} = 1$, 
+o interpretador \textit{Python} atribui $\mathfrak{S}(1, \theta) = (1 - \theta)^{\infty} = 0$, como ilustrado na Figura \ref{fig23}. Ou seja, independente da frequência relativa $\theta$, se 
+a cardinalidade do modelo é mínima, a força também é mínima. Observa-se contudo, que $\mathfrak{S}(1, 0) = 1$ não é problema, uma vez que o modelo que nunca ocorre em $\mathcal{M}_{\Gamma}$, de fato é forte, não importa quão ínfima seja sua cardinalidade $\mathcal{C}$.
+
+\section{Entropia do Modelo}
+
+\begin{itemize}
+ \item Transmissão de uma mensagem: simbolos, alfabeto de signos, mensagem, esquema de codificação
+ \item codificacao: tradução de signos para simbolos
+ \item Entropia: quantidade de informação contida em cada simbolo de determinada codificação. Por isso pode se entender como a quantidade média de perguntas que precisam ser feitas até que se descubra qual o signo codificado.
+ \item Quanto mais signos possiveis, maior a entropia
+ \item no contexto da avaliacao de força de senhas, dado determinado modelo, quanto mais perguntas forem necessárias para adivinhar a senha, melhor.
+ logo, é desejável que o modelo possua entropia alta. aqui, a senha faz o papel de uma mensagem de apenas um signo a ser codificado. o modelo faz o papel da codificação a ser utilizada. o domínio faz o papel do alfabeto de signos
+ 
+ TI				TC		TM			Corinda
+ signos				elemento				senha
+ simbolo								hash
+ todos os símbolos do código	conjunto	domínio do modelo	dicionário		
+ 
+ teoria bayseiana pode ser usada para obter p(~s), e consequentemente H(m) mais precisos... contudo, dificultaria a implementacao, por causa dos dicionarios a serem varridos pelo hashcat
+ entao assumo p(~s) -> 1/C(m)
+ 
+ DIAGRAMA DE DECISOES COM MORSE ABCD E DICIONARIO
+ 
+ $H(\hat m) = - \sum P(\tilde s)\log_{10}P(\tilde s)$
+ 
+ se simplificar, fica $H(\hat m) = -\log_{10}(1/\mathcal{C}(\hat m))$
+ 
+One ban or hartley is the information content of an event if the probability of that event occurring is 1/10
+ 
+ FORÇA = ENTROPIA DO MODELO * FREQUENCIA DO MODELO
+ 
+\end{itemize}
+
+
 
 \section{Considerações}
 
-Veja as expressões (\ref{Equ1}) e (\ref{Equ2}), que servem de exemplo de como inserir expressões matemática.
-
-\begin{equation}
-v_{a}(t) = R_{a}\cdot i_{a}(t) + L_{a} \frac{di_{a}(t)}{dt} + e_{g}(t)
-\label{Equ1}
-\end{equation}
-
-\begin{equation}
-v_{f}(t) = R_{f}\cdot i_{f}(t) + L_{f} \frac{di_{f}(t)}{dt}
-\label{Equ2}
-\end{equation}
+A definição de string estabelece representação formal de senhas. As definições de modelo
+e seus derivados formalizam os conceitos que permitem a representação dos vieses psicológicos envolvidos no processo de criação das senhas por seres humanos.
+A definição de FDC estabelece a noção de \textit{hash}. Por fim, a formalização do conceito de força do modelo permite quantificar quão robusta é determinada senha quando submetida
+a processos de quebra. Com base nestas definições, o próximo capítulo estabelece a metologia utilizada na implementação do \textbf{Corinda}.

@@ -2,41 +2,108 @@
 % CAPÍTULO 2
 \chapter{CONTROLE MODERNO (xx/xx/2017)}\label{chapter:cap2}
 
-\section{Controle clássico e moderno}
+Este capítulo descreve o fenômeno de vazamento de dados de autenticação. Algumas listas conhecidas são apresentadas, bem como a ferramenta de avaliação de complexidade de senhas chamada Passfault.
 
-Aqui você deve escrever umas 15 linhas ou mais sobre a diferença entre controles clássicos e controle moderno. Termine citando os controladores por modos deslizantes e o preditivo.
+\section{Informação Sigilosa}
 
-\section{Controle por modos deslizantes}
+Na maioria das organizações, as informações relativas à autenticação de usuários ficam armazenados em servidores. Tais servidores encontram-se instalados em complexas
+infraestruturas de rede, com diversos pontos que podem servir de entrada para agentes maliciosos, caso sejam mal configurados ou estejam desatualizados. Por razões
+que passam por ativismo político, crime organizado e até guerras cibernéticas entre nações, tais servidores são invadidos e informações de autenticação de usuários são roubadas. 
 
-Aqui você deve falar do controle por modos deslizantes.
+De forma a mitigar os danos no caso do vazamento dos dados de autenticação, a utilização de função de dispersão criptográfica (FDC) para criptografar senhas armazenadas é prática comum.
+Apenas o \textit{hash} da senha é armazenado, e a autenticação ocorre quando o \textit{hash} calculado a partir da senha digitada pelo usuário é comparada com aquele armazenado
+no banco de dados, permitindo o acesso caso os valores sejam idênticos.
 
-\subsection{Sintonia do controlador por modos deslizantes}
+Quando as listas de \textit{usernames} e \textit{hashes} são roubadas, várias vezes seus destinos são mercados negros \textit{online}. Eventualmente, estas listas acabam emergindo
+para a superfície da internet. Comunidades inteiras se formam para compartilhar técnicas e resultados de quebra de \textit{hashes}. Exemplo disto é a ferramenta \textit{Hashcat}, projeto
+de código aberto resultado de esforço puramente comunitário. Quando ocorre o vazamento público dos dados de alguma corporação, curto tempo se decorre até que elevada porcentagem
+dos \textit{hashes} seja quebrada.
 
-Aqui você deve dar ênfase nas variáveis manipuladas do controle por modos deslizantes.
+Tabelas de consulta com \textit{hashes} previamente computados são utilizados para reduzir o tempo de quebra dos mesmos. Caso considerável número de usuários utilizem a mesma senha 
+em determinada lista, basta que a primeira senha seja quebrada para que todas iguais a ela sejam comprometidas. De forma a diminuir a eficácia das tabelas das \textit{hashes} pré computados, 
+a técnica de \textit{salting} é prática de segurança recomendada por especialistas. A técnica consiste em concatenar caracteres aleatórios (\textit{salt}) à senha antes do cálculo do \textit{hash} via FDC. O \textit{salt} deve ser armazenado de forma segura. Durante a autenticação, 
+a senha fornecida pelo usuário mais o \textit{salt} armazenado são usadas no cálculo do \textit{hash}. Contudo, caso os \textit{salts} também sejam roubados junto aos \textit{hashes}, tal
+técnica não impede que os \textit{salts} sejam usados para computar a nova tabela de consulta.
 
-\section{Controle preditivo baseado em modelos}
+Existem algumas listas de \textit{hashes} roubadas que são conhecidas, como: i) RockYou, ii) LinkedIn, e iii) Anti Public.
 
-Aqui você deve falar do controle preditivo baseado em modelos.
+RAINBOW TABLE
 
-\subsection{Sintonia do controlador preditivo baseado em modelos}
+\section{RockYou}
+O RockYou fornece serviços de jogos \textit{on-line}. Em Dezembro de 2009, a empresa de segurança da informação emitiu notificação sobre séria falha de segurança do tipo SQL Injection
+nos servidores da RockYou, que alegou ter resolvido o problema. Este tipo de falha já havia sido amplamente documentada e estudada por cerca de uma década. Apesar das alegações
+da RockYou sobre terem corrigido o problema, agentes maliciosos foram 
+capazes de explorar tal falha e roubar cerca de 32 milhões de senhas na forma \textit{plaintext}, ou seja, sem nenhuma proteção por FDC.
 
-Aqui você deve dar ênfase nas variáveis manipuladas do controle preditivo baseado em modelos.
+Este acontecimento foi amplamente divulgado na mídia logo após o roubo. Especialistas de segurança aconselharam aos usuários do \textit{site} que trocassem todas suas senhas imediatamente,
+uma vez que as senhas roubadas poderiam ser utilizadas para roubar contas em outros \textit{sites} \cite{techcrunch}.
+
+Desde então, esta lista de senhas tem sido amplamente utilizada para fins de pesquisa. 
+
+\section{LinkedIn}
+LinkedIn consiste de rede social de contatos profissionais. Em Junho de 2012, os \textit{hashes} das senhas de cerca de 6,5 milhões de usuários são roubadas por criminosos russos. As senhas eram
+protegidas pela FDC \textit{Secure Hashing Algorithm 1} (\textit{SHA1}), sem \textit{salting}. Estes usuários não puderam mais
+acessar suas contas, e a empresa encorajou que todos seus usuários mudassem suas senhas. No mesmo dia, os \textit{hashes} foram quebrados e postados em fóruns \textit{online} \cite{mashable}.
+
+Em Maio de 2016, mais 117 milhões de \textit{hashes} aparecem na internet. Especula-se que esta lista foi roubada no mesmo incidente de 2012, contudo permanecendo
+em mercados negros \textit{online} antes de ser descoberta. Como não havia proteção por \textit{salting}, mais de 90\% da lista de \textit{hashes} foi quebrada em menos de 72 horas. Como resposta, o LinkedIn invalidou as senhas de todos os usuários que não mudaram a senha desde 2012 \cite{motherboard}.
+
+\section{\textit{Anti Public}}
+
+
+A lista conhecida como \textit{Anti Public} surgiu na internet em Dezembro de 2016 por meio de fóruns russos. A lista \textit{Anti Public} foi amplamente comercializada em mercados negros.
+Quase nada se sabe sobre sua verdadeira origem, mas especula-se que ela seja o compilado geral de diversos vazamentos. Tais listas são comumente chamadas de listas \textit{combo}.
+
+A lista contém cerca de 458 milhões de \textit{e-mails} diferentes, alguns com múltiplas senhas. A lista também 
+é utilizada em prática conhecida como \textit{credential stuffing}, que consiste em automatizar a autenticação em diversos \textit{websites} utilizando diferentes credenciais da lista \cite{troyhunt}.
+
+\section{Vieses Psicológicos}
+
+Comumente estudados na psicologia comportamental, vieses psicológicos (ou cognitivos) consistem de tendências a pensamentos e decisões que desviam sistematicamente da racionalidade padrão \cite{caverni_fabre_gonzalez_1990}. Vieses
+psicológicos podem ser vistos como heurísticas que o cérebro utiliza como atalhos no processamento de informação. 
+
+No contexto deste trabalho, tais vieses se manifestam estatisticamente, na tendência dos usuários a criarem senhas seguindo padrões frequentes. As reais causas e mecanismos por trás destes
+vieses psicológicos fogem o escopo deste trabalho, mas especula-se que a facilidade de armazenamento na memória do indivíduo, bem como os mecanismos linguísticos do cérebro, possuam
+papel importante na manifestação deste fenômeno.
+
+Por exemplo, a Tabela (\ref{tab21}) lista as dez senhas mais frequentes na lista roubada da rede social LinkedIn. Nota-se que sequências numéricas são um padrão recorrente.
+Palavras associadas ao contexto da senha (\textbf{linkedin} e \textbf{password}) também mostram-se bastante populares. Estes são exemplos de vieses psicológicos que delimitam
+o espaço de busca para senhas prováveis, reduzindo sua ordem de grandeza de trilhões de senhas para algumas dezenas de milhares. Isso faz com que o \textit{hash} da senha seja facilmente quebrado
+por agentes maliciosos experientes.
+
+\begin{table}[!h]
+    \centering
+    \caption{Dez senhas mais frequentes da lista LinkedIn}
+    \label{tab21}
+      \begin{tabular}{c|c}
+	\hline \textbf{Senha} & \textbf{Frequência}\\
+	\hline {123456} & {753.305}\\
+	\hline {linkedin} & {172.523}\\
+	\hline {password} & {144.458}\\
+	\hline {123456789} & {94.314}\\
+	\hline {12345678} & {63.769}\\
+	\hline {111111} & {57.210}\\
+	\hline {1234567} & {49.652}\\
+	\hline {sunshine} & {39.118}\\
+	\hline {qwerty} & {37.538}\\
+	\hline {654321} & {33.854}\\
+
+      \end{tabular}
+     \vspace{3ex}
+\end{table}
+
+\section{Passfault}\label{passfault}
+
+Criada em 2001, a \textit{Open Web Application Security Project} (\textit{OWASP}) é a comunidade \textit{online} com o objetivo de produzir artigos, metodologias, documentação, ferramentas e
+tecnologias no campo da segurança de aplicações \textit{web}.
+
+Mantido pela OWASP, o Passfault é ferramenta de código aberto, implementada em \textit{Java} e distribuída sob \textit{Apache Licence 2.0}. Seu desenvolvimento começou em 2011, com o objetivo de fazer com que 
+a complexidade e força das senhas sejam facilmente entendidas pela população. O Passfault recebe como entrada uma senha, uma opção de FDC e uma opção de \textit{hardware} adversário. Ele analisa a estrutura da senha, tentando encontrar o modelo que melhor descreve a mesma. Então, o Passfault informa o usuário da complexidade da senha (tamanho do espaço de busca), 
+bem como o tempo necessário para quebrá-la, baseado na FDC e no \textit{hardware} escolhido \cite{rodrigues}.
+
+O código do Passfault pode ser encontrado em repositório aberto em \href{https://github.com/OWASP/passfault}{https://github.com/OWASP/passfault}.
 
 \section{Considerações}
 
-Veja as Figura~\ref{Exep1} e Figura~\ref{Exep2}, que servem de exemplo para inserção figuras.
-
-\begin{figure}[!h]
-	\centering
-	\includegraphics[width=20pc]{./figs/Fig1-1}
-	\caption{Partes construtivas do motor de corrente contínua.}
-	\label{Exep1}
-\end{figure} 
-
-\begin{figure}[!h]
-	\begin{center}
-		\includegraphics[width=\linewidth]{./figs/Fig2-4}
-		\caption{Ligações de máquinas CC: (a) excitação independente, (b) em derivação, (c) em série, (d) composta.}
-		\label{Exep2}
-	\end{center}
-\end{figure}
+Muitas organizações ainda não utilizam boas práticas de segurança como  o \textit{salting}. Ainda assim, técnicas de quebra de \textit{hashes} continuam em constante evolução, e os vazamentos de credenciais continuam acontecendo com frequência cada vez maior.
+Assim, é importante a conscientização dos usuários para que utilizem senhas fortes de forma a dificultar a quebra do \textit{hash}. O capítulo a seguir descreve a métrica de força de senha.

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.8.24)  23 JAN 2018 17:11
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.8.24)  24 JAN 2018 09:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -616,26 +616,7 @@ LaTeX Font Info:    Try loading font information for T1+lmr on input line 1126.
 
 (/usr/share/texmf/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-))
-
-! LaTeX Error: Option clash for package inputenc.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.5 
-    
-The package inputenc has already been loaded with options:
-  [latin1]
-There has now been an attempt to load it with options
-  [utf8]
-Adding the global options:
-  latin1,utf8
-to your \documentclass declaration may fix this.
-Try typing  <return>  to proceed.
-
-(./configuracaoUFG.tex)
+)) (./configuracaoUFG.tex)
 \@indexfile=\write3
 \openout3 = `Tese_Dissertacao_UFG.idx'.
 
@@ -648,20 +629,20 @@ Writing index file Tese_Dissertacao_UFG.idx
 (./docs/CAP6T.aux) (./docs/glossario.aux))
 \openout1 = `Tese_Dissertacao_UFG.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -697,13 +678,13 @@ Package lastpage Info: Please have a look at the pagesLTS package at
 (lastpage)             or
 (lastpage)             http://www.ctan.org/tex-archive/ 
 (lastpage)             install/macros/latex/contrib/pagesLTS.tds.zip
-(lastpage)             ! on input line 15.
+(lastpage)             ! on input line 14.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 
 ABD: EveryShipout initializing macros
 \AtBeginShipoutBox=\box38
-Package hyperref Info: Link coloring ON on input line 15.
+Package hyperref Info: Link coloring ON on input line 14.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -713,15 +694,15 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count138
 )
-LaTeX Info: Redefining \ref on input line 15.
-LaTeX Info: Redefining \pageref on input line 15.
-LaTeX Info: Redefining \nameref on input line 15.
+LaTeX Info: Redefining \ref on input line 14.
+LaTeX Info: Redefining \pageref on input line 14.
+LaTeX Info: Redefining \nameref on input line 14.
 
 (./Tese_Dissertacao_UFG.out) (./Tese_Dissertacao_UFG.out)
 \@outlinefile=\write4
 \openout4 = `Tese_Dissertacao_UFG.out'.
 
-Package hyperref Info: Anchor `Doc-Start' on input line 15.
+Package hyperref Info: Anchor `Doc-Start' on input line 14.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -758,70 +739,70 @@ Package hyperref Info: Anchor `Doc-Start' on input line 15.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
+(babel)             in language  on input line 16.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
+(babel)             in language  on input line 16.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
+(babel)             in language  on input line 16.
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\\' on input line 17.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\\' on input line 17.
+(hyperref)                removing `\\' on input line 16.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\\' on input line 17.
+(hyperref)                removing `\\' on input line 16.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\\' on input line 17.
+(hyperref)                removing `\\' on input line 16.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\\' on input line 17.
+(hyperref)                removing `\\' on input line 16.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\\' on input line 17.
+(hyperref)                removing `\\' on input line 16.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\\' on input line 16.
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
+(babel)             in language  on input line 16.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
-Package hyperref Info: Anchor `CAPA.0' on input line 17.
+(babel)             in language  on input line 16.
+Package hyperref Info: Anchor `CAPA.0' on input line 16.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
+(babel)             in language  on input line 16.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
-Package hyperref Info: Anchor `page.1' on input line 17.
+(babel)             in language  on input line 16.
+Package hyperref Info: Anchor `page.1' on input line 16.
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
-Package hyperref Info: Anchor `VERSO.0' on input line 17.
+(babel)             in language  on input line 16.
+Package hyperref Info: Anchor `VERSO.0' on input line 16.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
+(babel)             in language  on input line 16.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
-Package hyperref Info: Anchor `page.2' on input line 17.
+(babel)             in language  on input line 16.
+Package hyperref Info: Anchor `page.2' on input line 16.
  [2]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
-Package hyperref Info: Anchor `FOLHA DE ROSTO.0' on input line 17.
+(babel)             in language  on input line 16.
+Package hyperref Info: Anchor `FOLHA DE ROSTO.0' on input line 16.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
+(babel)             in language  on input line 16.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
-Package hyperref Info: Anchor `page.1' on input line 17.
+(babel)             in language  on input line 16.
+Package hyperref Info: Anchor `page.1' on input line 16.
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.17 \maketitle
+l.16 \maketitle
                 [1]
 \cutter@width=\skip129
 \oitava@coluna=\skip130
@@ -832,100 +813,100 @@ l.17 \maketitle
 \sexta@coluna=\skip135
 \quarta@coluna=\skip136
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
-Package hyperref Info: Anchor `nomefichac.0' on input line 17.
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 17.
+(babel)             in language  on input line 16.
+Package hyperref Info: Anchor `nomefichac.0' on input line 16.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 16.
  (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 17.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 16.
 
 (/usr/share/texmf/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 17.
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 16.
 
 
 (/usr/share/texmf/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 17.
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 16.
 
 
 (/usr/share/texmf/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 17.
+(Font)              <12> on input line 16.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 17.
+(Font)              <8> on input line 16.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 17.
-LaTeX Font Info:    Try loading font information for U+msa on input line 17.
+(Font)              <6> on input line 16.
+LaTeX Font Info:    Try loading font information for U+msa on input line 16.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 17.
+LaTeX Font Info:    Try loading font information for U+msb on input line 16.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Package hyperref Info: Reference (link) `page.38' on input line 17.
+Package hyperref Info: Reference (link) `page.48' on input line 16.
 
-Underfull \hbox (badness 10000) in paragraph at lines 17--17
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 17--17
+Underfull \hbox (badness 10000) in paragraph at lines 16--16
 
  []
 
 
-Underfull \hbox (badness 1442) in paragraph at lines 17--17
+Underfull \hbox (badness 10000) in paragraph at lines 16--16
+
+ []
+
+
+Underfull \hbox (badness 1442) in paragraph at lines 16--16
 \T1/lmr/m/n/12 Dissertação - Uni-ver-si-dade Fe-de-ral de Goiás - UFG,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 17--17
+Underfull \hbox (badness 10000) in paragraph at lines 16--16
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 17--17
+Underfull \hbox (badness 10000) in paragraph at lines 16--16
 
  []
 
 
-Underfull \hbox (badness 2564) in paragraph at lines 17--17
+Underfull \hbox (badness 2564) in paragraph at lines 16--16
 \T1/lmr/m/n/12 1.Senhas - Te-ses. 2.\T1/lmr/m/it/12 Hashes \T1/lmr/m/n/12 - Te-
 ses. 3.Se-gu-rança da
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 17--17
+Underfull \hbox (badness 10000) in paragraph at lines 16--16
 
  []
 
-LaTeX Font Info:    Try loading font information for OMS+lmr on input line 17.
+LaTeX Font Info:    Try loading font information for OMS+lmr on input line 16.
 (/usr/share/texmf/tex/latex/lm/omslmr.fd
 File: omslmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `OMS/lmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/lmsy/m/n' tried instead on input line 17.
+(Font)              Font shape `OMS/lmsy/m/n' tried instead on input line 16.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 19.
+(babel)             in language  on input line 18.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 19.
-Package hyperref Info: Anchor `page.2' on input line 19.
+(babel)             in language  on input line 18.
+Package hyperref Info: Anchor `page.2' on input line 18.
 pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.19 \include{./docs/epigrafe}
+l.18 \include{./docs/epigrafe}
                                %% opcional [2
-Package `hyperref' Info: End of reference (link) `page.38', line 17.
+Package `hyperref' Info: End of reference (link) `page.48', line 16.
 ]
 \openout2 = `./docs/epigrafe.aux'.
 
@@ -936,10 +917,10 @@ Package hyperref Info: Anchor `nomeepigrafe.0' on input line 4.
 Package hyperref Info: Anchor `estilo:epigrafe' on input line 6.
 )
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 19.
+(babel)             in language  on input line 18.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 19.
-Package hyperref Info: Anchor `page.3' on input line 19.
+(babel)             in language  on input line 18.
+Package hyperref Info: Anchor `page.3' on input line 18.
  [3
 
 
@@ -970,10 +951,10 @@ LaTeX Font Info:    Font shape `T1/calligra/m/n' will be
 (Font)              scaled to size 24.88324pt on input line 14.
 )
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 20.
+(babel)             in language  on input line 19.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 20.
-Package hyperref Info: Anchor `page.5' on input line 20.
+(babel)             in language  on input line 19.
+Package hyperref Info: Anchor `page.5' on input line 19.
  [5]
 \openout2 = `./docs/agradecimentos.aux'.
 
@@ -995,10 +976,10 @@ Package hyperref Info: Anchor `nomethank.0' on input line 4.
 Package hyperref Info: Anchor `estilo:agradecimentos' on input line 6.
 )
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 21.
+(babel)             in language  on input line 20.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 21.
-Package hyperref Info: Anchor `page.7' on input line 21.
+(babel)             in language  on input line 20.
+Package hyperref Info: Anchor `page.7' on input line 20.
  [7]
 \openout2 = `./docs/resumo.aux'.
 
@@ -1021,10 +1002,10 @@ Package hyperref Info: Anchor `nomeresumo.0' on input line 4.
 Package hyperref Info: Anchor `estilo:resumo' on input line 6.
 )
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 22.
+(babel)             in language  on input line 21.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 22.
-Package hyperref Info: Anchor `page.9' on input line 22.
+(babel)             in language  on input line 21.
+Package hyperref Info: Anchor `page.9' on input line 21.
  [9]
 \openout2 = `./docs/abstract.aux'.
 
@@ -1046,24 +1027,24 @@ Package hyperref Info: Anchor `nomeabstract.0' on input line 5.
 Package hyperref Info: Anchor `estilo:abstract' on input line 7.
 )
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 23.
+(babel)             in language  on input line 22.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 23.
-Package hyperref Info: Anchor `page.11' on input line 23.
+(babel)             in language  on input line 22.
+Package hyperref Info: Anchor `page.11' on input line 22.
  [11]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 25.
+(babel)             in language  on input line 24.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 25.
-Package hyperref Info: Anchor `page.12' on input line 25.
+(babel)             in language  on input line 24.
+Package hyperref Info: Anchor `page.12' on input line 24.
  [12
 
 
 
 ]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 25.
-Package hyperref Info: Anchor `contentsname.0' on input line 25.
+(babel)             in language  on input line 24.
+Package hyperref Info: Anchor `contentsname.0' on input line 24.
 
 (./Tese_Dissertacao_UFG.toc
 Package hyperref Info: Reference (link) `section.0.1' on input line 4.
@@ -1074,26 +1055,26 @@ Package hyperref Info: Reference (link) `chapter.1' on input line 15.
 Package hyperref Info: Reference (link) `chapter.2' on input line 16.
 Package hyperref Info: Reference (link) `section.2.1' on input line 17.
 Package hyperref Info: Reference (link) `section.2.2' on input line 18.
-Package hyperref Info: Reference (link) `subsection.2.2.1' on input line 19.
-Package hyperref Info: Reference (link) `section.2.3' on input line 20.
-Package hyperref Info: Reference (link) `subsection.2.3.1' on input line 21.
-Package hyperref Info: Reference (link) `section.2.4' on input line 22.
-Package hyperref Info: Reference (link) `chapter.3' on input line 23.
-Package hyperref Info: Reference (link) `section.3.1' on input line 24.
-Package hyperref Info: Reference (link) `section.3.2' on input line 25.
-Package hyperref Info: Reference (link) `subsection.3.2.1' on input line 26.
-Package hyperref Info: Reference (link) `section.3.3' on input line 27.
-Package hyperref Info: Reference (link) `subsection.3.3.1' on input line 28.
+Package hyperref Info: Reference (link) `section.2.3' on input line 19.
+Package hyperref Info: Reference (link) `section.2.4' on input line 20.
+Package hyperref Info: Reference (link) `section.2.5' on input line 21.
+Package hyperref Info: Reference (link) `section.2.6' on input line 22.
+Package hyperref Info: Reference (link) `section.2.7' on input line 23.
+Package hyperref Info: Reference (link) `chapter.3' on input line 24.
+Package hyperref Info: Reference (link) `section.3.1' on input line 25.
+Package hyperref Info: Reference (link) `subsection.3.1.1' on input line 26.
+Package hyperref Info: Reference (link) `section.3.2' on input line 27.
+Package hyperref Info: Reference (link) `section.3.3' on input line 28.
 Package hyperref Info: Reference (link) `section.3.4' on input line 29.
-Package hyperref Info: Reference (link) `chapter.4' on input line 30.
-Package hyperref Info: Reference (link) `section.4.1' on input line 31.
-Package hyperref Info: Reference (link) `section.4.2' on input line 32.
-Package hyperref Info: Reference (link) `section.4.3' on input line 33.
-Package hyperref Info: Reference (link) `section.4.4' on input line 34.
-Package hyperref Info: Reference (link) `section.4.5' on input line 35.
-Package hyperref Info: Reference (link) `chapter.5' on input line 36.
-Package hyperref Info: Reference (link) `section.5.1' on input line 37.
-Package hyperref Info: Reference (link) `section.5.2' on input line 38.
+Package hyperref Info: Reference (link) `section.3.5' on input line 30.
+Package hyperref Info: Reference (link) `section.3.6' on input line 31.
+Package hyperref Info: Reference (link) `section.3.7' on input line 32.
+Package hyperref Info: Reference (link) `chapter.4' on input line 33.
+Package hyperref Info: Reference (link) `section.4.1' on input line 34.
+Package hyperref Info: Reference (link) `section.4.2' on input line 35.
+Package hyperref Info: Reference (link) `section.4.3' on input line 36.
+Package hyperref Info: Reference (link) `section.4.4' on input line 37.
+Package hyperref Info: Reference (link) `section.4.5' on input line 38.
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 39.
 Package babel Info: Redefining portuges shorthand "|
@@ -1108,127 +1089,130 @@ Package `hyperref' Info: End of reference (link) `chapter.1', line 15.
 Package `hyperref' Info: End of reference (link) `chapter.2', line 16.
 Package `hyperref' Info: End of reference (link) `section.2.1', line 17.
 Package `hyperref' Info: End of reference (link) `section.2.2', line 18.
-Package `hyperref' Info: End of reference (link) `subsection.2.2.1', line 19.
-Package `hyperref' Info: End of reference (link) `section.2.3', line 20.
-Package `hyperref' Info: End of reference (link) `subsection.2.3.1', line 21.
-Package `hyperref' Info: End of reference (link) `section.2.4', line 22.
-Package `hyperref' Info: End of reference (link) `chapter.3', line 23.
-Package `hyperref' Info: End of reference (link) `section.3.1', line 24.
-Package `hyperref' Info: End of reference (link) `section.3.2', line 25.
-Package `hyperref' Info: End of reference (link) `subsection.3.2.1', line 26.
-Package `hyperref' Info: End of reference (link) `section.3.3', line 27.
-Package `hyperref' Info: End of reference (link) `subsection.3.3.1', line 28.
+Package `hyperref' Info: End of reference (link) `section.2.3', line 19.
+Package `hyperref' Info: End of reference (link) `section.2.4', line 20.
+Package `hyperref' Info: End of reference (link) `section.2.5', line 21.
+Package `hyperref' Info: End of reference (link) `section.2.6', line 22.
+Package `hyperref' Info: End of reference (link) `section.2.7', line 23.
+Package `hyperref' Info: End of reference (link) `chapter.3', line 24.
+Package `hyperref' Info: End of reference (link) `section.3.1', line 25.
+Package `hyperref' Info: End of reference (link) `subsection.3.1.1', line 26.
+Package `hyperref' Info: End of reference (link) `section.3.2', line 27.
+Package `hyperref' Info: End of reference (link) `section.3.3', line 28.
 Package `hyperref' Info: End of reference (link) `section.3.4', line 29.
-Package `hyperref' Info: End of reference (link) `chapter.4', line 30.
-Package `hyperref' Info: End of reference (link) `section.4.1', line 31.
-Package `hyperref' Info: End of reference (link) `section.4.2', line 32.
-Package `hyperref' Info: End of reference (link) `section.4.3', line 33.
-Package `hyperref' Info: End of reference (link) `section.4.4', line 34.
-Package `hyperref' Info: End of reference (link) `section.4.5', line 35.
-Package `hyperref' Info: End of reference (link) `chapter.5', line 36.
-Package `hyperref' Info: End of reference (link) `section.5.1', line 37.
+Package `hyperref' Info: End of reference (link) `section.3.5', line 30.
+Package `hyperref' Info: End of reference (link) `section.3.6', line 31.
+Package `hyperref' Info: End of reference (link) `section.3.7', line 32.
+Package `hyperref' Info: End of reference (link) `chapter.4', line 33.
+Package `hyperref' Info: End of reference (link) `section.4.1', line 34.
+Package `hyperref' Info: End of reference (link) `section.4.2', line 35.
+Package `hyperref' Info: End of reference (link) `section.4.3', line 36.
+Package `hyperref' Info: End of reference (link) `section.4.4', line 37.
 ]
-Package hyperref Info: Reference (link) `subsection.5.2.1' on input line 39.
-Package hyperref Info: Reference (link) `section.5.3' on input line 40.
-Package hyperref Info: Reference (link) `section.5.4' on input line 41.
-Package hyperref Info: Reference (link) `chapter.6' on input line 42.
-Package hyperref Info: Reference (link) `section.6.1' on input line 43.
-Package hyperref Info: Reference (link) `section.6.2' on input line 44.
-Package hyperref Info: Reference (link) `section.6.3' on input line 45.
-Package hyperref Info: Reference (link) `anexo.a' on input line 47.
-Package hyperref Info: Reference (link) `anexo.b' on input line 48.
+Package hyperref Info: Reference (link) `chapter.5' on input line 39.
+Package hyperref Info: Reference (link) `section.5.1' on input line 40.
+Package hyperref Info: Reference (link) `section.5.2' on input line 41.
+Package hyperref Info: Reference (link) `subsection.5.2.1' on input line 42.
+Package hyperref Info: Reference (link) `section.5.3' on input line 43.
+Package hyperref Info: Reference (link) `section.5.4' on input line 44.
+Package hyperref Info: Reference (link) `chapter.6' on input line 45.
+Package hyperref Info: Reference (link) `section.6.1' on input line 46.
+Package hyperref Info: Reference (link) `section.6.2' on input line 47.
+Package hyperref Info: Reference (link) `section.6.3' on input line 48.
+Package hyperref Info: Reference (link) `anexo.a' on input line 50.
+Package hyperref Info: Reference (link) `anexo.b' on input line 51.
 )
 \tf@toc=\write5
 \openout5 = `Tese_Dissertacao_UFG.toc'.
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 25.
+(babel)             in language  on input line 24.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 25.
-Package hyperref Info: Anchor `page.14' on input line 25.
+(babel)             in language  on input line 24.
+Package hyperref Info: Anchor `page.14' on input line 24.
  [14
-Package `hyperref' Info: End of reference (link) `section.5.2', line 38.
-Package `hyperref' Info: End of reference (link) `subsection.5.2.1', line 39.
-Package `hyperref' Info: End of reference (link) `section.5.3', line 40.
-Package `hyperref' Info: End of reference (link) `section.5.4', line 41.
-Package `hyperref' Info: End of reference (link) `chapter.6', line 42.
-Package `hyperref' Info: End of reference (link) `section.6.1', line 43.
-Package `hyperref' Info: End of reference (link) `section.6.2', line 44.
-Package `hyperref' Info: End of reference (link) `section.6.3', line 45.
-Package `hyperref' Info: End of reference (link) `anexo.a', line 47.
-Package `hyperref' Info: End of reference (link) `anexo.b', line 48.
+Package `hyperref' Info: End of reference (link) `section.4.5', line 38.
+Package `hyperref' Info: End of reference (link) `chapter.5', line 39.
+Package `hyperref' Info: End of reference (link) `section.5.1', line 40.
+Package `hyperref' Info: End of reference (link) `section.5.2', line 41.
+Package `hyperref' Info: End of reference (link) `subsection.5.2.1', line 42.
+Package `hyperref' Info: End of reference (link) `section.5.3', line 43.
+Package `hyperref' Info: End of reference (link) `section.5.4', line 44.
+Package `hyperref' Info: End of reference (link) `chapter.6', line 45.
+Package `hyperref' Info: End of reference (link) `section.6.1', line 46.
+Package `hyperref' Info: End of reference (link) `section.6.2', line 47.
+Package `hyperref' Info: End of reference (link) `section.6.3', line 48.
+Package `hyperref' Info: End of reference (link) `anexo.a', line 50.
+Package `hyperref' Info: End of reference (link) `anexo.b', line 51.
 ]
-Package hyperref Info: Anchor `section.0.1' on input line 26.
+Package hyperref Info: Anchor `section.0.1' on input line 25.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 26.
-Package hyperref Info: bookmark on input line 26:
+(babel)             in language  on input line 25.
+Package hyperref Info: bookmark on input line 25:
 (hyperref)             thecounter {0}
 (hyperref)             text {\listfigurename }
 (hyperref)             reference {section.0.1}
 (hyperref)             toclevel {0}
 (hyperref)             type {toc}.
- (./Tese_Dissertacao_UFG.lof
-Package hyperref Info: Reference (link) `figure.2.1' on input line 5.
-Package hyperref Info: Reference (link) `figure.2.2' on input line 6.
-)
+ (./Tese_Dissertacao_UFG.lof)
 \tf@lof=\write6
 \openout6 = `Tese_Dissertacao_UFG.lof'.
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 26.
+(babel)             in language  on input line 25.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 26.
-Package hyperref Info: Anchor `page.15' on input line 26.
+(babel)             in language  on input line 25.
+Package hyperref Info: Anchor `page.15' on input line 25.
  [15
 
 
 
 
-Package `hyperref' Info: End of reference (link) `figure.2.1', line 5.
-Package `hyperref' Info: End of reference (link) `figure.2.2', line 6.
 ]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 26.
+(babel)             in language  on input line 25.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 26.
-Package hyperref Info: Anchor `page.16' on input line 26.
+(babel)             in language  on input line 25.
+Package hyperref Info: Anchor `page.16' on input line 25.
 
 [16
 
 
 ]
-Package hyperref Info: Anchor `section.0.2' on input line 27.
+Package hyperref Info: Anchor `section.0.2' on input line 26.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 27.
-Package hyperref Info: bookmark on input line 27:
+(babel)             in language  on input line 26.
+Package hyperref Info: bookmark on input line 26:
 (hyperref)             thecounter {0}
 (hyperref)             text {\listtablename }
 (hyperref)             reference {section.0.2}
 (hyperref)             toclevel {0}
 (hyperref)             type {toc}.
  (./Tese_Dissertacao_UFG.lot
-Package hyperref Info: Reference (link) `table.5.1' on input line 8.
-Package hyperref Info: Reference (link) `table.5.2' on input line 9.
+Package hyperref Info: Reference (link) `table.2.1' on input line 5.
+Package hyperref Info: Reference (link) `table.5.1' on input line 9.
+Package hyperref Info: Reference (link) `table.5.2' on input line 10.
 )
 \tf@lot=\write7
 \openout7 = `Tese_Dissertacao_UFG.lot'.
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 27.
+(babel)             in language  on input line 26.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 27.
-Package hyperref Info: Anchor `page.17' on input line 27.
+(babel)             in language  on input line 26.
+Package hyperref Info: Anchor `page.17' on input line 26.
  [17
 
 
-Package `hyperref' Info: End of reference (link) `table.5.1', line 8.
-Package `hyperref' Info: End of reference (link) `table.5.2', line 9.
+Package `hyperref' Info: End of reference (link) `table.2.1', line 5.
+Package `hyperref' Info: End of reference (link) `table.5.1', line 9.
+Package `hyperref' Info: End of reference (link) `table.5.2', line 10.
 ]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 27.
+(babel)             in language  on input line 26.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 27.
-Package hyperref Info: Anchor `page.18' on input line 27.
+(babel)             in language  on input line 26.
+Package hyperref Info: Anchor `page.18' on input line 26.
  [18
 
 
@@ -1314,16 +1298,113 @@ Package babel Info: Redefining portuges shorthand "|
 Package hyperref Info: bookmark on input line 3:
 (hyperref)             thecounter {1}
 (hyperref)             text {\protect \numberline {\thechapter }INTRODUÇÃO (xx/
-xx/2017)}
+02/2018)}
 (hyperref)             reference {chapter.1}
 (hyperref)             toclevel {0}
 (hyperref)             type {toc}.
-)
+
+LaTeX Warning: Citation `hutchens_2014' on page 23 undefined on input line 6.
+
+Package backref Info: Back cite `hutchens_2014' on input line 6.
+
+LaTeX Warning: Citation `cisar_cisar_2007' on page 23 undefined on input line 9
+.
+
+Package backref Info: Back cite `cisar_cisar_2007' on input line 9.
+
+LaTeX Warning: Citation `shen_khanna_1997' on page 23 undefined on input line 1
+1.
+
+Package backref Info: Back cite `shen_khanna_1997, singh_yamini_2013, jayamaha_
+2008, zhang_koushanfar_2016' on input line 11.
+
+LaTeX Warning: Citation `singh_yamini_2013' on page 23 undefined on input line 
+11.
+
+Package backref Info: Back cite `shen_khanna_1997, singh_yamini_2013, jayamaha_
+2008, zhang_koushanfar_2016' on input line 11.
+
+LaTeX Warning: Citation `jayamaha_2008' on page 23 undefined on input line 11.
+
+Package backref Info: Back cite `shen_khanna_1997, singh_yamini_2013, jayamaha_
+2008, zhang_koushanfar_2016' on input line 11.
+
+LaTeX Warning: Citation `zhang_koushanfar_2016' on page 23 undefined on input l
+ine 11.
+
+Package backref Info: Back cite `shen_khanna_1997, singh_yamini_2013, jayamaha_
+2008, zhang_koushanfar_2016' on input line 11.
+
+LaTeX Warning: Citation `florencio_herley_2007' on page 23 undefined on input l
+ine 13.
+
+Package backref Info: Back cite `florencio_herley_2007, dellamico_michiardi_rou
+dier_2010, bishop_klein_1995' on input line 13.
+
+LaTeX Warning: Citation `dellamico_michiardi_roudier_2010' on page 23 undefined
+ on input line 13.
+
+Package backref Info: Back cite `florencio_herley_2007, dellamico_michiardi_rou
+dier_2010, bishop_klein_1995' on input line 13.
+
+LaTeX Warning: Citation `bishop_klein_1995' on page 23 undefined on input line 
+13.
+
+Package backref Info: Back cite `florencio_herley_2007, dellamico_michiardi_rou
+dier_2010, bishop_klein_1995' on input line 13.
+
+LaTeX Warning: Citation `gaw_felten_2006' on page 23 undefined on input line 13
+.
+
+Package backref Info: Back cite `gaw_felten_2006' on input line 13.
+
+LaTeX Warning: Citation `conger_lynley_2017' on page 23 undefined on input line
+ 13.
+
+Package backref Info: Back cite `conger_lynley_2017' on input line 13.
+
+LaTeX Warning: Citation `menezes_2001' on page 23 undefined on input line 15.
+
+Package backref Info: Back cite `menezes_2001, stallings_2017' on input line 15
+.
+
+LaTeX Warning: Citation `stallings_2017' on page 23 undefined on input line 15.
+
+
+Package backref Info: Back cite `menezes_2001, stallings_2017' on input line 15
+.
+
+LaTeX Warning: Citation `menezes_2001' on page 23 undefined on input line 15.
+
+Package backref Info: Back cite `menezes_2001' on input line 15.
+
+LaTeX Warning: Citation `swiderski_snyder_2009' on page 23 undefined on input l
+ine 17.
+
+Package backref Info: Back cite `swiderski_snyder_2009' on input line 17.
+
+LaTeX Warning: Citation `murakami_kasahara_saito_2010' on page 23 undefined on 
+input line 17.
+
+Package backref Info: Back cite `murakami_kasahara_saito_2010, hashcat_2016' on
+ input line 17.
+
+LaTeX Warning: Citation `hashcat_2016' on page 23 undefined on input line 17.
+
+Package backref Info: Back cite `murakami_kasahara_saito_2010, hashcat_2016' on
+ input line 17.
+
+LaTeX Warning: Citation `munshi_2009' on page 23 undefined on input line 17.
+
+Package backref Info: Back cite `munshi_2009' on input line 17.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 34.
+(babel)             in language  on input line 18.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 34.
-Package hyperref Info: Anchor `page.23' on input line 34.
+(babel)             in language  on input line 18.
+Package hyperref Info: Anchor `page.23' on input line 18.
  [23
 
 
@@ -1332,6 +1413,88 @@ Package hyperref Info: Anchor `page.23' on input line 34.
 
 
 ]
+
+LaTeX Warning: Citation `weir_2009' on page 24 undefined on input line 19.
+
+Package backref Info: Back cite `weir_2009, bishop_klein_1995, wang_2016' on in
+put line 19.
+
+LaTeX Warning: Citation `bishop_klein_1995' on page 24 undefined on input line 
+19.
+
+Package backref Info: Back cite `weir_2009, bishop_klein_1995, wang_2016' on in
+put line 19.
+
+LaTeX Warning: Citation `wang_2016' on page 24 undefined on input line 19.
+
+Package backref Info: Back cite `weir_2009, bishop_klein_1995, wang_2016' on in
+put line 19.
+
+LaTeX Warning: Citation `gosney_2016' on page 24 undefined on input line 19.
+
+Package backref Info: Back cite `gosney_2016' on input line 19.
+
+LaTeX Warning: Citation `weir_2009' on page 24 undefined on input line 21.
+
+Package backref Info: Back cite `weir_2009' on input line 21.
+
+LaTeX Warning: Citation `bishop_klein_1995' on page 24 undefined on input line 
+21.
+
+Package backref Info: Back cite `bishop_klein_1995' on input line 21.
+
+LaTeX Warning: Citation `castellucia' on page 24 undefined on input line 21.
+
+Package backref Info: Back cite `castellucia' on input line 21.
+
+LaTeX Warning: Citation `burr' on page 24 undefined on input line 21.
+
+Package backref Info: Back cite `burr, burr2' on input line 21.
+
+LaTeX Warning: Citation `burr2' on page 24 undefined on input line 21.
+
+Package backref Info: Back cite `burr, burr2' on input line 21.
+
+LaTeX Warning: Citation `kelley2' on page 24 undefined on input line 21.
+
+Package backref Info: Back cite `kelley2' on input line 21.
+
+LaTeX Warning: Citation `kelley1' on page 24 undefined on input line 21.
+
+Package backref Info: Back cite `kelley1' on input line 21.
+
+LaTeX Warning: Citation `sahin' on page 24 undefined on input line 23.
+
+Package backref Info: Back cite `sahin' on input line 23.
+
+LaTeX Warning: Citation `sahin' on page 24 undefined on input line 26.
+
+Package backref Info: Back cite `sahin' on input line 26.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 27.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 27.
+Package hyperref Info: Anchor `page.24' on input line 27.
+[24]
+
+LaTeX Warning: Citation `sahin' on page 25 undefined on input line 29.
+
+Package backref Info: Back cite `sahin' on input line 29.
+
+LaTeX Warning: Citation `rodrigues' on page 25 undefined on input line 29.
+
+Package backref Info: Back cite `rodrigues' on input line 29.
+
+LaTeX Warning: Citation `sahin' on page 25 undefined on input line 29.
+
+Package backref Info: Back cite `sahin' on input line 29.
+)
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 33.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 33.
+Package hyperref Info: Anchor `page.25' on input line 33.
+ [25]
 \openout2 = `./docs/CAP2T.aux'.
 
  (./docs/CAP2T.tex
@@ -1339,8 +1502,8 @@ Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 3.
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 3.
-Package hyperref Info: Anchor `page.24' on input line 3.
- [24
+Package hyperref Info: Anchor `page.26' on input line 3.
+ [26
 
 
 
@@ -1358,122 +1521,183 @@ O (xx/xx/2017)}
 (hyperref)             reference {chapter.2}
 (hyperref)             toclevel {0}
 (hyperref)             type {toc}.
-Package hyperref Info: Anchor `section.2.1' on input line 5.
+Package hyperref Info: Anchor `section.2.1' on input line 7.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 5.
-Package hyperref Info: bookmark on input line 5:
+(babel)             in language  on input line 7.
+Package hyperref Info: bookmark on input line 7:
 (hyperref)             thecounter {2.1}
 (hyperref)             text {\ifnum 1>\c@secnumdepth \else \protect \numberline
- {\csname thesection\endcsname }\fi Controle clássico e moderno}
+ {\csname thesection\endcsname }\fi Informação Sigilosa}
 (hyperref)             reference {section.2.1}
 (hyperref)             toclevel {1}
 (hyperref)             type {toc}.
-Package hyperref Info: Anchor `section.2.2' on input line 9.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 9.
-Package hyperref Info: bookmark on input line 9:
+(babel)             in language  on input line 27.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 27.
+Package hyperref Info: Anchor `page.27' on input line 27.
+ [27]
+Package hyperref Info: Anchor `section.2.2' on input line 32.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 32.
+Package hyperref Info: bookmark on input line 32:
 (hyperref)             thecounter {2.2}
 (hyperref)             text {\ifnum 1>\c@secnumdepth \else \protect \numberline
- {\csname thesection\endcsname }\fi Controle por modos deslizantes}
+ {\csname thesection\endcsname }\fi RockYou}
 (hyperref)             reference {section.2.2}
 (hyperref)             toclevel {1}
 (hyperref)             type {toc}.
-Package hyperref Info: Anchor `subsection.2.2.1' on input line 13.
+
+
+LaTeX Warning: Citation `techcrunch' on page 28 undefined on input line 39.
+
+Package backref Info: Back cite `techcrunch' on input line 39.
+Package hyperref Info: Anchor `section.2.3' on input line 43.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 13.
-Package hyperref Info: bookmark on input line 13:
-(hyperref)             thecounter {2.2.1}
-(hyperref)             text {\ifnum 2>\c@secnumdepth \else \protect \numberline
- {\csname thesubsection\endcsname }\fi Sintonia do controlador por modos desliz
-antes}
-(hyperref)             reference {subsection.2.2.1}
-(hyperref)             toclevel {2}
-(hyperref)             type {toc}.
-Package hyperref Info: Anchor `section.2.3' on input line 17.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
-Package hyperref Info: bookmark on input line 17:
+(babel)             in language  on input line 43.
+Package hyperref Info: bookmark on input line 43:
 (hyperref)             thecounter {2.3}
 (hyperref)             text {\ifnum 1>\c@secnumdepth \else \protect \numberline
- {\csname thesection\endcsname }\fi Controle preditivo baseado em modelos}
+ {\csname thesection\endcsname }\fi LinkedIn}
 (hyperref)             reference {section.2.3}
 (hyperref)             toclevel {1}
 (hyperref)             type {toc}.
-Package hyperref Info: Anchor `subsection.2.3.1' on input line 21.
+
+LaTeX Warning: Citation `mashable' on page 28 undefined on input line 46.
+
+Package backref Info: Back cite `mashable' on input line 46.
+
+LaTeX Warning: Citation `motherboard' on page 28 undefined on input line 49.
+
+Package backref Info: Back cite `motherboard' on input line 49.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 21.
-Package hyperref Info: bookmark on input line 21:
-(hyperref)             thecounter {2.3.1}
-(hyperref)             text {\ifnum 2>\c@secnumdepth \else \protect \numberline
- {\csname thesubsection\endcsname }\fi Sintonia do controlador preditivo basead
-o em modelos}
-(hyperref)             reference {subsection.2.3.1}
-(hyperref)             toclevel {2}
-(hyperref)             type {toc}.
-Package hyperref Info: Anchor `section.2.4' on input line 25.
+(babel)             in language  on input line 50.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 25.
-Package hyperref Info: bookmark on input line 25:
+(babel)             in language  on input line 50.
+Package hyperref Info: Anchor `page.28' on input line 50.
+ [28]
+Package hyperref Info: Anchor `section.2.4' on input line 51.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 51.
+Package hyperref Info: bookmark on input line 51:
 (hyperref)             thecounter {2.4}
 (hyperref)             text {\ifnum 1>\c@secnumdepth \else \protect \numberline
- {\csname thesection\endcsname }\fi Considerações}
+ {\csname thesection\endcsname }\fi \textit {Anti Public}}
 (hyperref)             reference {section.2.4}
 (hyperref)             toclevel {1}
 (hyperref)             type {toc}.
-Package hyperref Info: Reference (link) `figure.2.1' on input line 27.
-Package hyperref Info: Reference (link) `figure.2.2' on input line 27.
-<./figs/Fig1-1.png, id=367, 371.58826pt x 115.02975pt>
-File: ./figs/Fig1-1.png Graphic file (type png)
- <use ./figs/Fig1-1.png>
-Package pdftex.def Info: ./figs/Fig1-1.png used on input line 31.
-(pdftex.def)             Requested size: 240.0pt x 74.2963pt.
-Package hyperref Info: bookmark on input line 32:
+
+
+LaTeX Warning: Citation `troyhunt' on page 29 undefined on input line 58.
+
+Package backref Info: Back cite `troyhunt' on input line 58.
+Package hyperref Info: Anchor `section.2.5' on input line 60.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 60.
+Package hyperref Info: bookmark on input line 60:
+(hyperref)             thecounter {2.5}
+(hyperref)             text {\ifnum 1>\c@secnumdepth \else \protect \numberline
+ {\csname thesection\endcsname }\fi Vieses Psicológicos}
+(hyperref)             reference {section.2.5}
+(hyperref)             toclevel {1}
+(hyperref)             type {toc}.
+
+LaTeX Warning: Citation `caverni_fabre_gonzalez_1990' on page 29 undefined on i
+nput line 62.
+
+Package backref Info: Back cite `caverni_fabre_gonzalez_1990' on input line 62.
+
+Package hyperref Info: Reference (link) `table.2.1' on input line 69.
+Package hyperref Info: bookmark on input line 76:
 (hyperref)             thecounter {2.1}
 (hyperref)             text {\protect \numberline {\csname the\@captype \endcsn
-ame }{\ignorespaces Partes construtivas do motor de corrente contínua.}}
-(hyperref)             reference {figure.2.1}
+ame }{\ignorespaces Dez senhas mais frequentes da lista LinkedIn}}
+(hyperref)             reference {table.2.1}
 (hyperref)             toclevel {0}
-(hyperref)             type {lof}.
-Package hyperref Info: Anchor `figure.2.1' on input line 32.
-
-<./figs/Fig2-4.png, id=368, 364.562pt x 198.341pt>
-File: ./figs/Fig2-4.png Graphic file (type png)
- <use ./figs/Fig2-4.png>
-Package pdftex.def Info: ./figs/Fig2-4.png used on input line 38.
-(pdftex.def)             Requested size: 426.79135pt x 232.21541pt.
-Package hyperref Info: bookmark on input line 39:
-(hyperref)             thecounter {2.2}
-(hyperref)             text {\protect \numberline {\csname the\@captype \endcsn
-ame }{\ignorespaces Ligações de máquinas CC: (a) excitação independente, (b) em
- derivação, (c) em série, (d) composta.}}
-(hyperref)             reference {figure.2.2}
-(hyperref)             toclevel {0}
-(hyperref)             type {lof}.
-Package hyperref Info: Anchor `figure.2.2' on input line 39.
-Package hyperref Info: Anchor `figure.2.2' on input line 39.
-
+(hyperref)             type {lot}.
+Package hyperref Info: Anchor `table.2.1' on input line 76.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
+Package hyperref Info: Anchor `section.2.6' on input line 95.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 95.
+Package hyperref Info: bookmark on input line 95:
+(hyperref)             thecounter {2.6}
+(hyperref)             text {\ifnum 1>\c@secnumdepth \else \protect \numberline
+ {\csname thesection\endcsname }\fi Passfault}
+(hyperref)             reference {section.2.6}
+(hyperref)             toclevel {1}
+(hyperref)             type {toc}.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 99.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 99.
+Package hyperref Info: Anchor `page.29' on input line 99.
+ [29
+Package `hyperref' Info: End of reference (link) `table.2.1', line 69.
+]
+
+LaTeX Warning: Citation `rodrigues' on page 30 undefined on input line 102.
+
+Package backref Info: Back cite `rodrigues' on input line 102.
+
+Underfull \hbox (badness 5217) in paragraph at lines 104--105
+[]\T1/lmr/m/n/12 O có-digo do Pas-s-fault pode ser en-con-trado em re-po-si-tó-
+rio aberto em
+ []
+
+Package hyperref Info: Anchor `section.2.7' on input line 106.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 106.
+Package hyperref Info: bookmark on input line 106:
+(hyperref)             thecounter {2.7}
+(hyperref)             text {\ifnum 1>\c@secnumdepth \else \protect \numberline
+ {\csname thesection\endcsname }\fi Considerações}
+(hyperref)             reference {section.2.7}
+(hyperref)             toclevel {1}
+(hyperref)             type {toc}.
 )
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 35.
+(babel)             in language  on input line 34.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 35.
-Package hyperref Info: Anchor `page.25' on input line 35.
- [25
-Package `hyperref' Info: End of reference (link) `figure.2.1', line 27.
-Package `hyperref' Info: End of reference (link) `figure.2.2', line 27.
- <./figs/Fig1-1.png>]
+(babel)             in language  on input line 34.
+Package hyperref Info: Anchor `page.30' on input line 34.
+ [30
+Package `hyperref' Info: End of reference (link) `table.2.1', line 69.
+]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 35.
+(babel)             in language  on input line 34.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 35.
-Package hyperref Info: Anchor `page.26' on input line 35.
- [26 <./figs/Fig2-4.png>]
+(babel)             in language  on input line 34.
+Package hyperref Info: Anchor `page.31' on input line 34.
+
+[31]
 \openout2 = `./docs/CAP3T.aux'.
 
  (./docs/CAP3T.tex
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 3.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 3.
+Package hyperref Info: Anchor `page.32' on input line 3.
+ [32
+
+
+
+
+]
 Package hyperref Info: Anchor `chapter.3' on input line 3.
 
 Cap\'{\i }tulo 3.
@@ -1486,92 +1710,234 @@ Package hyperref Info: bookmark on input line 3:
 (hyperref)             reference {chapter.3}
 (hyperref)             toclevel {0}
 (hyperref)             type {toc}.
-Package hyperref Info: Anchor `section.3.1' on input line 5.
+Package hyperref Info: Anchor `section.3.1' on input line 7.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 5.
-Package hyperref Info: bookmark on input line 5:
+(babel)             in language  on input line 7.
+Package hyperref Info: bookmark on input line 7:
 (hyperref)             thecounter {3.1}
 (hyperref)             text {\ifnum 1>\c@secnumdepth \else \protect \numberline
- {\csname thesection\endcsname }\fi Sistema}
+ {\csname thesection\endcsname }\fi String}
 (hyperref)             reference {section.3.1}
 (hyperref)             toclevel {1}
 (hyperref)             type {toc}.
-Package hyperref Info: Anchor `section.3.2' on input line 9.
+Package hyperref Info: Anchor `equation.3.1.1' on input line 12.
+Package hyperref Info: Anchor `equation.3.1.1' on input line 12.
+Package hyperref Info: Anchor `equation.3.1.1' on input line 12.
+Package hyperref Info: Anchor `equation.3.1.1' on input line 12.
+Package hyperref Info: Anchor `equation.3.1.2' on input line 18.
+Package hyperref Info: Anchor `equation.3.1.2' on input line 18.
+Package hyperref Info: Anchor `equation.3.1.2' on input line 18.
+Package hyperref Info: Anchor `equation.3.1.2' on input line 18.
+Package hyperref Info: Anchor `equation.3.1.3' on input line 24.
+Package hyperref Info: Anchor `equation.3.1.3' on input line 24.
+Package hyperref Info: Anchor `equation.3.1.3' on input line 24.
+Package hyperref Info: Anchor `equation.3.1.3' on input line 24.
+Package hyperref Info: Anchor `equation.3.1.4' on input line 32.
+Package hyperref Info: Anchor `equation.3.1.4' on input line 32.
+Package hyperref Info: Anchor `equation.3.1.4' on input line 32.
+Package hyperref Info: Anchor `equation.3.1.4' on input line 32.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 9.
-Package hyperref Info: bookmark on input line 9:
+(babel)             in language  on input line 40.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 40.
+Package hyperref Info: Anchor `page.33' on input line 40.
+ [33]
+Package hyperref Info: Anchor `subsection.3.1.1' on input line 41.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 41.
+Package hyperref Info: bookmark on input line 41:
+(hyperref)             thecounter {3.1.1}
+(hyperref)             text {\ifnum 2>\c@secnumdepth \else \protect \numberline
+ {\csname thesubsection\endcsname }\fi Operações com Strings}
+(hyperref)             reference {subsection.3.1.1}
+(hyperref)             toclevel {2}
+(hyperref)             type {toc}.
+Package hyperref Info: Anchor `equation.3.1.5' on input line 45.
+Package hyperref Info: Anchor `equation.3.1.5' on input line 45.
+Package hyperref Info: Anchor `equation.3.1.5' on input line 45.
+Package hyperref Info: Anchor `equation.3.1.5' on input line 45.
+Package hyperref Info: Anchor `equation.3.1.6' on input line 51.
+Package hyperref Info: Anchor `equation.3.1.6' on input line 51.
+Package hyperref Info: Anchor `equation.3.1.6' on input line 51.
+Package hyperref Info: Anchor `equation.3.1.6' on input line 51.
+Package hyperref Info: Anchor `equation.3.1.7' on input line 55.
+Package hyperref Info: Anchor `equation.3.1.7' on input line 55.
+Package hyperref Info: Anchor `equation.3.1.7' on input line 55.
+Package hyperref Info: Anchor `equation.3.1.7' on input line 55.
+Package hyperref Info: Anchor `equation.3.1.8' on input line 59.
+Package hyperref Info: Anchor `equation.3.1.8' on input line 59.
+Package hyperref Info: Anchor `equation.3.1.8' on input line 59.
+Package hyperref Info: Anchor `equation.3.1.8' on input line 59.
+Package hyperref Info: Anchor `equation.3.1.9' on input line 65.
+Package hyperref Info: Anchor `equation.3.1.9' on input line 65.
+Package hyperref Info: Anchor `equation.3.1.9' on input line 65.
+Package hyperref Info: Anchor `equation.3.1.9' on input line 65.
+Package hyperref Info: Reference (link) `equation.3.1.6' on input line 69.
+Package hyperref Info: Reference (link) `equation.3.1.7' on input line 69.
+Package hyperref Info: Reference (link) `equation.3.1.8' on input line 69.
+Package hyperref Info: Anchor `equation.3.1.10' on input line 71.
+Package hyperref Info: Anchor `equation.3.1.10' on input line 71.
+Package hyperref Info: Anchor `equation.3.1.10' on input line 71.
+Package hyperref Info: Anchor `equation.3.1.10' on input line 71.
+Package hyperref Info: Anchor `equation.3.1.11' on input line 75.
+Package hyperref Info: Anchor `equation.3.1.11' on input line 75.
+Package hyperref Info: Anchor `equation.3.1.11' on input line 75.
+Package hyperref Info: Anchor `equation.3.1.11' on input line 75.
+Package hyperref Info: Anchor `equation.3.1.12' on input line 79.
+Package hyperref Info: Anchor `equation.3.1.12' on input line 79.
+Package hyperref Info: Anchor `equation.3.1.12' on input line 79.
+Package hyperref Info: Anchor `equation.3.1.12' on input line 79.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 81.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 81.
+Package hyperref Info: Anchor `page.34' on input line 81.
+ [34
+Package `hyperref' Info: End of reference (link) `equation.3.1.6', line 69.
+Package `hyperref' Info: End of reference (link) `equation.3.1.7', line 69.
+Package `hyperref' Info: End of reference (link) `equation.3.1.8', line 69.
+]
+Package hyperref Info: Anchor `section.3.2' on input line 226.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 226.
+Package hyperref Info: bookmark on input line 226:
 (hyperref)             thecounter {3.2}
 (hyperref)             text {\ifnum 1>\c@secnumdepth \else \protect \numberline
- {\csname thesection\endcsname }\fi Modelo}
+ {\csname thesection\endcsname }\fi Frequência Relativa}
 (hyperref)             reference {section.3.2}
 (hyperref)             toclevel {1}
 (hyperref)             type {toc}.
-Package hyperref Info: Anchor `subsection.3.2.1' on input line 13.
+
+
+LaTeX Warning: Citation `casella_berger_2010' on page 35 undefined on input lin
+e 230.
+
+Package backref Info: Back cite `casella_berger_2010' on input line 230.
+Package hyperref Info: Anchor `equation.3.2.13' on input line 232.
+Package hyperref Info: Anchor `equation.3.2.13' on input line 232.
+Package hyperref Info: Anchor `equation.3.2.13' on input line 232.
+Package hyperref Info: Anchor `equation.3.2.13' on input line 232.
+Package hyperref Info: Anchor `section.3.3' on input line 236.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 13.
-Package hyperref Info: bookmark on input line 13:
-(hyperref)             thecounter {3.2.1}
-(hyperref)             text {\ifnum 2>\c@secnumdepth \else \protect \numberline
- {\csname thesubsection\endcsname }\fi Construção da modelagem do motor de corr
-ente contínua}
-(hyperref)             reference {subsection.3.2.1}
-(hyperref)             toclevel {2}
-(hyperref)             type {toc}.
-Package hyperref Info: Anchor `section.3.3' on input line 17.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 17.
-Package hyperref Info: bookmark on input line 17:
+(babel)             in language  on input line 236.
+Package hyperref Info: bookmark on input line 236:
 (hyperref)             thecounter {3.3}
 (hyperref)             text {\ifnum 1>\c@secnumdepth \else \protect \numberline
- {\csname thesection\endcsname }\fi Processo de otimização}
+ {\csname thesection\endcsname }\fi Função de Dispersão Criptográfica}
 (hyperref)             reference {section.3.3}
 (hyperref)             toclevel {1}
 (hyperref)             type {toc}.
-Package hyperref Info: Anchor `subsection.3.3.1' on input line 21.
+
+LaTeX Warning: Citation `ferguson_schneier_kohno_2010' on page 35 undefined on 
+input line 239.
+
+Package backref Info: Back cite `ferguson_schneier_kohno_2010, menezes_2001' on
+ input line 239.
+
+LaTeX Warning: Citation `menezes_2001' on page 35 undefined on input line 239.
+
+Package backref Info: Back cite `ferguson_schneier_kohno_2010, menezes_2001' on
+ input line 239.
+Package hyperref Info: Anchor `section.3.4' on input line 242.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 21.
-Package hyperref Info: bookmark on input line 21:
-(hyperref)             thecounter {3.3.1}
-(hyperref)             text {\ifnum 2>\c@secnumdepth \else \protect \numberline
- {\csname thesubsection\endcsname }\fi Otimização aplicada ao controle do motor
- de corrente contínua}
-(hyperref)             reference {subsection.3.3.1}
-(hyperref)             toclevel {2}
-(hyperref)             type {toc}.
-Package hyperref Info: Anchor `section.3.4' on input line 25.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 25.
-Package hyperref Info: bookmark on input line 25:
+(babel)             in language  on input line 242.
+Package hyperref Info: bookmark on input line 242:
 (hyperref)             thecounter {3.4}
 (hyperref)             text {\ifnum 1>\c@secnumdepth \else \protect \numberline
- {\csname thesection\endcsname }\fi Considerações}
+ {\csname thesection\endcsname }\fi Processo de Quebra}
 (hyperref)             reference {section.3.4}
 (hyperref)             toclevel {1}
 (hyperref)             type {toc}.
-Package hyperref Info: Reference (link) `equation.3.4.1' on input line 27.
-Package hyperref Info: Reference (link) `equation.3.4.2' on input line 27.
-Package hyperref Info: Anchor `equation.3.4.1' on input line 29.
-Package hyperref Info: Anchor `equation.3.4.1' on input line 29.
-Package hyperref Info: Anchor `equation.3.4.1' on input line 29.
-Package hyperref Info: Anchor `equation.3.4.1' on input line 29.
-Package hyperref Info: Anchor `equation.3.4.2' on input line 34.
-Package hyperref Info: Anchor `equation.3.4.2' on input line 34.
-Package hyperref Info: Anchor `equation.3.4.2' on input line 34.
-Package hyperref Info: Anchor `equation.3.4.2' on input line 34.
+Package hyperref Info: Anchor `section.3.5' on input line 251.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 251.
+Package hyperref Info: bookmark on input line 251:
+(hyperref)             thecounter {3.5}
+(hyperref)             text {\ifnum 1>\c@secnumdepth \else \protect \numberline
+ {\csname thesection\endcsname }\fi Força do Modelo}
+(hyperref)             reference {section.3.5}
+(hyperref)             toclevel {1}
+(hyperref)             type {toc}.
+LaTeX Font Info:    Try loading font information for U+euf on input line 254.
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/ueuf.fd
+File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
+)
+Package hyperref Info: Anchor `equation.3.5.14' on input line 256.
+Package hyperref Info: Anchor `equation.3.5.14' on input line 256.
+Package hyperref Info: Anchor `equation.3.5.14' on input line 256.
+Package hyperref Info: Anchor `equation.3.5.14' on input line 256.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 258.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 258.
+Package hyperref Info: Anchor `page.35' on input line 258.
+ [35]
+
+LaTeX Warning: Citation `sahin' on page 36 undefined on input line 263.
+
+Package backref Info: Back cite `sahin, weir_2009, burr' on input line 263.
+
+LaTeX Warning: Citation `weir_2009' on page 36 undefined on input line 263.
+
+Package backref Info: Back cite `sahin, weir_2009, burr' on input line 263.
+
+LaTeX Warning: Citation `burr' on page 36 undefined on input line 263.
+
+Package backref Info: Back cite `sahin, weir_2009, burr' on input line 263.
+Package hyperref Info: Reference (link) `equation.3.5.14' on input line 269.
+
+LaTeX Warning: Reference `fig21' on page 36 undefined on input line 273.
+
+
+LaTeX Warning: Reference `fig22' on page 36 undefined on input line 275.
+
+
+LaTeX Warning: Reference `fig23' on page 36 undefined on input line 279.
+
+Package hyperref Info: Anchor `section.3.6' on input line 282.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 282.
+Package hyperref Info: bookmark on input line 282:
+(hyperref)             thecounter {3.6}
+(hyperref)             text {\ifnum 1>\c@secnumdepth \else \protect \numberline
+ {\csname thesection\endcsname }\fi Entropia do Modelo}
+(hyperref)             reference {section.3.6}
+(hyperref)             toclevel {1}
+(hyperref)             type {toc}.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 288.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 288.
+Package hyperref Info: Anchor `page.36' on input line 288.
+[36
+Package `hyperref' Info: End of reference (link) `equation.3.5.14', line 269.
+]
+Package hyperref Info: Anchor `section.3.7' on input line 314.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 314.
+Package hyperref Info: bookmark on input line 314:
+(hyperref)             thecounter {3.7}
+(hyperref)             text {\ifnum 1>\c@secnumdepth \else \protect \numberline
+ {\csname thesection\endcsname }\fi Considerações}
+(hyperref)             reference {section.3.7}
+(hyperref)             toclevel {1}
+(hyperref)             type {toc}.
 )
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 36.
+(babel)             in language  on input line 35.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 36.
-Package hyperref Info: Anchor `page.27' on input line 36.
- [27
-
-
-
-
-Package `hyperref' Info: End of reference (link) `equation.3.4.1', line 27.
-Package `hyperref' Info: End of reference (link) `equation.3.4.2', line 27.
-]
+(babel)             in language  on input line 35.
+Package hyperref Info: Anchor `page.37' on input line 35.
+ [37]
 \openout2 = `./docs/CAP4T.aux'.
 
  (./docs/CAP4T.tex
@@ -1579,8 +1945,8 @@ Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 3.
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 3.
-Package hyperref Info: Anchor `page.28' on input line 3.
- [28
+Package hyperref Info: Anchor `page.38' on input line 3.
+ [38
 
 
 
@@ -1652,11 +2018,11 @@ Package hyperref Info: bookmark on input line 13:
 (hyperref)             type {toc}.
 )
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 37.
+(babel)             in language  on input line 36.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 37.
-Package hyperref Info: Anchor `page.29' on input line 37.
- [29]
+(babel)             in language  on input line 36.
+Package hyperref Info: Anchor `page.39' on input line 36.
+ [39]
 \openout2 = `./docs/CAP5T.aux'.
 
  (./docs/CAP5T.tex
@@ -1664,8 +2030,8 @@ Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 3.
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 3.
-Package hyperref Info: Anchor `page.30' on input line 3.
- [30
+Package hyperref Info: Anchor `page.40' on input line 3.
+ [40
 
 
 
@@ -1760,11 +2126,11 @@ ame }{\ignorespaces Parâmetros otimizados para o controlador PID.}}
 Package hyperref Info: Anchor `table.5.2' on input line 55.
 )
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 38.
+(babel)             in language  on input line 37.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 38.
-Package hyperref Info: Anchor `page.31' on input line 38.
- [31
+(babel)             in language  on input line 37.
+Package hyperref Info: Anchor `page.41' on input line 37.
+ [41
 Package `hyperref' Info: End of reference (link) `table.5.1', line 19.
 Package `hyperref' Info: End of reference (link) `table.5.2', line 19.
 ]
@@ -1775,8 +2141,8 @@ Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 3.
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 3.
-Package hyperref Info: Anchor `page.32' on input line 3.
- [32
+Package hyperref Info: Anchor `page.42' on input line 3.
+ [42
 
 
 
@@ -1826,17 +2192,17 @@ Package hyperref Info: bookmark on input line 18:
 (hyperref)             type {toc}.
 )
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 39.
+(babel)             in language  on input line 38.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 39.
-Package hyperref Info: Anchor `page.33' on input line 39.
- [33]
+(babel)             in language  on input line 38.
+Package hyperref Info: Anchor `page.43' on input line 38.
+ [43]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 42.
+(babel)             in language  on input line 41.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 42.
-Package hyperref Info: Anchor `page.34' on input line 42.
- [34
+(babel)             in language  on input line 41.
+Package hyperref Info: Anchor `page.44' on input line 41.
+ [44
 
 
 
@@ -1854,13 +2220,13 @@ Package hyperref Info: bookmark on input line 3:
 (hyperref)             toclevel {0}
 (hyperref)             type {toc}.
 )
-Package hyperref Info: Anchor `references' on input line 46.
+Package hyperref Info: Anchor `references' on input line 45.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 47.
+(babel)             in language  on input line 46.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 47.
-Package hyperref Info: Anchor `page.35' on input line 47.
- [35
+(babel)             in language  on input line 46.
+Package hyperref Info: Anchor `page.45' on input line 46.
+ [45
 
 
 ]
@@ -1873,8 +2239,8 @@ Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 5.
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 5.
-Package hyperref Info: Anchor `page.36' on input line 5.
- [36
+Package hyperref Info: Anchor `page.46' on input line 5.
+ [46
 
 
 
@@ -1892,58 +2258,67 @@ Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 20.
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 20.
-Package hyperref Info: Anchor `page.37' on input line 20.
- [37])
+Package hyperref Info: Anchor `page.47' on input line 20.
+ [47])
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 47.
+(babel)             in language  on input line 46.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 47.
-Package hyperref Info: Anchor `page.38' on input line 47.
- [38] (./Tese_Dissertacao_UFG.ind)
+(babel)             in language  on input line 46.
+Package hyperref Info: Anchor `page.48' on input line 46.
+ [48] (./Tese_Dissertacao_UFG.ind)
 AED: lastpage setting LastPage 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 50.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 50.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 50.
+(babel)             in language  on input line 49.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 49.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 49.
 (./Tese_Dissertacao_UFG.aux (./docs/epigrafe.aux) (./docs/dedicatoria.aux)
 (./docs/agradecimentos.aux) (./docs/resumo.aux) (./docs/abstract.aux)
 (./docs/simbolos.aux) (./docs/abreviaturasesiglas.aux) (./docs/INTROT.aux)
 (./docs/CAP2T.aux) (./docs/CAP3T.aux) (./docs/CAP4T.aux) (./docs/CAP5T.aux)
 (./docs/CAP6T.aux) (./docs/glossario.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 50.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 50.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 49.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 49.
 Package rerunfilecheck Info: File `Tese_Dissertacao_UFG.out' has not changed.
-(rerunfilecheck)             Checksum: 1FBEE867BE29A41622CE987970793889;3402.
+(rerunfilecheck)             Checksum: DC5D4204872315E63FEDA0264CAA8920;3394.
 Package rerunfilecheck Info: File `Tese_Dissertacao_UFG.brf' has not changed.
-(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 50.
+(rerunfilecheck)             Checksum: 0565E0A0D0F09309024951399F6D6F9E;2810.
+
+
+LaTeX Warning: There were undefined references.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 49.
  ) 
 Here is how much of TeX's memory you used:
- 10330 strings out of 493304
- 148336 string characters out of 6139871
- 264729 words of memory out of 5000000
- 13329 multiletter control sequences out of 15000+600000
- 62898 words of font info for 59 fonts, out of 8000000 for 9000
+ 10482 strings out of 493304
+ 151015 string characters out of 6139871
+ 264744 words of memory out of 5000000
+ 13452 multiletter control sequences out of 15000+600000
+ 80111 words of font info for 69 fonts, out of 8000000 for 9000
  961 hyphenation exceptions out of 8191
- 43i,16n,40p,896b,494s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 43i,16n,40p,1319b,494s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dv
-ips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/s
-hare/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/l
-m/lm-ec.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/calligra-type1/ca
-llig15.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf
-/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc
-10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fon
-ts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi12.pf
-b></usr/share/texmf/fonts/type1/public/lm/lmmi7.pfb></usr/share/texmf/fonts/typ
-e1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/
-share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/publi
-c/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmr7.pfb></usr/share/tex
-mf/fonts/type1/public/lm/lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lms
-y10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy7.pfb>
-Output written on Tese_Dissertacao_UFG.pdf (40 pages, 448109 bytes).
+ips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/s
+hare/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm
+-mathex.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/calligra-type1/ca
+llig15.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/euler/euf
+m10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fo
+nts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.
+pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts
+/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb>
+</usr/share/texmf/fonts/type1/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type
+1/public/lm/lmmi7.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/s
+hare/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public
+/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr17.pfb></usr/share/tex
+mf/fonts/type1/public/lm/lmr7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.
+pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/
+type1/public/lm/lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb><
+/usr/share/texmf/fonts/type1/public/lm/lmsy7.pfb></usr/share/texmf/fonts/type1/
+public/lm/lmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+symbols/msbm10.pfb>
+Output written on Tese_Dissertacao_UFG.pdf (50 pages, 385401 bytes).
 PDF statistics:
- 530 PDF objects out of 1000 (max. 8388607)
- 464 compressed objects within 5 object streams
- 101 named destinations out of 1000 (max. 500000)
- 387 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 626 PDF objects out of 1000 (max. 8388607)
+ 546 compressed objects within 6 object streams
+ 125 named destinations out of 1000 (max. 500000)
+ 401 words of extra memory for PDF output out of 10000 (max. 10000000)
 

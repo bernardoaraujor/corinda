@@ -1,12 +1,34 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CAPÍTULO 1
-\chapter{INTRODUÇÃO (xx/xx/2017)}\label{chapter:introducao}
+\chapter{INTRODUÇÃO (xx/02/2018)}\label{chapter:introducao}
 
+Conceitos como Internet das Coisas, Computação na Nuvem e Redes Sociais possuem papel
+cada vez mais fundamental no desenvolvimento social e econômico da sociedade atual. Isso faz com que o tema da Segurança da Informação seja cada vez mais importante \cite{hutchens_2014}. Com isto, qualquer vulnerabilidade inerente a uma tecnologia amplamente utilizada torna-se alvo de interesse ao público em geral.
+
+\par Senhas são objetos importantes em sistemas computacionais, sendo essenciais para 
+garantir a segurança de informações pessoais ou sigilosas, bem como acesso a variedade de dispositivos inteligentes \cite{cisar_cisar_2007}.
+Enquanto diversos tipos alternativos de autenticação têm sido implementados, 
+senhas baseadas em sequências de caracteres ainda são o tipo de autenticação mais comum \cite{shen_khanna_1997, singh_yamini_2013, jayamaha_2008, zhang_koushanfar_2016}.
+
+\par Combinações frágeis de \textit{username} e senhas fazem com que dispositivos e contas sejam facilmente comprometidas por agentes maliciosos \cite{florencio_herley_2007, dellamico_michiardi_roudier_2010, bishop_klein_1995}. Além de senhas fracas, a reutilização de senhas é prática comum entre usuários \cite{gaw_felten_2006}. Tais práticas abrem espaço para técnicas de engenharia social e escalada de privilégios, tais como as utilizadas no vazamentos de dados do serviço de armazenamento de arquivos \textit{Dropbox} em 2016, onde agentes maliciosos se aproveitaram de senhas reutilizadas para obter acesso ao sistema da empresa \cite{conger_lynley_2017}.
+
+\par Funções de dispersão criptográficas (FDC) geram longa e complexa sequência de caracteres (chamada \textit{hash}) a partir de informação inicial, sendo matematicamente impossível recuperar a informação original a partir do \textit{hash} calculado, permitindo que tal informação seja armazenada secretamente. FDC são funções unidirecionais, o que significa que a única forma de obter determinado \textit{hash} é fornecendo a informação original como entrada da função \cite{menezes_2001, stallings_2017}. Atualmente, sistemas computacionais armazenam apenas o \textit{hash} da senha do usuário. A autenticação ocorre quando o \textit{hash} calculado a partir da senha digitada pelo usuário é comparada com o \textit{hash} armazenado no banco de dados, permitindo o acesso caso os valores sejam iguais \cite{menezes_2001}.
+
+\par No contexto de modelagem de ameaças, o indivíduo malicioso tentando obter a senha em questão é chamado de atacante. O administrador do sistema ou especialista que tenta previnir que a senha seja comprometida é chamado de defensor \cite{swiderski_snyder_2009}. De forma a obter a senha, o atacante deve encontrar a sequência de caracteres cuja FDC corresponde ao \textit{hash} roubado do banco de dados. Tal processo de adivinhação é chamado de quebra da senha, e existem ferramentas específicas capazes de realizar milhões de palpites por segundo, tais como \textit{John The Ripper} e \textit{Hashcat} \cite{murakami_kasahara_saito_2010, hashcat_2016}. \textit{Hashcat} é a ferramenta mais avançada e popular atualmente, tornando possível o uso de técnicas de paralelização baseadas no uso de \textit{Open Computing Language} (\textit{OpenCL}), descrita por \citeonline{munshi_2009}. O \textit{Hashcat} pode ser utilizado em diversas plataformas de \textit{hardware}, tais como Unidades de Processamento Central (\textit{CPU}), Unidades de Processamento Gráfico (\textit{GPU}), Processadores Digitais de Sinais (\textit{DSP}), e Arranjos de Portas Programáveis em Campo (\textit{FPGA}).
+
+\par Técnicas de quebra de senhas tem sido amplamente pesquisadas, não apenas pela comunidade científica, mas também por comunidades online e fóruns \cite{weir_2009, bishop_klein_1995, wang_2016}. Em 2016, mais de $96\%$ dos \textit{hashes} vazados dos bancos de dados da rede social de negócios \textit{LinkedIn}, descritos por \citeonline{gosney_2016}, foram quebrados menos de cinco meses depois de terem sido disponibilizados online. Se as senhas forem simples o bastante, mesmo FDC robustas não resitem a técnicas modernas de quebra de senha.
+
+\par Quando usuários criam suas senhas, a maioria tende a utilizar padrões que possam ser facilmente lembrados. Isto faz com que seja possível que o atacante consiga adivinhá-la. Alguns autores trabalharam com a tentativa de encontrar padrões na forma que os usuários criam suas senhas. \citeonline{weir_2009} utilizam gramáticas probabilísticas livre de contexto como entrada em \textit{software} de quebra de senha. \citeonline{bishop_klein_1995} procuram por padrões comuns tais como números de caracteres e palavras de dicionários. Outros pesquisadores também tentaram elaborar métricas confiáveis capazes de quantificar o quão robusta determinada senha é frente a tentativas de quebra. \citeonline{castellucia} utilizam Modelos de Markov para modelar a força de senhas. O padrão definido por \citeonline{burr, burr2} nas diretrizes de autenticação online do \textit{National Institute of Standards and Technology} (\textit{NIST}) propõe a entropia de caractere como métrica de força. \citeonline{kelley2} avaliam a métrica do \textit{NIST} como útil, porém limitada na maioria dos casos. \citeonline{kelley1} propõem como métrica a entropia empírica baseada em senhas previamente coletadas, também com resultados limitados.
+
+\par De forma a estabelecer \textit{framework} generalizado para a quantificação da resistência de determinada senha contra técnicas de quebra, \citeonline{sahin} formaliza os conceitos de \textbf{complexidade} e \textbf{força} com sólidas definições matemáticas que enfatizam suas diferenças. Estes conceitos possuem importância fundamental no contexto de quebra de senhas, uma vez que eles derivam da compreensão fundamental de que:
+
+\begin{citacao}
+ \textit{...o sucesso do atacante ao quebrar uma senha deve ser definido pelos seus recursos computacionais disponíveis, tempo disponível, FDC utilizada, bem como a topologia que define o espaço de busca \cite{sahin}}.
+\end{citacao}
+
+\par Com o objetivo de avaliar os conceitos de complexidade e força estabelecidos por \citeonline{sahin}, \citeonline{rodrigues} realizam série de experimentos. Entre as conclusões, observa-se que existem padrões estatísticos distintos na distribuição das senhas analisadas. A possibilidade de criação de métrica que reflita tais padrões estatísticos, bem como o conceito de complexidade estabelecido por \citeonline{sahin}, justificam este estudo.
 
 \begin{itemize}
-	\item Frase introdutória
-	\item Estado da arte
-	\item Justificativa
 	\item Hipótese
 	\item Objetivos
 	\item Estrutura do trabalho

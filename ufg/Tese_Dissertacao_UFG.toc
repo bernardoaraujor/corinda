@@ -12,38 +12,41 @@
 \cftpagenumbersoff {chapter}
 \contentsline {chapter}{LISTA DE ABREVIATURAS E SIGLAS}{21}{section.0.4}
 \cftpagenumberson {chapter}
-\contentsline {chapter}{\numberline {1}INTRODU\c C\~AO (xx/xx/2017)}{23}{chapter.1}
-\contentsline {chapter}{\numberline {2}CONTROLE MODERNO (xx/xx/2017)}{25}{chapter.2}
-\contentsline {section}{\numberline {2.1}Controle cl\'assico e moderno}{25}{section.2.1}
-\contentsline {section}{\numberline {2.2}Controle por modos deslizantes}{25}{section.2.2}
-\contentsline {subsection}{\numberline {2.2.1}Sintonia do controlador por modos deslizantes}{25}{subsection.2.2.1}
-\contentsline {section}{\numberline {2.3}Controle preditivo baseado em modelos}{25}{section.2.3}
-\contentsline {subsection}{\numberline {2.3.1}Sintonia do controlador preditivo baseado em modelos}{25}{subsection.2.3.1}
-\contentsline {section}{\numberline {2.4}Considera\c c\~oes}{25}{section.2.4}
-\contentsline {chapter}{\numberline {3}SISTEMA, MODELO E OTIMIZA\c C\~AO (xx/xx/2017)}{27}{chapter.3}
-\contentsline {section}{\numberline {3.1}Sistema}{27}{section.3.1}
-\contentsline {section}{\numberline {3.2}Modelo}{27}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Constru\c c\~ao da modelagem do motor de corrente cont\IeC {\'\i }nua}{27}{subsection.3.2.1}
-\contentsline {section}{\numberline {3.3}Processo de otimiza\c c\~ao}{27}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Otimiza\c c\~ao aplicada ao controle do motor de corrente cont\IeC {\'\i }nua}{27}{subsection.3.3.1}
-\contentsline {section}{\numberline {3.4}Considera\c c\~oes}{27}{section.3.4}
-\contentsline {chapter}{\numberline {4}METODOLOGIA (xx/xx/2017)}{29}{chapter.4}
-\contentsline {section}{\numberline {4.1}Constru\c c\~ao e configura\c c\~ao do sistema}{29}{section.4.1}
-\contentsline {section}{\numberline {4.2}Modelagem e simula\c c\~ao}{29}{section.4.2}
-\contentsline {section}{\numberline {4.3}Aplica\c c\~ao do processo de otimiza\c c\~ao na sintonia dos controladores}{29}{section.4.3}
-\contentsline {section}{\numberline {4.4}An\'alise de desempenho entre os controladores}{29}{section.4.4}
-\contentsline {section}{\numberline {4.5}Considera\c c\~oes}{29}{section.4.5}
-\contentsline {chapter}{\numberline {5}RESULTADOS (xx/xx/2018)}{31}{chapter.5}
-\contentsline {section}{\numberline {5.1}Constru\c c\~ao da bancada e do modelo}{31}{section.5.1}
-\contentsline {section}{\numberline {5.2}Resultado de simula\c c\~ao}{31}{section.5.2}
-\contentsline {subsection}{\numberline {5.2.1}Otimiza\c c\~ao aplicada na sintonia dos controladores}{31}{subsection.5.2.1}
-\contentsline {section}{\numberline {5.3}Resultado de bancada}{31}{section.5.3}
-\contentsline {section}{\numberline {5.4}Coment\'arios}{31}{section.5.4}
-\contentsline {chapter}{\numberline {6}CONCLUS\~AO (xx/xx/2018)}{33}{chapter.6}
-\contentsline {section}{\numberline {6.1}Contribui\c c\~oes do Trabalho}{33}{section.6.1}
-\contentsline {section}{\numberline {6.2}Continua\c c\~ao do trabalho}{33}{section.6.2}
-\contentsline {section}{\numberline {6.3}Sugest\~oes para Trabalhos Futuros}{33}{section.6.3}
+\contentsline {chapter}{\numberline {1}INTRODU\c C\~AO (xx/02/2018)}{23}{chapter.1}
+\contentsline {chapter}{\numberline {2}CONTROLE MODERNO (xx/xx/2017)}{27}{chapter.2}
+\contentsline {section}{\numberline {2.1}Informa\c c\~ao Sigilosa}{27}{section.2.1}
+\contentsline {section}{\numberline {2.2}RockYou}{28}{section.2.2}
+\contentsline {section}{\numberline {2.3}LinkedIn}{28}{section.2.3}
+\contentsline {section}{\numberline {2.4}\textit {Anti Public}}{29}{section.2.4}
+\contentsline {section}{\numberline {2.5}Vieses Psicol\'ogicos}{29}{section.2.5}
+\contentsline {section}{\numberline {2.6}Passfault}{30}{section.2.6}
+\contentsline {section}{\numberline {2.7}Considera\c c\~oes}{30}{section.2.7}
+\contentsline {chapter}{\numberline {3}SISTEMA, MODELO E OTIMIZA\c C\~AO (xx/xx/2017)}{33}{chapter.3}
+\contentsline {section}{\numberline {3.1}String}{33}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}Opera\c c\~oes com Strings}{34}{subsection.3.1.1}
+\contentsline {section}{\numberline {3.2}Frequ\^encia Relativa}{35}{section.3.2}
+\contentsline {section}{\numberline {3.3}Fun\c c\~ao de Dispers\~ao Criptogr\'afica}{35}{section.3.3}
+\contentsline {section}{\numberline {3.4}Processo de Quebra}{35}{section.3.4}
+\contentsline {section}{\numberline {3.5}For\c ca do Modelo}{35}{section.3.5}
+\contentsline {section}{\numberline {3.6}Entropia do Modelo}{36}{section.3.6}
+\contentsline {section}{\numberline {3.7}Considera\c c\~oes}{37}{section.3.7}
+\contentsline {chapter}{\numberline {4}METODOLOGIA (xx/xx/2017)}{39}{chapter.4}
+\contentsline {section}{\numberline {4.1}Constru\c c\~ao e configura\c c\~ao do sistema}{39}{section.4.1}
+\contentsline {section}{\numberline {4.2}Modelagem e simula\c c\~ao}{39}{section.4.2}
+\contentsline {section}{\numberline {4.3}Aplica\c c\~ao do processo de otimiza\c c\~ao na sintonia dos controladores}{39}{section.4.3}
+\contentsline {section}{\numberline {4.4}An\'alise de desempenho entre os controladores}{39}{section.4.4}
+\contentsline {section}{\numberline {4.5}Considera\c c\~oes}{39}{section.4.5}
+\contentsline {chapter}{\numberline {5}RESULTADOS (xx/xx/2018)}{41}{chapter.5}
+\contentsline {section}{\numberline {5.1}Constru\c c\~ao da bancada e do modelo}{41}{section.5.1}
+\contentsline {section}{\numberline {5.2}Resultado de simula\c c\~ao}{41}{section.5.2}
+\contentsline {subsection}{\numberline {5.2.1}Otimiza\c c\~ao aplicada na sintonia dos controladores}{41}{subsection.5.2.1}
+\contentsline {section}{\numberline {5.3}Resultado de bancada}{41}{section.5.3}
+\contentsline {section}{\numberline {5.4}Coment\'arios}{41}{section.5.4}
+\contentsline {chapter}{\numberline {6}CONCLUS\~AO (xx/xx/2018)}{43}{chapter.6}
+\contentsline {section}{\numberline {6.1}Contribui\c c\~oes do Trabalho}{43}{section.6.1}
+\contentsline {section}{\numberline {6.2}Continua\c c\~ao do trabalho}{43}{section.6.2}
+\contentsline {section}{\numberline {6.3}Sugest\~oes para Trabalhos Futuros}{43}{section.6.3}
 \renewcommand {\chaptername }{\nomeanexo }
-\contentsline {chapter}{REFER\^ENCIAS BIBLIOGR\'AFICAS}{35}{anexo.a}
-\contentsline {chapter}{GLOSS\'ARIO}{37}{anexo.b}
+\contentsline {chapter}{REFER\^ENCIAS BIBLIOGR\'AFICAS}{45}{anexo.a}
+\contentsline {chapter}{GLOSS\'ARIO}{47}{anexo.b}
 \contentsfinish 
