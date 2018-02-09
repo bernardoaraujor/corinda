@@ -1,6 +1,6 @@
 # Corinda
 
-![alt text](https://github.com/bernardoaraujor/corinda/corinda.jpg "Corinda")
+![alt text](https://github.com/bernardoaraujor/corinda/blob/master/corinda.jpg "Corinda")
 
 
 Corinda is a concurrency and entropy based hash cracker.
