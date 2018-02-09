@@ -1,5 +1,8 @@
 # Corinda
 
+![alt text](https://github.com/bernardoaraujor/corinda/corinda.jpg "Corinda")
+
+
 Corinda is a concurrency and entropy based hash cracker.
 It takes advantage of the concurrency possibilities of [Go Language](https://golang.org/) 
 to learn new password model entropy patterns, as well as to make guesses against a target hash.
@@ -44,7 +47,7 @@ This project uses a modified version of [OWASP's Passfault](http://www.passfault
 
 ## Masters
 
-This work is part of my MSc. in Computer Engineering @ UFG, Brazil. The Dissertation can be found at `/ufg`, however only a Brazilian Portuguese version is available.
+This work is part of my MSc. in Computer Engineering @ UFG, Brazil. The Dissertation will be available soon, however only a Brazilian Portuguese version.
 
 
 ## Passfault Wordlists
@@ -102,3 +105,6 @@ Downloaded from the US Census of 2000: [https://www.census.gov/topics/population
     - misspelling (Passfault)
     - support toggle case (Passfault)
     - entropy guess sorting
+
+## Tony Corinda
+[https://en.wikipedia.org/wiki/Tony_Corinda](https://en.wikipedia.org/wiki/Tony_Corinda)
