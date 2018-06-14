@@ -25,9 +25,9 @@ In terms of Golang's primitives, an Elementary Model is implemented as a `struct
 
 ```
 type Model struct {
-	Name       string
-	Entropy    float64
-	TokenFreqs map[string]int
+	Name           string
+	Entropy        float64
+	TokenFreqs     map[string]int
 }
 ```
 
@@ -47,11 +47,11 @@ A Composite Model is also implemented as a `struct`:
 
 ```
 type Model struct{
-	Name             string
-	Freq    int
-	Prob 	float64
-	Entropy float64
-	Models  []string
+	Name        string
+	Freq        int
+	Prob 	    float64
+	Entropy     float64
+	Models      []string
 }
 ```
 
@@ -60,7 +60,7 @@ Composite Models have the following functions:
  - **UpdateProb**: TODO
  - **UpdateFreq**: TODO
  - **UpdateEntropy**: TODO
- - **recursive**:
+ - **recursive**: TODO
 
 ## Training Module
 
