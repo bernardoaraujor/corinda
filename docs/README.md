@@ -17,11 +17,11 @@ For example, in the password `corinda123`, the Token `corinda` belongs to the El
 
 ## Elementary Models
 
-Elementary Models are abstractions for the atomic rule structures inside the password string. Each Elementary Model is has a Name, an Entropy value, and a map of Token frequencies. Tokens are just substring instances of the atomic rule structure, and Frequencies are integers that account for the number of occurances of a specific Token inside a Training list.
+Elementary Models are abstractions for the atomic rule structures dictating the password string. Each Elementary Model is has a Name, an Entropy value, and a map of Token frequencies. Tokens are just substring instances of the atomic rule structure, and Frequencies are integers that account for the number of occurances of a specific Token inside a Training list.
 
 Elementary Models are implemented in the [Elementary Module](https://github.com/bernardoaraujor/corinda/blob/master/elementary/elementary.go).
 
-In terms of Golang's primitives, Elementary Models are implemented as structs:
+In terms of Golang's primitives, an Elementary Model is implemented as a `struct`:
 
 ```
 type Model struct {
@@ -33,13 +33,34 @@ type Model struct {
 
 Elementary Models have the following functions:
 
- - **UpdateEntropy**:  
- - **UpdateTokenFreq**:
- - **SortedTokens**:
-
-
+ - **UpdateEntropy**: TODO
+ - **UpdateTokenFreq**: TODO
+ - **SortedTokens**: TODO
 
 ## Composite Models
+
+Composite Models are abstractions for the composition of atomic rule structures dictating the password string. Each Composite Model has a Name, a Frequency value, a Probability value, a total Entropy value, and an array of strings representing the Elementary Models that form the composed structure.
+
+Composite Models are implemented in the [Composite Module](https://github.com/bernardoaraujor/corinda/blob/master/composite/composite.go).
+
+A Composite Model is also implemented as a `struct`:
+
+```
+type Model struct{
+	Name             string
+	Freq    int
+	Prob 	float64
+	Entropy float64
+	Models  []string
+}
+```
+
+Composite Models have the following functions:
+
+ - **UpdateProb**: TODO
+ - **UpdateFreq**: TODO
+ - **UpdateEntropy**: TODO
+ - **recursive**:
 
 ## Training Module
 
