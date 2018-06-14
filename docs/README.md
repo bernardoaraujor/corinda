@@ -11,7 +11,7 @@ Corinda is a concurrency and entropy based hash cracker. It takes advantage of t
 
 ## Models
 
-Corinda abstracts password substrings as Models. Models can be either Elementary or Composite.
+Corinda abstracts password substrings as Tokens, and the underlying rules that dictate them as Models. Models can be either Elementary or Composite.
 
 For example, in the password `corinda123`, the Token `corinda` belongs to the Elementary Model of words belonging to a dictionary (let's call it **[dict]**), and `123` belongs to the Elementary Model of three number sequences (let's call it **[3N]**). In this case, the `corinda123` belongs to the Composite Model **[dict 3N]**.
 
