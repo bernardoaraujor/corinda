@@ -39,7 +39,7 @@ Elementary Models have the following functions:
 
 ## Composite Models
 
-Composite Models are abstractions for the composition of atomic rule structures dictating the password string. Each Composite Model has a Name, a Frequency value, a Probability value, a total Entropy value, and an array of strings representing the Elementary Models that form the composed structure.
+Composite Models are abstractions for the composition of atomic rule structures dictating the password string. Each Composite Model has a Name, a Frequency value, a Probability value, a total Entropy value, and an array of strings representing the Elementary Models that form the composed structure. Frequency, Probablity and total Entropy values are all tied to the Composite Model's occurances in a Training list.
 
 Composite Models are implemented in the [Composite Module](https://github.com/bernardoaraujor/corinda/blob/master/composite/composite.go).
 
