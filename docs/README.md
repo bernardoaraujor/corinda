@@ -1,6 +1,6 @@
 # Corinda Docs
 
-Corinda is a concurrency and entropy based hash cracker. It takes advantage of the concurrency possibilities of Go Language to learn new password model entropy patterns, as well as to make guesses against a target hash.
+Corinda is a concurrency and entropy based hash cracker. It takes advantage of the concurrency possibilities of the [Go Language](https://golang.org/) to learn new password model entropy patterns, as well as to make guesses against a target hash.
 
 ## Golang Primitives
 
@@ -19,6 +19,8 @@ For example, in the password `corinda123`, the Token `corinda` belongs to the El
 
 Elementary Models are abstractions for the atomic rule structures inside the password string. Each Elementary Model is has a Name, an Entropy value, and a map of Token frequencies. Tokens are just substring instances of the atomic rule structure, and Frequencies are integers that account for the number of occurances of a specific Token inside a Training list.
 
+Elementary Models are implemented in the [Elementary Module](https://github.com/bernardoaraujor/corinda/blob/master/elementary/elementary.go).
+
 In terms of Golang's primitives, Elementary Models are implemented as structs:
 
 ```
@@ -28,6 +30,14 @@ type Model struct {
 	TokenFreqs map[string]int
 }
 ```
+
+Elementary Models have the following functions:
+
+ - **UpdateEntropy**:  
+ - **UpdateTokenFreq**:
+ - **SortedTokens**:
+
+
 
 ## Composite Models
 
