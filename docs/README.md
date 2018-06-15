@@ -64,4 +64,17 @@ Composite Models have the following functions:
 
 ## Training Module
 
+The [Training Module](https://github.com/bernardoaraujor/corinda/blob/master/train/train.go) is responsible for populating the Elementary and Composite Models from a training password list. It uses the [Java Native Interface (JNI)](https://en.wikipedia.org/wiki/Java_Native_Interface) to call [Passfault](https://github.com/OWASP/passfault) to recognize the Elementary and Composite Models inside the training list. For each password in the training list, Passfault returns a JSON object with Elementary and Composite Model information.
+
+The Training Module provides the following functions:
+
+ - **countLines**: TODO
+ - **generator**: TODO
+ - **batchAnalyzer**: TODO
+ - **reporter**:TODO
+ - **batchDecoder**: TODO
+ - **mapsMerger**: TODO
+ - **saveMaps**: TODO
+ - **Train**: TODO
+
 ## Cracking Module
