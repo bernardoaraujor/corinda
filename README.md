@@ -20,6 +20,8 @@ Related publications on the subject:
 ```
 cd $GOPATH
 go get github.com/bernardoaraujor/corinda
+cd src/github.com/bernardoaraujor/corinda
+git submodule update --init --recursive
 ```
 
 ## Training
