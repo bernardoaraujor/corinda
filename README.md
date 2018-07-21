@@ -1,16 +1,37 @@
-# Corinda
+<h1 align="center">
+  <br>
+  Corinda <br>
+  <img src="https://raw.githubusercontent.com/bernardoaraujor/corinda/master/corinda.jpg">
+  <br>
+</h1>
+<h3 align="center">
+A password hash cracker written in <a href="https://golang.org" target="_blank">Golang</a>.
+</h3>
 
-![alt text](https://github.com/bernardoaraujor/corinda/blob/master/corinda.jpg "Corinda")
+[https://github.com/bernardoaraujor/corinda](
+https://github.com/bernardoaraujor/corinda)
 
+Corinda uses concurrent heuristics based on model entropy and relative frequency from sample sets. Currently, Corinda has the following sample sets:
 
-Corinda is a concurrency and entropy based hash cracker.
-It takes advantage of the concurrency possibilities of [Go Language](https://golang.org/) 
-to learn new password model entropy patterns, as well as to make guesses against a target hash.
+ - RockYou
+ - LinkedIn
+ - AntiPublic
+ 
+The user feeds Corinda a password hash (SHA1, 2, or 3), chooses a sample set, and waits while concurrent goroutines try to crack it with computational load balancing for each password model.
+
+Corinda only supports CPU cracking.
+
+Corinda uses a modified version of [OWASP's Passfault](http://www.passfault.com/) to train password models.
 
 Related publications on the subject:
 
  - General Framework for Evaluating Password Complexity and Strength: [https://goo.gl/uYJsVr](https://goo.gl/uYJsVr)
  - Passfault: an Open Source Tool for Measuring Password Complexity and Strength: [https://goo.gl/mUVlw2](https://goo.gl/mUVlw2)
+
+Corinda is released under [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html). Corinda is distributed for research purposes only. We believe that people should understand the dangers of simple passwords, and Corinda is an effort to encourage people to protect their privacy with high entropy passwords. And remember, with great powers, come great responsabilitiy!
+
+Contact:
+bernardoar@protonmail.com
  
 ## Installing
 
