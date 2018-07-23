@@ -40,28 +40,28 @@ bernardoar@protonmail.com
 3. Clone to GOPATH:
 ```
 cd $GOPATH
-go get github.com/bernardoaraujor/corinda
-cd src/github.com/bernardoaraujor/corinda
+mkdir -p src/github.com/bernardoaraujor/
+cd src/github.com/bernardoaraujor
+git clone https://github.com/bernardoaraujor/corinda
+cd corinda
 git submodule update --init --recursive
 ```
 
 ## Training
 
-1. Have .csv file corretly formatted in `/csv`. In other words, each line must be composed of `[frequency,password]`
-2. Run `main/mainTrain.go`:
+1. Have input file correctly formatted as Comma Separated Values. Each line must be composed of `[frequency,password]`. The .csv must be compressed into .csv.gz, and placed inside the `/csv` directory.
+2. Run train command:
 ```
-cd $GOPATH/src/github.com/bernardoaraujor/corinda/
-go run main/mainCrack.go <input list>
+corinda train <input>
 ```
 
 ## Cracking
 
 1. Make sure you have the trained maps (elementary and composite) in `/maps`.
 2. Make sure you have there is only one file for target list in `/targets` (run `merger.sh` script if necessary)
-3. Run `main/mainCrack.go`
+3. Run crack command:
 ```
-cd $GOPATH/src/github.com/bernardoaraujor/corinda/
-go run main/mainCrack.go <trained list> <target list> <sha1 or sha256>
+crack <trained list> <target list> <sha1 or sha256>
 ```
 
 ## Passfault
