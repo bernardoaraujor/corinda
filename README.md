@@ -121,7 +121,6 @@ Downloaded from the US Census of 2000: [https://www.census.gov/topics/population
  - doc dependencies
     - (jnigi check /usr/lib/jvm/..., sym link include/linux/jni_md.h to include/jni_md.h)
  - future work:
-    - CLI (cobra?)
     - go tests
     - support salting
     - support l337 (Passfault)
