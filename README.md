@@ -5,7 +5,7 @@
   <br>
 </h1>
 <h3 align="center">
-A password hash cracker written in <a href="https://golang.org" target="_blank">Golang</a>.
+An experimental password hash cracker written in <a href="https://golang.org" target="_blank">Golang</a>.
 </h3>
 
 [https://github.com/bernardoaraujor/corinda](
@@ -17,7 +17,7 @@ Corinda uses concurrent heuristics based on model entropy and relative frequency
  - LinkedIn
  - AntiPublic
  
-The user feeds Corinda a password hash (SHA1, 2, or 3), chooses a sample set, and waits while concurrent goroutines try to crack it with computational load balancing for each password model.
+The user feeds Corinda a password hash (SHA1 or SHA256), chooses a sample set, and waits while concurrent goroutines try to crack it with computational load balancing for each password model.
 
 Corinda only supports CPU cracking.
 
@@ -52,7 +52,7 @@ git submodule update --init --recursive
 1. Have input file correctly formatted as Comma Separated Values. Each line must be composed of `[frequency,password]`. The .csv must be compressed into .csv.gz, and placed inside the `/csv` directory.
 2. Run train command:
 ```
-corinda train <input>
+$ corinda train <input>
 ```
 
 ## Cracking
@@ -61,7 +61,7 @@ corinda train <input>
 2. Make sure you have there is only one file for target list in `/targets` (run `merger.sh` script if necessary)
 3. Run crack command:
 ```
-crack <trained list> <target list> <sha1 or sha256>
+$ corinda crack <trained list> <target list> <sha1 or sha256>
 ```
 
 ## Passfault
