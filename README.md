@@ -17,6 +17,8 @@ This repository is old and dusty. Files stored with Git LFS probably won't work.
 
 ## Introduction
 
+Corinda is the product of my MSc. in Computer Engineering @ UFG, Brazil. The Dissertation is available at [/docs](https://github.com/bernardoaraujor/corinda/blob/master/docs/bernardo_rodrigues_ufg.pdf), however only a Brazilian Portuguese version is available.
+
 Corinda uses concurrent heuristics based on model entropy and relative frequency from sample sets. Currently, Corinda has the following sample sets:
 
  - RockYou
@@ -76,7 +78,7 @@ This project uses a modified version of [OWASP's Passfault](http://www.passfault
 
 ## Masters
 
-This work is part of my MSc. in Computer Engineering @ UFG, Brazil. The Dissertation will be available soon, however only a Brazilian Portuguese version.
+This work is part of my MSc. in Computer Engineering @ UFG, Brazil.
 
 
 ## Passfault Wordlists
