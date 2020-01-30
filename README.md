@@ -1,7 +1,7 @@
 <h1 align="center">
   <br>
   Corinda <br>
-  <img src="https://raw.githubusercontent.com/bernardoaraujor/corinda/master/corinda.jpg">
+  <img src="https://raw.githubusercontent.com/bernardoaraujor/corinda/master/corinda.png">
   <br>
 </h1>
 <h3 align="center">
