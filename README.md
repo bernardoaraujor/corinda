@@ -8,9 +8,6 @@
 An experimental password hash cracker written in <a href="https://golang.org" target="_blank">Golang</a>.
 </h3>
 
-[https://github.com/bernardoaraujor/corinda](
-https://github.com/bernardoaraujor/corinda)
-
 ## Disclaimer
 
 This repository is old and dusty. Files stored with Git LFS probably won't work. Contact me if you're interested in the project, and I'd be glad to hand them over.
