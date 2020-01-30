@@ -11,6 +11,12 @@ An experimental password hash cracker written in <a href="https://golang.org" ta
 [https://github.com/bernardoaraujor/corinda](
 https://github.com/bernardoaraujor/corinda)
 
+## Disclaimer
+
+This repository is old and dusty. Files stored with Git LFS probably won't work. Contact me if you're interested in the project, and I'd be glad to hand them over.
+
+## Introduction
+
 Corinda uses concurrent heuristics based on model entropy and relative frequency from sample sets. Currently, Corinda has the following sample sets:
 
  - RockYou
@@ -31,7 +37,7 @@ Related publications on the subject:
 Corinda is released under [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html). Corinda is distributed for research purposes only. We believe that people should understand the dangers of simple passwords, and Corinda is an effort to encourage people to protect their privacy with high entropy passwords. And remember, with great powers, come great responsabilitiy!
 
 Contact:
-bernardoar@protonmail.com
+bernardoaraujor@gmail.com
  
 ## Installing
 
